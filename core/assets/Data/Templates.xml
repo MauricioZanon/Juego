@@ -1,0 +1,17 @@
+<object-array>
+  <components.Type>FEATURE</components.Type>
+  <components.NameComponent>
+    <name>Feature template</name>
+  </components.NameComponent>
+  <components.GraphicsComponent>
+    <ASCII>?</ASCII>
+    <font>general</font>
+    <frontColor>
+      <r>1.0</r>
+      <g>0.0</g>
+      <b>0.0</b>
+      <a>1.0</a>
+    </frontColor>
+    <renderPriority>2</renderPriority>
+  </components.GraphicsComponent>
+</object-array>

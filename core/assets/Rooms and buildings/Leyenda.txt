@@ -1,0 +1,8 @@
+. Piso
+# Pared
+<> Escaleras
++ Puerta
+u Punto de unión opcional
+U Punto de unión obligatorio
+
+

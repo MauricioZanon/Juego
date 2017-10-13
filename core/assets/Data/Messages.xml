@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<Messages>
+
+	<Note>
+        [WHITE]     texto normal
+        [ORANGE]    enemigos
+        [YELLOW}    items
+	</Note>
+
+	<Message>
+		<Type>PlayerPicksUp</Type>
+		<Text>[WHITE]You pick up the[YELLOW] /0/[].</Text>
+		<Text>[WHITE]You put the[YELLOW] /0/[] in your inventory.</Text>
+	</Message>
+
+	<Message>
+		<Type>PlayerAttacksNPC</Type>
+		<Text>[WHITE]You strike the[ORANGE] /1/[].</Text>
+	</Message>
+
+
+	<Message>
+		<Type>NPCAttacksPlayer</Type>
+		<Text>[RED]The[ORANGE] /0/[] attacks you.</Text>
+	</Message>
+
+
+	<Message>
+		<Type>NPCAttacksNPC</Type>
+		<Text>[WHITE]The[ORANGE] /0/[] attacks the[ORANGE] /1/[].</Text>
+	</Message>  
+
+	<Message>
+		<Type>StandingOnItem</Type>
+		<Text>[WHITE]There is a[YELLOW] /0/[] on the ground.</Text>
+	</Message>
+
+
+	<Message>
+		<Type>PlayerWieldsItem</Type>
+		<Text>[WHITE]You start wielding your [YELLOW]/0/[].</Text>
+	</Message>
+
+	<Message>
+		<Type>PlayerEquipsItem</Type>
+		<Text>[WHITE]You put on your [YELLOW]/0/[].</Text>
+	</Message>
+
+	<Message>
+		<Type>PlayerDrinksPotion</Type>
+		<Text>[WHITE]You drink the[YELLOW] /1/[].</Text>
+	</Message>
+
+	<Message>
+		<Type>NpcDrinksPotion</Type>
+		<Text>[WHITE]The [ORANGE]/0/[] drinks a potion.</Text>
+	</Message>
+
+	<Message>
+		<Type>PlayerHeals</Type>
+		<Text>[WHITE]Some of your wounds are healed.</Text>
+	</Message>
+
+	<Message>
+		<Type>NpcHeals</Type>
+		<Text>[WHITE]The wounds on the [ORANGE]/0/[] are closing.</Text>
+	</Message>
+
+</Messages>

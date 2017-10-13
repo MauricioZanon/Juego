@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Weapons>
+
+	<object-array>
+		<components.Type>ITEM</components.Type>
+		<components.ItemType>SWORD</components.ItemType>
+		<components.NameComponent>
+			<name>sword</name>
+		</components.NameComponent>
+		<components.GraphicsComponent>
+			<ASCII>/</ASCII>
+			<font>general</font>
+			<frontColor>
+				<r>0.8</r>
+				<g>0.8</g>
+				<b>0.8</b>
+				<a>1.0</a>
+			</frontColor>
+			<renderPriority>1</renderPriority>
+		</components.GraphicsComponent>
+		<components.PickupableComponent/>
+		<components.AttributeComponent>
+			<att>
+				<entry>
+					<string>damage</string>
+					<float>10.0</float>
+				</entry>
+				<entry>
+					<string>quantity</string>
+					<float>1.0</float>
+				</entry>
+			</att>
+		</components.AttributeComponent>
+	</object-array>
+
+	<object-array>
+		<components.Type>ITEM</components.Type>
+		<components.ItemType>WEAPON</components.ItemType>
+		<components.NameComponent>
+			<name>Item template2</name>
+		</components.NameComponent>
+		<components.GraphicsComponent>
+			<ASCII>/</ASCII>
+			<font>general</font>
+			<frontColor>
+				<r>0.49803922</r>
+				<g>0.49803922</g>
+				<b>0.49803922</b>
+				<a>1.0</a>
+			</frontColor>
+			<renderPriority>1</renderPriority>
+		</components.GraphicsComponent>
+		<components.PickupableComponent/>
+		<components.AttributeComponent>
+			<att>
+				<entry>
+					<string>damage</string>
+					<float>10.0</float>
+				</entry>
+				<entry>
+					<string>quantity</string>
+					<float>1.0</float>
+				</entry>
+			</att>
+		</components.AttributeComponent>
+	</object-array>
+
+</Weapons>

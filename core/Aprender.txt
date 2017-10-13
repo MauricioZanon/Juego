@@ -1,0 +1,13 @@
+-Bitwise operations
+
+-Un debugger, un profiler y un code linter
+
+-Guía de BitmapFonts
+	https://github.com/libgdx/libgdx/wiki/Bitmap-fonts
+
+-LibGdx:
+	-Telegrams
+	-PathFinding
+	-Finite state machines
+	
+-Process API

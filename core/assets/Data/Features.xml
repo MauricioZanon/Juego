@@ -1,0 +1,56 @@
+<Features>
+
+	<object-array>
+		<components.Type>FEATURE</components.Type>
+		<components.NameComponent>
+			<name>stair</name>
+		</components.NameComponent>
+		<components.GraphicsComponent>
+			<ASCII>></ASCII>
+			<font>general</font>
+			<frontColor>
+				<r>1.0</r>
+				<g>0.0</g>
+				<b>0.0</b>
+				<a>1.0</a>
+			</frontColor>
+			<renderPriority>2</renderPriority>
+		</components.GraphicsComponent>
+		<components.TranslucentComponent>
+			<translucent>true</translucent>
+		</components.TranslucentComponent>
+		<components.TransitableComponent>
+			<allowedMovementType>
+				<components.MovementComponent_-MovementType>WALK</components.MovementComponent_-MovementType>
+				<components.MovementComponent_-MovementType>FLY</components.MovementComponent_-MovementType>
+			</allowedMovementType>
+		</components.TransitableComponent>
+	</object-array>
+
+	<object-array>
+		<components.Type>FEATURE</components.Type>
+		<components.NameComponent>
+			<name>closed door</name>
+		</components.NameComponent>
+		<components.GraphicsComponent>
+			<ASCII>+</ASCII>
+			<font>general</font>
+			<frontColor>
+				<r>0.64</r>
+				<g>0.31</g>
+				<b>0.04</b>
+				<a>1.0</a>
+			</frontColor>
+			<renderPriority>2</renderPriority>
+		</components.GraphicsComponent>
+		<components.TranslucentComponent>
+			<translucent>false</translucent>
+		</components.TranslucentComponent>
+		<components.TransitableComponent>
+			<allowedMovementType>
+			</allowedMovementType>
+		</components.TransitableComponent>
+	</object-array>
+
+</Features>
+

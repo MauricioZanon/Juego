@@ -1,0 +1,3 @@
+- Cuando un NPC choca con un terreno no transitable se saltea su turno y se queda con 100 de AP
+- Las factories de items y npcs tardan mucho
+- Las lineas de la consola se pisan cuando un mensaje ocupa mas de una

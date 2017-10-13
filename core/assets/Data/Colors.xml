@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Colors>
+	
+	<Color name = "red">
+		<r>1.0</r>
+		<g>0.0</g>
+		<b>0.0</b>
+	</Color>
+	
+	<Color name = "green">
+		<r>0.6</r>
+		<g>0.8</g>
+		<b>0.2</b>
+	</Color>
+	
+	<Color name = "blue">
+		<r>0.0</r>
+		<g>0.0</g>
+		<b>1.0</b>
+	</Color>
+	
+	<Color name = "cerulean">
+		<r>0.61</r>
+		<g>0.77</g>
+		<b>0.89</b>
+	</Color>
+	
+	<Color name = "purple">
+		<r>0.8</r>
+		<g>0.64</g>
+		<b>0.87</b>
+	</Color>
+	
+	<Color name = "yellow">
+		<r>1.0</r>
+		<g>0.94</g>
+		<b>0.0</b>
+	</Color>
+	
+	<Color name = "orange">
+		<r>1.0</r>
+		<g>0.6</g>
+		<b>0.0</b>
+	</Color>
+	
+	<Color name = "pink">
+		<r>0.91</r>
+		<g>0.62</g>
+		<b>0.77</b>
+	</Color>
+
+	
+
+</Colors>
+

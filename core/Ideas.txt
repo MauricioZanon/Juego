@@ -1,0 +1,65 @@
+# - Open world tipo Catalysm DDA:
+
+	- Crafteo de equipo, herramientas, consumables
+		- La mayoría de los crafteos se habilitan encontrando las recetas o usando el skill tinker
+			- TINKER: se buscan los posibles crafteos con los items cercanos, el exito depende de la inteligencia
+	- Construccion de una base
+	- Se podrían encontrar NPCs no hostiles que empiezen a vivir en la base y ayuden de alguna forma (defensas, crafteo, materiales, etc)
+	- Una vez que el juego avanze lo suficiente se puede transformar en algo tipo Guild of Dungeoneering donde se mandan NPCs a realizar distintas tareas
+		- Lootear un dungeon
+		- Buscar otros NPCs
+		- Buscar materiales
+	- El mundo es normal cuando empieza el juego y con el pasar del tiempo van apareciendo distintas amenazas en el mapa que interactuan 
+		con los lugares cercanos o con todo el mapa
+		- Reyes con ejercitos que conquisten ciudades
+		- Dragones que atacan aldeas cercanas
+		- Portales a otra dimension
+
+# - Dungeons:
+	
+	- Mapa que cambia de forma (aparecen y desaparecen las paredes sin atrapar al personaje ni cerrar lugares)
+	- Mapas usando Wolfram Elementary Cellular Automata
+	
+	# - Tipos:
+		-Cave
+		-IceCave
+		-CrystalCave
+		-Lairs (bear lair, troll lair, dragon lair, etc)
+		-Tombs
+		-AbandonedCastles
+		
+# - Trampas:
+	
+	- Entrance and exit stair wells lock up the moment you enter the level. Heat slowly rises. Player has to flip a few 
+		switches all over the level in time. Unexpected because traps are usually only small. Should only occur every few play-throughs.
+	- La trampa de dardo podría tener mas de un efecto 
+	- Cuchillas girando en el centro de una habitación como en Dungeon Themed Starvation Simulator
+		https://imgur.com/a/9z2rz	
+
+# - General:
+	- Si se hacen historias para quests hacerlas usando el metodo "therefore/but" (buscarlo en internet)
+	- Tiles iluminados, no se ven a menos que haya alguna fuente de luz
+	- Vidas extra obtenidas clonandose a uno mismo
+		- Se podría usar un hechizo o varita para duplicar al personaje y al morir el original el juego continua con el clon
+		
+	-Deseos que deciden que hace cada aactor(hambre, miedo, etc)
+	-Perlin noise modificado para usarse en areas ya generadas, para ver donde poner areas con pasto, piedras, agua, etc
+	
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
