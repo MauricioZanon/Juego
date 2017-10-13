@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -18,23 +17,6 @@ public class MainScreen implements Screen{
 	private final InputProcessor MAIN_SCREEN_INPUT = createMainScreenInputProcessor();
 	
 	private SpriteBatch batch;
-	private CustomShapeRenderer shapeRenderer;
-	
-	private String title =  "\n" + 
-			" /$$                       /$$       /$$             /$$                         /$$                       /$$                 /$$   /$$           /$$          \n" + 
-			"| $$                      | $$      |__/            | $$                        |__/                      | $$                | $$  /$$/          | $$          \n" + 
-			"| $$        /$$$$$$       | $$$$$$$  /$$  /$$$$$$$ /$$$$$$    /$$$$$$   /$$$$$$  /$$  /$$$$$$         /$$$$$$$  /$$$$$$       | $$ /$$/   /$$$$$$ | $$ /$$   /$$\n" + 
-			"| $$       |____  $$      | $$__  $$| $$ /$$_____/|_  $$_/   /$$__  $$ /$$__  $$| $$ |____  $$       /$$__  $$ /$$__  $$      | $$$$$/   /$$__  $$| $$| $$  | $$\n" + 
-			"| $$        /$$$$$$$      | $$  \\ $$| $$|  $$$$$$   | $$    | $$  \\ $$| $$  \\__/| $$  /$$$$$$$      | $$  | $$| $$$$$$$$      | $$  $$  | $$$$$$$$| $$| $$  | $$\n" + 
-			"| $$       /$$__  $$      | $$  | $$| $$ \\____  $$  | $$ /$$| $$  | $$| $$      | $$ /$$__  $$      | $$  | $$| $$_____/      | $$\\  $$ | $$_____/| $$| $$  | $$\n" + 
-			"| $$$$$$$$|  $$$$$$$      | $$  | $$| $$ /$$$$$$$/  |  $$$$/|  $$$$$$/| $$      | $$|  $$$$$$$      |  $$$$$$$|  $$$$$$$      | $$ \\  $$|  $$$$$$$| $$|  $$$$$$$\n" + 
-			"|________/ \\_______/      |__/  |__/|__/|_______/    \\___/   \\______/ |__/      |__/ \\_______/       \\_______/ \\_______/      |__/  \\__/ \\_______/|__/ \\____  $$\n" + 
-			"                                                                                                                                                       /$$  | $$\n" + 
-			"                                                                                                                                                      |  $$$$$$/\n" + 
-			"                                                                                                                                                       \\______/ \n" + 
-			"";
-	
-	private int selectedOption = 0;
 	
 	private MainScreen() {}
 
@@ -45,7 +27,6 @@ public class MainScreen implements Screen{
 	@Override
 	public void show() {
 		batch = new SpriteBatch();
-		shapeRenderer = new CustomShapeRenderer();
 		
 		Gdx.input.setInputProcessor(MAIN_SCREEN_INPUT);
 	}
@@ -60,12 +41,10 @@ public class MainScreen implements Screen{
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		BitmapFont font = generator.generateFont(parameter);
 		
-		font.draw(batch, "New game", 100, 400);
-		font.draw(batch, "Load", 100, 370);
-		font.draw(batch, "Options", 100, 340);
-		font.draw(batch, "Exit", 100, 310);
-		font.setColor(Color.RED);
-		font.draw(batch, title, 0, 800);
+		font.draw(batch, "[N]ew game", 100, 400);
+		font.draw(batch, "[L]oad", 100, 370);
+		font.draw(batch, "[O]ptions", 100, 340);
+		font.draw(batch, "[E]xit", 100, 310);
 		
 		
 		batch.end();
