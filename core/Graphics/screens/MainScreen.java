@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.mygdx.juego.Juego;
 
 public class MainScreen implements Screen{
 	
@@ -87,7 +88,17 @@ public class MainScreen implements Screen{
 			@Override
 			public boolean keyDown(int keycode) {
 				switch(keycode){
+				case Keys.N:
+					Juego.startGame();
+					break;
+				case Keys.L:
+//					loadGame();
+					break;
+				case Keys.O:
+//					showOptions();
+					break;
 				case Keys.ESCAPE:
+				case Keys.E:
 					System.exit(0);
 					break;
 				default:
@@ -95,7 +106,7 @@ public class MainScreen implements Screen{
 				}
 				return false;
 			}
-
+			
 			@Override
 			public boolean keyUp(int keycode) {
 				// TODO Auto-generated method stub

@@ -23,6 +23,7 @@ import components.TimedComponent;
 import components.Type;
 import components.VisionComponent;
 import eventSystem.EventSystem;
+import screens.GameScreenASCII;
 import screens.MainScreen;
 import screens.RenderSystem;
 import world.World;
@@ -33,17 +34,22 @@ public class Juego extends Game {
 	public static final Entity PLAYER = ENGINE.createEntity();
 	
     public void create() {
+    	ENGINE.addSystem(new RenderSystem());
+    	ENGINE.getSystem(RenderSystem.class).setScreen(MainScreen.getInstance());
+    }
+    
+    public static void startGame() {
     	World.initialize();
     	
     	ENGINE.addSystem(new EventSystem());
-    	ENGINE.addSystem(new RenderSystem());
     	
     	spawnPlayer();
     	
-    	RenderSystem.setScreen(MainScreen.getInstance());
-    }
+    	ENGINE.getSystem(RenderSystem.class).setScreen(GameScreenASCII.getInstance());
+	}
+
     
-    private void spawnPlayer(){
+    private static void spawnPlayer(){
     	PLAYER.add(ENGINE.createComponent(PlayerComponent.class));
     	
     	PLAYER.add(Type.ACTOR);

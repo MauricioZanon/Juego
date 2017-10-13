@@ -560,7 +560,7 @@ public class GameScreenASCII implements Screen{
 			public boolean keyDown(int keycode) {
 				switch(keycode){
 					case Keys.ESCAPE:
-						RenderSystem.setScreen(GameScreenASCII.getInstance());
+						Juego.ENGINE.getSystem(RenderSystem.class).setScreen(GameScreenASCII.getInstance());
 						break;
 					case Keys.ENTER:
 //						PositionComponent pos = getClickedPos();
