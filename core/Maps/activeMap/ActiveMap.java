@@ -8,17 +8,17 @@ import com.mygdx.juego.Juego;
 import components.Mappers;
 import components.PositionComponent;
 import components.Type;
-import cosas.Tile;
 import eventSystem.EventSystem;
+import main.Tile;
 import world.World;
 
 public abstract class ActiveMap {
 	
-	private static int chunkSize = World.CHUNK_SIZE;
+	public static final int MAP_SIZE_IN_TILES = World.CHUNK_SIZE * 4;
 	private static Tile[][] map;
 	
 	public static void refresh(){
-		map = new Tile[chunkSize][chunkSize];
+		map = new Tile[MAP_SIZE_IN_TILES][MAP_SIZE_IN_TILES];
 		
 		HashSet<Entity> npcs = new HashSet<>();
 		

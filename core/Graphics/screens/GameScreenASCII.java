@@ -28,13 +28,12 @@ import components.Type;
 import console.Console;
 import console.Message;
 import console.MessageFactory;
-import cosas.Tile;
-import cosas.Tile.Visibility;
 import fatories.ItemFactory;
+import main.Tile;
+import main.Tile.Visibility;
 import pathFind.PathFinder;
 import world.Direction;
 import world.Explorer;
-import world.World;
 
 public class GameScreenASCII implements Screen{
 	
@@ -102,15 +101,16 @@ public class GameScreenASCII implements Screen{
 		shapeRenderer.begin(ShapeType.Filled);
 		for (int x = -gameScreenTiles/2; x <= gameScreenTiles/2; x++){
 			for(int y = -gameScreenTiles/2; y <= gameScreenTiles/2; y++){
-				if(map[center+x][center+y] == null || map[center+x][center+y].getVisibility() == Visibility.NOT_VISIBLE) {
+				Tile tile = null;
+				try {tile = map[center+x][center+y];}
+				catch(ArrayIndexOutOfBoundsException e) {continue;}
+				GraphicsComponent gc = tile.getBackGC();
+				if(tile == null || gc == null || tile.getVisibility() == Visibility.NOT_VISIBLE) {
 					continue;
 				}
-				Tile tile = map[center+x][center+y];
 				int xImg = (x * TILE_SIZE) + (gameScreenSize / 2) - 8;
 				int yImg = (y * TILE_SIZE) + (gameScreenSize / 2) - 8;
 				
-				GraphicsComponent gc = tile.getBackGC();
-				if(gc == null) continue;
 				Color color = new Color(gc.backColor);
 				if(tile.getVisibility() == Visibility.VIEWED){
 					shapeRenderer.setColor(color.lerp(Color.BLACK, 0.5f));
@@ -127,21 +127,27 @@ public class GameScreenASCII implements Screen{
 		GlyphLayout layout = new GlyphLayout();
 		for (int x = -gameScreenTiles/2; x <= gameScreenTiles/2; x++){
 			for(int y = -gameScreenTiles/2; y <= gameScreenTiles/2; y++){
-				if(map[center+x][center+y] == null || map[center+x][center+y].getVisibility() == Visibility.NOT_VISIBLE) {
+				Tile tile = null;
+				try {tile = map[center+x][center+y];}
+				catch(ArrayIndexOutOfBoundsException e) {continue;}
+				if(tile == null || tile.getVisibility() == Visibility.NOT_VISIBLE) {
 					continue;
 				}
-				Tile tile = map[center+x][center+y];
 				int xImg = (x * TILE_SIZE) + (gameScreenSize / 2) - 8;
 				int yImg = (y * TILE_SIZE) + (gameScreenSize / 2) - 8;
 				
 				GraphicsComponent gc;
 				Color color;
 				if(tile.getVisibility() == Visibility.VIEWED){
-					gc = Mappers.graphMap.get(tile.get(Type.TERRAIN));
+					try {gc = Mappers.graphMap.get(tile.get(Type.TERRAIN));}
+					catch(NullPointerException e) {continue;}
+					
+					if(gc == null) continue;
 					color = new Color(gc.frontColor);
 					color.lerp(Color.BLACK, 0.5f);
 				}else {
 					gc = tile.getFrontGC();
+					if(gc == null) continue;
 					color = new Color(gc.frontColor);
 				}
 				drawASCII(batch, fonts.get(gc.font), color, layout, gc.ASCII, xImg, yImg);
@@ -164,7 +170,7 @@ public class GameScreenASCII implements Screen{
 	private final int MINI_MAP_SIZE = Gdx.graphics.getWidth() - gameScreenSize;
 	private final int SIDE_BAR_X_POS = gameScreenSize + 8;
 	private final int MINI_MAP_Y_POS = 0;
-	private final float PIXEL_SIZE = (float)MINI_MAP_SIZE / (float) World.CHUNK_SIZE;
+	private final float PIXEL_SIZE = (float)MINI_MAP_SIZE / (float) ActiveMap.MAP_SIZE_IN_TILES;
 	
 	private void drawMiniMap(){
 		Tile[][] map = ActiveMap.getMap();
@@ -176,8 +182,9 @@ public class GameScreenASCII implements Screen{
 				if(map[x][y] == null || map[x][y].getVisibility() == Visibility.NOT_VISIBLE)
 					shapeRenderer.setColor(new Color(.2f,.2f,.2f,0));
 				else{
-					Tile tile = map[x][y];
-					Color color = tile.getBackGC().backColor;
+					GraphicsComponent gc = map[x][y].getBackGC();
+					if(gc == null) continue;
+					Color color = gc.backColor;
 					if(color != null) {
 						shapeRenderer.setColor(color);
 					}
@@ -254,7 +261,7 @@ public class GameScreenASCII implements Screen{
 	private void drawMarkedTileInfo(){
 		Tile tile = getClickedTile();
 		
-		if(tile.getVisibility() != Visibility.NOT_VISIBLE && !tile.isEmpty()){
+		if(tile != null && tile.getVisibility() != Visibility.NOT_VISIBLE && !tile.isEmpty()){
 			String text = "";
 			if(tile.get(Type.ACTOR) != null){
 				text = Mappers.nameMap.get(tile.get(Type.ACTOR)).name;
@@ -305,7 +312,9 @@ public class GameScreenASCII implements Screen{
 		int Y0 = ActiveMap.getMap().length / 2;
 		int clickX = X0 + (markerX / TILE_SIZE) - gameScreenSize / (2 * TILE_SIZE);
 		int clickY = Y0 + (markerY / TILE_SIZE) - gameScreenSize / (2 * TILE_SIZE);
-		return ActiveMap.getMap()[clickX][clickY];
+		try {return ActiveMap.getMap()[clickX][clickY];}
+		catch(ArrayIndexOutOfBoundsException e) {return null;}
+		
 	}
 	
 	public void resize(int width, int height) {

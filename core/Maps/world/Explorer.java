@@ -6,9 +6,9 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 import components.PositionComponent;
-import cosas.Chunk;
-import cosas.EmptyMap;
-import cosas.Tile;
+import main.Chunk;
+import main.EmptyMap;
+import main.Tile;
 
 //TODO cambiar nombre
 public class Explorer {
@@ -194,10 +194,11 @@ public class Explorer {
 		if(start.getGx() == end.getGx()){
 			return end.getLx() - start.getLx();
 		}else{
+			int gxDistance = Math.abs(start.getGx() - end.getGx());
 			if(start.getGx() < end.getGx()){
-				return World.CHUNK_SIZE - start.getLx() + end.getLx();
+				return World.CHUNK_SIZE - start.getLx() + end.getLx() + (World.CHUNK_SIZE * (gxDistance - 1));
 			}else{
-				return -(World.CHUNK_SIZE - end.getLx() + start.getLx());
+				return -(World.CHUNK_SIZE - end.getLx() + start.getLx() + (World.CHUNK_SIZE * (gxDistance - 1)));
 			}
 		}
 	}
@@ -206,10 +207,11 @@ public class Explorer {
 		if(start.getGy() == end.getGy()){
 			return start.getLy() - end.getLy();
 		}else{
+			int gyDistance = Math.abs(start.getGy() - end.getGy());
 			if(start.getGy() < end.getGy()){
-				return start.getLy() - end.getLy() - World.CHUNK_SIZE;
+				return World.CHUNK_SIZE - start.getLy() + end.getLy() + (World.CHUNK_SIZE * (gyDistance - 1));
 			}else{
-				return (World.CHUNK_SIZE - end.getLy()) + start.getLy() + (start.getGy() - end.getGy() - 1) * World.CHUNK_SIZE;
+				return -(World.CHUNK_SIZE - end.getLy() + start.getLy() + (World.CHUNK_SIZE * (gyDistance - 1)));
 			}
 		}
 	}
@@ -225,10 +227,11 @@ public class Explorer {
 	 * Bresenham's line algorithm
  		https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
 	 */
+	//TODO: la linea a veces no termina donde deberia
 	public static ArrayList<Tile> getStraigthLine(PositionComponent start, PositionComponent end){
 		int dx = getDistanceInX(start, end);
 		int dy = getDistanceInY(start, end);
-		
+
 		int sx = dx > 0 ? 1 : -1;
 		int sy = dy < 0 ? 1 : -1;
 		
@@ -237,11 +240,12 @@ public class Explorer {
 		
 		int err = dx - dy;
 		
-		ArrayList<Tile> linea = new ArrayList<Tile>();
-		PositionComponent linePos = new PositionComponent(start.getGx(), start.getGy(), start.getGz(), start.getLx(), start.getLy());
+		ArrayList<Tile> line = new ArrayList<Tile>();
+		PositionComponent linePos = start.clone();
 		
-		while (!linePos.equals(end)) {
-			linea.add(getTile(linePos));
+		double lineLength = getDistance(start, end);
+		while (lineLength > getDistance(start, linePos)) {
+			line.add(getTile(linePos));
 			 
 			int e2 = 2 * err;
 			
@@ -254,9 +258,9 @@ public class Explorer {
 				linePos.setLy(linePos.getLy() + sy);
 			}
 		}
-		linea.add(getTile(end));
+		line.add(getTile(end));
 		
-		return linea;
+		return line;
 	}
 	
 	public static Tile getNearbyTile(Tile origin, Predicate<Tile> cond){

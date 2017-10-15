@@ -7,8 +7,8 @@ import com.badlogic.ashley.core.Entity;
 import RNG.RNG;
 import components.PositionComponent;
 import components.Type;
-import cosas.Tile;
 import fatories.TerrainFactory;
+import main.Tile;
 import world.Explorer;
 
 public class Miner {

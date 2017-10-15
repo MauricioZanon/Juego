@@ -10,7 +10,7 @@ import com.badlogic.ashley.core.Entity;
 import actions.ActionType;
 import actions.Actions;
 import components.Type;
-import cosas.Tile;
+import main.Tile;
 import pathFind.PathFinder;
 
 

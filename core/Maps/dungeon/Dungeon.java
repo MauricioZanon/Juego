@@ -3,7 +3,7 @@ package dungeon;
 import java.util.HashSet;
 import java.util.Set;
 
-import cosas.Location;
+import main.Location;
 
 public class Dungeon extends Location{
 	

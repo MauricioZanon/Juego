@@ -3,7 +3,7 @@ package components;
 import com.badlogic.ashley.core.Component;
 import com.mygdx.juego.Juego;
 
-import cosas.Tile;
+import main.Tile;
 import world.Direction;
 import world.Explorer;
 import world.World;

@@ -1,4 +1,4 @@
-package cosas;
+package main;
 
 public class EmptyMap extends Chunk{
 	

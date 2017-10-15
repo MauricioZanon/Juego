@@ -1,4 +1,4 @@
-package cosas;
+package main;
 
 import components.PositionComponent;
 import world.Direction;

@@ -5,7 +5,7 @@ import java.util.Set;
 
 import components.Mappers;
 import components.Type;
-import cosas.Tile;
+import main.Tile;
 
 public class Room {
 	

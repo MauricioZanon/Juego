@@ -4,9 +4,9 @@ import java.util.function.Consumer;
 
 import com.badlogic.ashley.core.Entity;
 
-import cosas.Chunk;
-import cosas.Tile;
 import fatories.TerrainFactory;
+import main.Chunk;
+import main.Tile;
 
 public class FieldLevel extends Chunk{
 	

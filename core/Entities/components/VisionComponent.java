@@ -4,7 +4,7 @@ import java.util.HashSet;
 
 import com.badlogic.ashley.core.Component;
 
-import cosas.Tile;
+import main.Tile;
 
 public class VisionComponent implements Component{
 	

@@ -8,9 +8,9 @@ import com.badlogic.ashley.core.Entity;
 
 import RNG.RNG;
 import components.Type;
-import cosas.Chunk;
-import cosas.Tile;
 import fatories.TerrainFactory;
+import main.Chunk;
+import main.Tile;
 
 public class ForestLevel extends Chunk{
 	

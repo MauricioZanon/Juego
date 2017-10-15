@@ -16,7 +16,7 @@ import components.PositionComponent;
 import components.StatusEffectsComponent;
 import components.Type;
 import console.MessageFactory;
-import cosas.Tile;
+import main.Tile;
 
 public abstract class Effects {
 	

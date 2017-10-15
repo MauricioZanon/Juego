@@ -6,7 +6,7 @@ import java.util.Comparator;
 import com.badlogic.ashley.core.Entity;
 
 import components.PositionComponent;
-import cosas.Tile;
+import main.Tile;
 import world.Explorer;
 import world.World;
 

@@ -1,9 +1,10 @@
-package cosas;
+package main;
 
 import static components.Mappers.nameMap;
 
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -130,7 +131,8 @@ public class Tile {
 		for(GraphicsComponent gc : getComponents(Mappers.graphMap)) {
 			queue.add(gc);
 		}
-		return queue.first();
+		try{return queue.first();}
+		catch(NoSuchElementException e) {return null;}
 	}
 
 	public GraphicsComponent getBackGC() {
@@ -138,7 +140,8 @@ public class Tile {
 		for(GraphicsComponent gc : getComponents(Mappers.graphMap)) {
 			queue.add(gc);
 		}
-		return queue.first();
+		try{return queue.first();}
+		catch(NoSuchElementException e) {return null;}
 	}
 	
 	public Visibility getVisibility() {

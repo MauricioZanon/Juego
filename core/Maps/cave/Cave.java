@@ -9,10 +9,10 @@ import RNG.RNG;
 import components.Mappers;
 import components.PositionComponent;
 import components.Type;
-import cosas.Location;
-import cosas.Tile;
 import fatories.FeatureFactory;
 import fatories.TerrainFactory;
+import main.Location;
+import main.Tile;
 import world.Explorer;
 
 

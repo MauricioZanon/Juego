@@ -1,7 +1,7 @@
 package world;
 
 import components.PositionComponent;
-import cosas.Tile;
+import main.Tile;
 
 public enum Direction {
 	

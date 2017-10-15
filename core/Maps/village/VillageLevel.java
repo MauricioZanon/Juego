@@ -11,9 +11,9 @@ import com.badlogic.ashley.core.Entity;
 
 import RNG.RNG;
 import components.Type;
-import cosas.Chunk;
-import cosas.Tile;
 import fatories.TerrainFactory;
+import main.Chunk;
+import main.Tile;
 import world.Direction;
 import world.Explorer;
 import world.World;
@@ -22,10 +22,10 @@ public class VillageLevel extends Chunk{
 	
 	private Set<Tile> road = new HashSet<>();
 	
-	public VillageLevel(int posX, int posY, int posZ){
+	public VillageLevel(int posX, int posY){
 		globalPosX = posX;
 		globalPosY = posY;
-		globalPosZ = posZ;
+		globalPosZ = 0;
 		
 		Entity grassFloor = TerrainFactory.get("grass floor");
 		Consumer<Tile> createGrassFloor = t -> t.put(grassFloor);
@@ -49,9 +49,12 @@ public class VillageLevel extends Chunk{
 		}
 	}
 	
+	/**
+	 * TODO: volver a hacer, el camino tiene que poder generarse vertical , horizontal y poder doblar
+	 */
 	private void buildRoad(){
 		int wide = RNG.nextInt(2, 4);
-		int yPos = RNG.nextInt(20, World.CHUNK_SIZE - 20);
+		int yPos = World.CHUNK_SIZE / 2; 
 		
 		for(int i = 0; i < World.CHUNK_SIZE; i += wide){
 			road.addAll(Explorer.getCircundatingArea(wide, getChunkMap()[i][yPos], false));

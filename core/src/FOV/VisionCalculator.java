@@ -10,8 +10,8 @@ import com.badlogic.ashley.core.Entity;
 
 import components.Mappers;
 import components.Type;
-import cosas.Tile;
-import cosas.Tile.Visibility;
+import main.Tile;
+import main.Tile.Visibility;
 import world.Explorer;
 
 public abstract class VisionCalculator {
