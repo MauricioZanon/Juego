@@ -209,9 +209,9 @@ public class Explorer {
 		}else{
 			int gyDistance = Math.abs(start.getGy() - end.getGy());
 			if(start.getGy() < end.getGy()){
-				return World.CHUNK_SIZE - start.getLy() + end.getLy() + (World.CHUNK_SIZE * (gyDistance - 1));
+				return -(World.CHUNK_SIZE - start.getLy() + end.getLy() + (World.CHUNK_SIZE * (gyDistance - 1)));
 			}else{
-				return -(World.CHUNK_SIZE - end.getLy() + start.getLy() + (World.CHUNK_SIZE * (gyDistance - 1)));
+				return World.CHUNK_SIZE - end.getLy() + start.getLy() + (World.CHUNK_SIZE * (gyDistance - 1));
 			}
 		}
 	}
@@ -223,11 +223,6 @@ public class Explorer {
 		return Math.sqrt(dx * dx + dy * dy);
 	}
 	
-	/*
-	 * Bresenham's line algorithm
- 		https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
-	 */
-	//TODO: la linea a veces no termina donde deberia
 	public static ArrayList<Tile> getStraigthLine(PositionComponent start, PositionComponent end){
 		int dx = getDistanceInX(start, end);
 		int dy = getDistanceInY(start, end);

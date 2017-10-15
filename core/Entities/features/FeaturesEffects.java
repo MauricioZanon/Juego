@@ -22,7 +22,9 @@ public abstract class FeaturesEffects {
 	}
 	
 	public static void use(Entity feature, Entity user) {
-		effects.get(nameMap.get(feature).name).accept(feature, user);
+		String featureName = nameMap.get(feature).name;
+		if(effects.containsKey(featureName))
+			effects.get(featureName).accept(feature, user);
 	}
 
 	private static void stair(Entity stair, Entity user) {

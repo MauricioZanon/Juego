@@ -37,7 +37,6 @@ public class Cave extends Location{
 		dig(firstPos, size.floorTiles);
 		
 		putWalls();
-		System.out.println(floorTiles.size());
 	}
 	
 	private void dig(PositionComponent startingPos, int floorTilesAmount) {

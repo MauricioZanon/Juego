@@ -10,11 +10,10 @@ import components.PositionComponent;
 import components.Type;
 import eventSystem.EventSystem;
 import main.Tile;
-import world.World;
 
 public abstract class ActiveMap {
 	
-	public static final int MAP_SIZE_IN_TILES = World.CHUNK_SIZE * 4;
+	public static final int MAP_SIZE_IN_TILES = 110;
 	private static Tile[][] map;
 	
 	public static void refresh(){

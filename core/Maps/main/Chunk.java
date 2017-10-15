@@ -29,7 +29,7 @@ public abstract class Chunk{
 				createNewTerrain.accept(chunkMap[x][y]);
 			}
 		} 
-		World.getMap()[globalPosX][globalPosY][globalPosZ] = this;
+		World.getMap()[globalPosX][globalPosY][globalPosZ] = this; 
 	}  
 	
 	protected abstract void buildLevel();

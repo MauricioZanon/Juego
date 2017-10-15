@@ -26,6 +26,31 @@
 			</allowedMovementType>
 		</components.TransitableComponent>
 	</object-array>
+	
+		<object-array>
+		<components.Type>FEATURE</components.Type>
+		<components.NameComponent>
+			<name>tree</name>
+		</components.NameComponent>
+		<components.GraphicsComponent>
+			<ASCII>&#x2551;</ASCII>
+			<font>general</font>
+			<frontColor>
+				<r>0.48</r>
+				<g>0.38</g>
+				<b>0.21</b>
+				<a>1.0</a>
+			</frontColor>
+			<renderPriority>2</renderPriority>
+		</components.GraphicsComponent>
+		<components.TranslucentComponent>
+			<translucent>false</translucent>
+		</components.TranslucentComponent>
+		<components.TransitableComponent>
+			<allowedMovementType>
+			</allowedMovementType>
+		</components.TransitableComponent>
+	</object-array>
 
 	<object-array>
 		<components.Type>FEATURE</components.Type>

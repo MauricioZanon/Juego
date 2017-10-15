@@ -30,11 +30,13 @@ public abstract class FontLoader {
 	private final static String WEAPONS_PATH = "../core/assets/Data/Weapons.xml";
 	private final static String POTIONS_PATH = "../core/assets/Data/Potions.xml";
 	private final static String TERRAINS_PATH = "../core/assets/Data/Terrains.xml";
+	private final static String FEATURES_PATH = "../core/assets/Data/Features.xml";
 	
 	private static Document npcsDoc;
 	private static Document weaponsDoc;
 	private static Document potionsDoc;
 	private static Document terrainsDoc;
+	private static Document featuresDoc;
 	
 	private static XPath XPath;
 	
@@ -45,6 +47,7 @@ public abstract class FontLoader {
 			weaponsDoc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(WEAPONS_PATH));
 			potionsDoc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(POTIONS_PATH));
 			terrainsDoc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(TERRAINS_PATH));
+			featuresDoc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(FEATURES_PATH));
 		} catch (SAXException | IOException | ParserConfigurationException e) {
 			System.out.println(e);
 		}
@@ -66,6 +69,7 @@ public abstract class FontLoader {
 		parameter.characters += searchASCII(weaponsDoc);
 		parameter.characters += searchASCII(potionsDoc);
 		parameter.characters += searchASCII(npcsDoc);
+		parameter.characters += searchASCII(featuresDoc);
 		parameter.size = (int) (tileSize * 0.85);
 		parameter.shadowColor = Color.BLACK;
 		parameter.shadowOffsetX = 1;

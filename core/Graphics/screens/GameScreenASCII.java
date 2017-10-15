@@ -4,6 +4,7 @@ import static screens.FontLoader.fonts;
 
 import java.util.ArrayList;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
@@ -29,6 +30,7 @@ import console.Console;
 import console.Message;
 import console.MessageFactory;
 import fatories.ItemFactory;
+import fatories.TerrainFactory;
 import main.Tile;
 import main.Tile.Visibility;
 import pathFind.PathFinder;
@@ -46,7 +48,7 @@ public class GameScreenASCII implements Screen{
 	
 	private static GameScreenASCII instance = new GameScreenASCII();
 	protected final static int TILE_SIZE = 18; // tamaño anterior 18
-	private int gameScreenSize = Gdx.graphics.getHeight();
+	private int gameScreenSize = Gdx.graphics.getHeight(); 
 	private int gameScreenTiles = Gdx.graphics.getHeight()/TILE_SIZE;
 	
 	public Menu menu = null;
@@ -436,20 +438,20 @@ public class GameScreenASCII implements Screen{
 
 			public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 				PositionComponent playerPos = Juego.PLAYER.getComponent(PositionComponent.class);
-				Tile tile = getClickedTile();
+				Tile clickedTile = getClickedTile();
+				ArrayList<Tile> lista;
 				
 				switch(button){
 					case 0: //click izquierdo
-						Mappers.movMap.get(Juego.PLAYER).path = PathFinder.findPath(playerPos, tile.getPos(), Juego.PLAYER);
+						Mappers.movMap.get(Juego.PLAYER).path = PathFinder.findPath(playerPos, clickedTile.getPos(), Juego.PLAYER);
 						Actions.followPath(Juego.PLAYER);
 						break;
 					case 1: //click derecho
-						System.out.println(tile);
-	//					lista = World.getStraigthLine(playerPos, clickedPos);
-	//					for(Tile tile : lista){
-	//						Terrain wall = TerrainFactory.createTerrain("concrete wall");
-	//						tile.setTerrain(wall);
-	//					}
+						lista = Explorer.getStraigthLine(playerPos, clickedTile.getPos());
+						for(Tile tile : lista){
+							Entity wall = TerrainFactory.get("concrete floor");
+							tile.put(wall);
+						}
 						break;
 					case 2: //ruedita
 	//					lista = World.getStraigthLine(clickedPos, playerPos);

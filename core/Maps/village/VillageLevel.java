@@ -32,13 +32,12 @@ public class VillageLevel extends Chunk{
 		fillLevel(createGrassFloor);
 		
 		buildLevel();
-//		spawnNPCs("villager");
+//		spawnNPCs("villager"); 
 		
 	}
 	
 	@Override
 	protected void buildLevel() {
-		System.out.println("Building village...");
 		buildRoad();
 		
 		for(int i = 0; i < 10; i++){

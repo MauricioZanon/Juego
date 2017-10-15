@@ -36,7 +36,7 @@ public class Tests {
 	
 	@Test
 	public void randomTile(){
-		VillageLevel level = new VillageLevel(0, 0, 0);
+		VillageLevel level = new VillageLevel(0, 0);
 		Predicate<Tile> cond = t -> !t.isTransitable();
 		for(int i = 0; i < 1000; i++){
 			Tile tile = RNG.getRandom(level.getChunkMap(), cond);

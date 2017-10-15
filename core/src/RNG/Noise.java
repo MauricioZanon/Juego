@@ -4,23 +4,37 @@ public abstract class Noise {
 	
 	public static void main(String[] args) {
 		
-		float[][] noise = generatePerlinNoise(50, 250, 5);
+		print(generatePerlinNoise(50, 250, 5));
 		
-		for(int i = 0; i < noise.length; i++){
-			for(int j = 0; j < noise[0].length; j++){
-				float h = noise[i][j];
-				if(h < 0.2)
-            		System.out.print("~");
-            	else if(h > 0.6 && h < 0.7)
-            		System.out.print("*");
-            	else if(h < 0.6)
-            		System.out.print(".");
-            	else 
-            		System.out.print("^");
+	}
+	
+	public static void print(float[][] noise) {
+		for(int j = 0; j < noise[0].length; j++){
+			for(int i = 0; i < noise.length; i++){
+				int h = (int) (noise[i][j]*10);
+				switch(h) {
+					case 0:
+					case 1:
+					case 2: // lago, oceano, rio, chasm, etc
+						System.out.print("~");
+	            		break;
+					case 3:
+					case 4:
+					case 5:
+					case 6: //campo, desierto, planicie, aldea, etc
+						System.out.print(".");
+						break;
+					case 7:
+					case 8: //bosque, jungla, pantano, etc
+						System.out.print("*");
+	            		break;
+					default: //montaña, meseta, volcan, etc
+						System.out.print("^");
+	            		break;
+				}
 			}
 			System.out.println();
 		}
-		
 	}
 	
 	private static float[][] generateWhiteNoise(int width, int height)	{
@@ -81,8 +95,8 @@ public abstract class Noise {
 	 */
 	public static float[][] generatePerlinNoise(int width, int height, int octaveCount){
 		
-		float[][] baseNoise = generateWhiteNoise(50, 250);
-		float[][][] smoothNoise = new float[octaveCount][][];
+		float[][] baseNoise = generateWhiteNoise(width, height);
+		float[][][] smoothNoise = new float[octaveCount][width][height];
 		 
 		float persistance = 0.5f;
 		 
