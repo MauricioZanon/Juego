@@ -8,7 +8,7 @@ import com.badlogic.ashley.core.Entity;
 import RNG.RNG;
 import components.Mappers;
 import components.PositionComponent;
-import fatories.FeatureFactory;
+import factories.FeatureFactory;
 
 public class DungeonBuilder {
 	

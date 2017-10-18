@@ -4,7 +4,7 @@ import java.util.function.Consumer;
 
 import com.badlogic.ashley.core.Entity;
 
-import fatories.TerrainFactory;
+import factories.TerrainFactory;
 import main.Chunk;
 import main.Tile;
 

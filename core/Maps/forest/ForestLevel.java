@@ -6,8 +6,8 @@ import com.badlogic.ashley.core.Entity;
 
 import RNG.RNG;
 import components.Type;
-import fatories.FeatureFactory;
-import fatories.TerrainFactory;
+import factories.FeatureFactory;
+import factories.TerrainFactory;
 import main.Chunk;
 import main.Tile;
 import world.World;

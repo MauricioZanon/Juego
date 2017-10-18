@@ -7,8 +7,8 @@ import org.junit.Test;
 import com.badlogic.ashley.core.Entity;
 
 import RNG.RNG;
-import fatories.ItemFactory;
-import fatories.NPCFactory;
+import factories.ItemFactory;
+import factories.NPCFactory;
 import main.Tile;
 import village.VillageLevel;
 import world.World;

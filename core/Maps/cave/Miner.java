@@ -7,7 +7,7 @@ import com.badlogic.ashley.core.Entity;
 import RNG.RNG;
 import components.PositionComponent;
 import components.Type;
-import fatories.TerrainFactory;
+import factories.TerrainFactory;
 import main.Tile;
 import world.Explorer;
 

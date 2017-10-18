@@ -1,4 +1,4 @@
-package fatories;
+package factories;
 
 import java.util.HashMap;
 

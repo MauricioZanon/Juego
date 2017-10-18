@@ -7,7 +7,7 @@ import com.mygdx.juego.Juego;
 
 import components.GraphicsComponent;
 import components.PositionComponent;
-import fatories.TerrainFactory;
+import factories.TerrainFactory;
 import main.Tile;
 
 public class Path {
