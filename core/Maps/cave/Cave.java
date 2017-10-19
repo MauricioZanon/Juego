@@ -22,14 +22,14 @@ public class Cave extends Location{
 	
 	/**Hecho con random walks*/
 	public Cave(PositionComponent startingPos, CaveSize size) {
-		Entity stair = FeatureFactory.get("stair");
+		Entity stair = FeatureFactory.createFeature("stair");
 		Mappers.graphMap.get(stair).ASCII = ">";
 		stair.add(startingPos);
 		startingPos.getTile().put(stair);
 		
 		PositionComponent firstPos = startingPos.clone();
 		firstPos.setGz(firstPos.getGz() + 1);
-		Entity stair2 = FeatureFactory.get("stair");
+		Entity stair2 = FeatureFactory.createFeature("stair");
 		Mappers.graphMap.get(stair2).ASCII = "<";
 		stair2.add(firstPos);
 		firstPos.getTile().put(stair2);

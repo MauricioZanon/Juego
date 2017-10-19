@@ -12,7 +12,8 @@ public abstract class TerrainFactory extends Factory {
 	private static HashMap<String, Entity> terrainPool = fillPool();
 	
 	public static Entity get(String name){
-		return terrainPool.get(name);
+		if(!terrainStrings.containsKey(name)) return null;
+		else return terrainPool.get(name);
 	}
 	
 	public static Entity getNewInstance(String name) {

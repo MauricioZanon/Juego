@@ -10,7 +10,8 @@ public abstract class FeatureFactory extends Factory{
 	
 	private static HashMap<String, String> featureStrings = loadEntities(PATH_FEATURES);
 	
-	public static Entity get(String name){
+	public static Entity createFeature(String name){
+		if(!featureStrings.keySet().contains(name)) return null;
 		return create(featureStrings.get(name));
 	}
 	

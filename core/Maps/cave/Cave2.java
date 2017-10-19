@@ -27,7 +27,7 @@ public class Cave2 extends Location{
 	
 	/**Hecho con cellular automaton, no sirve como cueva pero puede servir para otras cosas, como para agregar spots de pasto o arboles*/
 	public Cave2(PositionComponent startingPos) {
-		Entity stair = FeatureFactory.get("stair");
+		Entity stair = FeatureFactory.createFeature("stair");
 		Mappers.graphMap.get(stair).ASCII = ">";
 		stair.add(startingPos);
 		startingPos.getTile().put(stair);

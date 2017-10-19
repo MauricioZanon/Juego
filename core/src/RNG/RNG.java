@@ -34,11 +34,13 @@ public abstract class RNG {
 	
 	@SuppressWarnings("unchecked")
 	public static <T> T getRandom(Collection<T> collection){
+		if(collection.isEmpty()) return null;
 		T[] array = (T[]) collection.toArray();
 		return array[nextInt(array.length)];
 	}
 	
 	public static <T> T getRandom(Collection<T> collection, Predicate<T> cond){
+		if(collection.isEmpty()) return null;
 		while(true){
 			T t = getRandom(collection);
 			if(cond.test(t)){
@@ -49,11 +51,13 @@ public abstract class RNG {
 	
 	@SuppressWarnings("unchecked")
 	public static <T> T getRandom(Set<T> set){
+		if(set.isEmpty()) return null;
 		T[] array = (T[]) set.toArray();
 		return array[nextInt(array.length)];
 	}
 
 	public static <T> T getRandom(Set<T> set, Predicate<T> cond){
+		if(set.isEmpty()) return null;
 		while(true){
 			T t = getRandom(set);
 			if(cond.test(t)){
@@ -63,10 +67,12 @@ public abstract class RNG {
 	}
 	
 	public static <T> T getRandom(List<T> list){
+		if(list.isEmpty()) return null;
 		return list.get(nextInt(list.size()));
 	}
 	
 	public static <T> T getRandom(List<T> list, Predicate<T> cond){
+		if(list.isEmpty()) return null;
 		while(true){
 			T t = getRandom(list);
 			if(cond.test(t)) return t;

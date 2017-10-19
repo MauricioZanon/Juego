@@ -17,7 +17,8 @@ public abstract class NPCFactory extends Factory{
 	}
 	
 	public static Entity createNPC(String name){
-		return create(NPCStrings.get(name));
+		if(!NPCStrings.keySet().contains(name)) return null;
+		else return create(NPCStrings.get(name));
 	}
 	
 	public static void main(String[] args) {

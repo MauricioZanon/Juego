@@ -23,7 +23,7 @@ public class DungeonBuilder {
 		Set<DungeonLevel> levels = new HashSet<>();
 		int depth = RNG.nextGaussian(4, 2);
 		
-		Entity stair = FeatureFactory.get("stair");
+		Entity stair = FeatureFactory.createFeature("stair");
 		Mappers.graphMap.get(stair).ASCII = ">";
 		stair.add(entrancePos);
 		entrancePos.getTile().put(stair);

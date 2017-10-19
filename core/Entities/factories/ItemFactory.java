@@ -29,6 +29,22 @@ public abstract class ItemFactory extends Factory{
 		}
 	}
 	
+	public static Entity createItem(String itemName) {
+		if(weaponStrings.keySet().contains(itemName)) {
+			return create(weaponStrings.get(itemName)); 
+		}
+		else if(armorStrings.keySet().contains(itemName)) {
+			return create(armorStrings.get(itemName)); 
+		}
+		else if(potionStrings.keySet().contains(itemName)){
+			return create(potionStrings.get(itemName)); 
+		}
+		else {
+			return null;
+		}
+		
+	}
+	
 	/**===============================================================
 	 * ============================EQUIPMENT==========================
 	 * ===============================================================*/

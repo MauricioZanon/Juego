@@ -156,13 +156,13 @@ public class DungeonLevel {
 	
 	private void putStairs() {
 		if(upStair != null) {
-			Entity stair = FeatureFactory.get("stair");
+			Entity stair = FeatureFactory.createFeature("stair");
 			stair.add(upStair);
 			Mappers.graphMap.get(stair).ASCII = "<";
 			upStair.getTile().put(stair);
 		}
 		if(downStair != null) {
-			Entity stair = FeatureFactory.get("stair");
+			Entity stair = FeatureFactory.createFeature("stair");
 			stair.add(downStair);
 			Mappers.graphMap.get(stair).ASCII = ">";
 			downStair.getTile().put(stair);
@@ -170,7 +170,7 @@ public class DungeonLevel {
 		else {
 			Room room = RNG.getRandom(rooms);//, r -> r.getDoorTiles().size() == 1);
 			downStair = RNG.getRandom(room.getFloorTiles()).getPos();
-			Entity stair = FeatureFactory.get("stair");
+			Entity stair = FeatureFactory.createFeature("stair");
 			stair.add(downStair);
 			Mappers.graphMap.get(stair).ASCII = ">";
 			downStair.getTile().put(stair);
