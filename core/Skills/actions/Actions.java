@@ -140,8 +140,12 @@ public abstract class Actions {
 	public static void explore(Entity actor){
 		Tile origin = posMap.get(actor).getTile();
 		Tile destination = Explorer.getNearbyTile(origin, t -> t.getVisibility() == Visibility.NOT_VISIBLE);
-		movMap.get(actor).path = PathFinder.findPath(origin.getPos(), destination.getPos(), actor);
-		followPath(actor);
+		if(destination != null) {
+			movMap.get(actor).path = PathFinder.findPath(origin.getPos(), destination.getPos(), actor);
+			followPath(actor);
+		}else {
+			MessageFactory.createMessage("There is nothing left to explore nearby.");
+		}
 	}
 	
 	/**

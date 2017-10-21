@@ -260,7 +260,7 @@ public class Explorer {
 	
 	public static Tile getNearbyTile(Tile origin, Predicate<Tile> cond){
 		Set<Tile> possibleTiles = getAdjacentTiles(origin, t -> t.isTransitable());
-		while(true){
+		for(int i = 0; i < World.CHUNK_SIZE; i++){
 			Set<Tile> newSet = new HashSet<>();
 			for(Tile tile : possibleTiles){
 				if(cond.test(tile)){
@@ -271,5 +271,6 @@ public class Explorer {
 			newSet.removeAll(possibleTiles);
 			possibleTiles = newSet;
 		}
+		return null;
 	}
 }

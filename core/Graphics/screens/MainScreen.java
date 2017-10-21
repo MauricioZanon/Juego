@@ -7,8 +7,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.mygdx.juego.Juego;
 
 public class MainScreen implements Screen{
@@ -28,7 +26,6 @@ public class MainScreen implements Screen{
 	@Override
 	public void show() {
 		batch = new SpriteBatch();
-		
 		Gdx.input.setInputProcessor(MAIN_SCREEN_INPUT);
 	}
 
@@ -38,9 +35,7 @@ public class MainScreen implements Screen{
 		
 		batch.begin();
 		
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("../core/assets/fonts/CONSOLA.ttf"));
-		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-		BitmapFont font = generator.generateFont(parameter);
+		BitmapFont font = FontLoader.fonts.get("menu");
 		
 		font.draw(batch, "[N]ew game", 100, 400);
 		font.draw(batch, "[L]oad", 100, 370);
