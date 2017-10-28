@@ -1,6 +1,6 @@
 package screens;
 
-import static screens.FontLoader.fonts;
+import static tools.FontLoader.fonts;
 
 import java.util.ArrayList;
 
@@ -9,6 +9,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -33,7 +34,14 @@ import factories.ItemFactory;
 import factories.TerrainFactory;
 import main.Tile;
 import main.Tile.Visibility;
+import menu.EquipMenu;
+import menu.InventoryMenu;
+import menu.Menu;
+import menu.QuaffMenu;
 import pathFind.PathFinder;
+import tools.CustomShapeRenderer;
+import tools.FontLoader;
+import tools.RenderSystem;
 import world.Direction;
 import world.Explorer;
 
@@ -47,7 +55,7 @@ public class GameScreenASCII implements Screen{
 	private CustomShapeRenderer shapeRenderer;
 	
 	private static GameScreenASCII instance = new GameScreenASCII();
-	protected final static int TILE_SIZE = 18; // tamaño anterior 18
+	public final static int TILE_SIZE = 18; // tamaño anterior 18
 	private int gameScreenSize = Gdx.graphics.getHeight(); 
 	private int gameScreenTiles = Gdx.graphics.getHeight()/TILE_SIZE;
 	
@@ -391,7 +399,8 @@ public class GameScreenASCII implements Screen{
 //						RenderSystem.setScreen(SkillsScreen.getInstance());
 						break;
 					case Keys.X:
-						Actions.explore(Juego.PLAYER);
+						State<Entity> exploreState = Mappers.AIMap.get(Juego.PLAYER).states.get("exploring");
+						Mappers.AIMap.get(Juego.PLAYER).fsm.changeState(exploreState);
 						break;
 				}
 				return false;

@@ -73,7 +73,23 @@
 		<components.StatusEffectsComponent/>
 		<components.SkillsComponent/>
 		<components.AIComponent>
-			<AIType>basic AI</AIType>
+			<states>
+				<entry>
+					<string>idling</string>
+					<states.IdleState/>
+				</entry>
+				<entry>
+					<string>exploring</string>
+					<states.ExploreState/>
+				</entry>
+				<entry>
+					<string>attacking</string>
+					<states.AttackState/>
+				</entry>
+			</states>
+			<fsm>
+				<currentState class="states.ExploreState" reference="../../states/entry[2]/states.ExploreState"/>
+			</fsm>
 		</components.AIComponent>
 		<components.VisionComponent>
 			<sightRange>50</sightRange>
@@ -158,7 +174,23 @@
 		<components.StatusEffectsComponent/>
 		<components.SkillsComponent/>
 		<components.AIComponent>
-			<AIType>basic AI</AIType>
+			<states>
+				<entry>
+					<string>idling</string>
+					<states.IdleState/>
+				</entry>
+				<entry>
+					<string>exploring</string>
+					<states.ExploreState/>
+				</entry>
+				<entry>
+					<string>attacking</string>
+					<states.AttackState/>
+				</entry>
+			</states>
+			<fsm>
+				<currentState class="states.ExploreState" reference="../../states/entry[2]/states.ExploreState"/>
+			</fsm>
 		</components.AIComponent>
 		<components.VisionComponent>
 			<sightRange>50</sightRange>
@@ -239,7 +271,23 @@
 		<components.StatusEffectsComponent/>
 		<components.SkillsComponent/>
 		<components.AIComponent>
-			<AIType>basic AI</AIType>
+			<states>
+				<entry>
+					<string>idling</string>
+					<states.IdleState/>
+				</entry>
+				<entry>
+					<string>exploring</string>
+					<states.ExploreState/>
+				</entry>
+				<entry>
+					<string>attacking</string>
+					<states.AttackState/>
+				</entry>
+			</states>
+			<fsm>
+				<currentState class="states.ExploreState" reference="../../states/entry[2]/states.ExploreState"/>
+			</fsm>
 		</components.AIComponent>
 		<components.VisionComponent>
 			<sightRange>50</sightRange>

@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.juego.Juego;
 
+import tools.FontLoader;
+
 public class MainScreen implements Screen{
 	
 	private static MainScreen instance = new MainScreen();

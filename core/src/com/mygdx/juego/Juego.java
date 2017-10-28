@@ -25,7 +25,10 @@ import components.VisionComponent;
 import eventSystem.EventSystem;
 import screens.GameScreenASCII;
 import screens.MainScreen;
-import screens.RenderSystem;
+import states.AttackState;
+import states.PlayerExploreState;
+import states.PlayerIdleState;
+import tools.RenderSystem;
 import world.World;
 
 public class Juego extends Game {
@@ -89,7 +92,10 @@ public class Juego extends Game {
 		PLAYER.add(ENGINE.createComponent(EquipmentComponent.class));
 		
 		AIComponent ai = ENGINE.createComponent(AIComponent.class);
-		ai.AIType = "player AI";
+		ai.fsm.setOwner(PLAYER);
+		ai.states.put("idling", new PlayerIdleState());
+		ai.states.put("exploring", new PlayerExploreState());
+		ai.states.put("attacking", new AttackState());
 		PLAYER.add(ai);
 		
 		PLAYER.add(ENGINE.createComponent(MovementComponent.class));

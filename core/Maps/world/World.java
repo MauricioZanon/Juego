@@ -32,8 +32,8 @@ public abstract class World {
 		
 		createOverworld();
 		
-		new Cave(new PositionComponent(5, 5, 0, 5, 5), RNG.getRandom(CaveSize.values()));
-//		createDungeons();
+//		new Cave(new PositionComponent(5, 5, 0, 5, 5), RNG.getRandom(CaveSize.values()));
+		createDungeons();
 		System.out.println("Tiempo de creación del World Map: " + (System.currentTimeMillis() - time));
 	}
 	

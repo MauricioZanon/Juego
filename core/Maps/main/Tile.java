@@ -25,7 +25,7 @@ public class Tile {
 	
 	private Entity actor = null;
 	private Entity feature = null;
-	private LinkedList<Entity> items = new LinkedList<>();;
+	private LinkedList<Entity> items = new LinkedList<>();
 	private Entity terrain = null;
 	
 	private Visibility visibility = Visibility.NOT_VISIBLE;

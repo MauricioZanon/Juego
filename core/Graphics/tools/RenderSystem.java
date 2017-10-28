@@ -1,4 +1,4 @@
-package screens;
+package tools;
 
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.Screen;

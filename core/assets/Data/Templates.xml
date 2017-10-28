@@ -1,17 +1,95 @@
 <object-array>
-  <components.Type>FEATURE</components.Type>
+  <components.Type>ACTOR</components.Type>
   <components.NameComponent>
-    <name>Feature template</name>
+    <name>Actor template</name>
   </components.NameComponent>
   <components.GraphicsComponent>
-    <ASCII>?</ASCII>
+    <ASCII>g</ASCII>
     <font>general</font>
     <frontColor>
       <r>1.0</r>
-      <g>0.0</g>
-      <b>0.0</b>
+      <g>0.4117647</g>
+      <b>0.7058824</b>
       <a>1.0</a>
     </frontColor>
-    <renderPriority>2</renderPriority>
+    <renderPriority>3</renderPriority>
   </components.GraphicsComponent>
+  <components.AttributeComponent>
+    <att>
+      <entry>
+        <string>STR</string>
+        <float>10.0</float>
+      </entry>
+      <entry>
+        <string>WIS</string>
+        <float>10.0</float>
+      </entry>
+      <entry>
+        <string>damage</string>
+        <float>15.0</float>
+      </entry>
+      <entry>
+        <string>CON</string>
+        <float>10.0</float>
+      </entry>
+      <entry>
+        <string>DEX</string>
+        <float>10.0</float>
+      </entry>
+      <entry>
+        <string>CUN</string>
+        <float>10.0</float>
+      </entry>
+      <entry>
+        <string>INT</string>
+        <float>10.0</float>
+      </entry>
+    </att>
+  </components.AttributeComponent>
+  <components.EquipmentComponent>
+    <equipment/>
+  </components.EquipmentComponent>
+  <components.AIComponent>
+    <states>
+      <entry>
+        <string>idling</string>
+        <states.IdleState/>
+      </entry>
+      <entry>
+        <string>exploring</string>
+        <states.ExploreState/>
+      </entry>
+      <entry>
+        <string>attacking</string>
+        <states.AttackState/>
+      </entry>
+    </states>
+    <fsm>
+      <currentState class="states.ExploreState" reference="../../states/entry[2]/states.ExploreState"/>
+    </fsm>
+  </components.AIComponent>
+  <components.HealthComponent>
+    <maxHP>20.0</maxHP>
+    <curHP>20.0</curHP>
+    <HPreg>0.1</HPreg>
+  </components.HealthComponent>
+  <components.MovementComponent>
+    <movementType>WALK</movementType>
+  </components.MovementComponent>
+  <components.TimedComponent>
+    <actionPoints>0</actionPoints>
+    <isActive>true</isActive>
+  </components.TimedComponent>
+  <components.Faction>HUMANS</components.Faction>
+  <components.InventoryComponent>
+    <inv/>
+  </components.InventoryComponent>
+  <components.StatusEffectsComponent>
+    <effects/>
+  </components.StatusEffectsComponent>
+  <components.SkillsComponent/>
+  <components.VisionComponent>
+    <sightRange>50</sightRange>
+    <visionMap/>
+  </components.VisionComponent>
 </object-array>

@@ -1,5 +1,6 @@
 package eventSystem;
 
+import static components.Mappers.AIMap;
 import static components.Mappers.timedMap;
 
 import java.util.Set;
@@ -7,8 +8,6 @@ import java.util.Set;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.mygdx.juego.Juego;
-
-import AI.AISystem;
 
 public class EventSystem extends EntitySystem {
 	
@@ -27,11 +26,11 @@ public class EventSystem extends EntitySystem {
 				if(timedMap.get(entity).actionPoints < 100)
 					timedMap.get(entity).actionPoints++;
 				else
-					AISystem.execute(entity);
+					AIMap.get(entity).fsm.update();
 			}
 			timedMap.get(Juego.PLAYER).actionPoints++;
 		}
-		AISystem.execute(Juego.PLAYER);
+		AIMap.get(Juego.PLAYER).fsm.update();
 	}
 
 }

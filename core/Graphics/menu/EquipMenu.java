@@ -1,4 +1,4 @@
-package screens;
+package menu;
 
 import static components.Mappers.attMap;
 import static components.Mappers.inventoryMap;
@@ -15,34 +15,36 @@ import com.mygdx.juego.Juego;
 
 import actions.Actions;
 import components.ItemType;
+import screens.GameScreenASCII;
+import tools.CustomShapeRenderer;
 
-public class QuaffMenu extends Menu{
+public class EquipMenu extends Menu{
 	
-	private final InputProcessor QUAFF_INPUT = createQuaffProcessor();
+	private final InputProcessor EQUIP_INPUT = createEquipProcessor();
 	
-	public QuaffMenu() {
-		items = inventoryMap.get(Juego.PLAYER).getList(ItemType.POTION);
+	public EquipMenu() {
+		items = inventoryMap.get(Juego.PLAYER).getList(ItemType.EQUIPMENT);
 		recalculateSize();
-		Gdx.input.setInputProcessor(QUAFF_INPUT);
+		Gdx.input.setInputProcessor(EQUIP_INPUT);
 	}
 	
 	@Override
 	public void render(SpriteBatch batch, CustomShapeRenderer sr) {
 		sr.begin(ShapeType.Filled);
-		sr.drawMenuBox(startingX, startingY, menuWidth, menuHeight, Color.BROWN);
+		sr.drawMenuBox(startingX, startingY, menuWidth, menuHeight, Color.BLUE);
 		sr.end();
 		
 		batch.begin();
 		int x = startingX + 5;
 		int y = startingY + menuHeight - 33;
 		
-		titleFont.setColor(Color.BROWN);
-		titleFont.draw(batch, "POTIONS", x, y + 30);
+		titleFont.setColor(Color.BLUE);
+		titleFont.draw(batch, "EQUIPMENT", x, y + 30);
 
 		for(Entity p : items){
-			String potionName = nameMap.get(p).name;
+			String equipmentName = nameMap.get(p).name;
 			int quantity = (int) attMap.get(p).get("quantity");
-			String text = potionName;
+			String text = equipmentName;
 			if(quantity > 1) {
 				text += " (" + quantity + ")";
 			}
@@ -53,9 +55,10 @@ public class QuaffMenu extends Menu{
 		}
 		
 		batch.end();
+		
 	}
 
-	private InputProcessor createQuaffProcessor() {
+	private InputProcessor createEquipProcessor() {
 		return new InputProcessor() {
 			
 			@Override
@@ -75,9 +78,9 @@ public class QuaffMenu extends Menu{
 					GameScreenASCII.getInstance().menu = null;
 					GameScreenASCII.getInstance().setGameInput();
 					if(!items.isEmpty()){
-						Entity potion = items.get(selectedItem);
-						Actions.quaff(Juego.PLAYER, potion);
-						inventoryMap.get(Juego.PLAYER).remove(potion);
+						Entity equipment = items.get(selectedItem);
+						Actions.equip(Juego.PLAYER, equipment);
+						inventoryMap.get(Juego.PLAYER).remove(equipment);
 					}
 					break;
 			}
@@ -120,5 +123,4 @@ public class QuaffMenu extends Menu{
 			}
 		};
 	}
-
 }

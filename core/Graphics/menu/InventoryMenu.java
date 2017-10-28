@@ -1,4 +1,4 @@
-package screens;
+package menu;
 
 import static components.Mappers.attMap;
 import static components.Mappers.inventoryMap;
@@ -12,6 +12,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.mygdx.juego.Juego;
+
+import screens.GameScreenASCII;
+import tools.CustomShapeRenderer;
 
 public  class InventoryMenu extends Menu{
 	

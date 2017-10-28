@@ -1,4 +1,4 @@
-package screens;
+package tools;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -21,6 +21,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+
+import screens.GameScreenASCII;
 
 public abstract class FontLoader {
 	

@@ -37,6 +37,9 @@ import components.TransitableComponent;
 import components.TranslucentComponent;
 import components.Type;
 import components.VisionComponent;
+import states.AttackState;
+import states.ExploreState;
+import states.IdleState;
 
 
 @XStreamAlias("Ejemplos") // Hace que XStream use este alias cuando cree el XML
@@ -114,6 +117,14 @@ public class EjemploXStream {
 		EquipmentComponent ec = Juego.ENGINE.createComponent(EquipmentComponent.class);
 		actor.add(ec);
 		
+		AIComponent ai = Juego.ENGINE.createComponent(AIComponent.class);
+		ai.states.put("attacking", new AttackState());
+		ai.states.put("exploring", new ExploreState());
+		ai.states.put("idling", new IdleState());
+		ai.fsm.setInitialState(ai.states.get("exploring"));
+		
+		actor.add(ai);
+		
 		actor.add(Juego.ENGINE.createComponent(HealthComponent.class));
 		actor.add(Juego.ENGINE.createComponent(MovementComponent.class));
 		actor.add(Juego.ENGINE.createComponent(TimedComponent.class));
@@ -121,7 +132,6 @@ public class EjemploXStream {
 		actor.add(Juego.ENGINE.createComponent(InventoryComponent.class));
 		actor.add(Juego.ENGINE.createComponent(StatusEffectsComponent.class));
 		actor.add(Juego.ENGINE.createComponent(SkillsComponent.class));
-		actor.add(Juego.ENGINE.createComponent(AIComponent.class));
 		actor.add(Juego.ENGINE.createComponent(VisionComponent.class));
 		
 		saveObject(actor.getComponents().toArray());
@@ -234,8 +244,8 @@ public class EjemploXStream {
 		createEntityWithAllComponents();
 		createItem();
 		createPotion();
-		createActor();
 		createFeature();
+		createActor();
 		
 		loadObject();
 		
