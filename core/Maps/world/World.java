@@ -3,9 +3,6 @@ package world;
 import java.util.HashSet;
 
 import RNG.Noise;
-import RNG.RNG;
-import cave.Cave;
-import cave.Cave.CaveSize;
 import components.PositionComponent;
 import dungeon.DungeonBuilder;
 import field.FieldLevel;
@@ -15,19 +12,19 @@ import main.Location;
 import mountain.MountainLevel;
 import village.VillageLevel;
 
-public abstract class World {
+public class World {
 	
-	private static final int WIDTH = 45;
-	private static final int HEIGHT = 30;
-	private static final int DEPTH = 10;
+	private final int WIDTH = 10;
+	private final int HEIGHT = 10;
+	private final int DEPTH = 10;
 	
-	public static final int CHUNK_SIZE = 50;
+	public final int CHUNK_SIZE = 50;
 	
-	private static Chunk[][][] map;
-	private static float[][] elevation;
-	private static HashSet<Location> locations = new HashSet<>();
+	private Chunk[][][] map;
+	private float[][] elevation;
+	private HashSet<Location> locations = new HashSet<>();
 	
-	public static void initialize(){
+	public void initialize(){
 		long time = System.currentTimeMillis();
 		
 		createOverworld();
@@ -37,7 +34,7 @@ public abstract class World {
 		System.out.println("Tiempo de creación del World Map: " + (System.currentTimeMillis() - time));
 	}
 	
-	private static void createOverworld() {
+	private void createOverworld() {
 		elevation = Noise.generatePerlinNoise(WIDTH, HEIGHT, 5);
 		Noise.print(elevation);
 		map = new Chunk[WIDTH][HEIGHT][DEPTH];
@@ -47,7 +44,7 @@ public abstract class World {
 				int h = (int) (elevation[x][y]*10);
 				switch(h) {
 					case 1:
-					case 2: // lago, oceano, rio, chasm, etc
+					case 2: //lago, oceano, rio, chasm, etc
 						map[x][y][0] = new VillageLevel(x, y);
 						break;
 					case 3:
@@ -68,17 +65,17 @@ public abstract class World {
 		}
 	}
 
-	private static void createDungeons() {
-		DungeonBuilder.createDungeon(new PositionComponent(5, 5, 0, 5, 5));
+	private void createDungeons() {
+		DungeonBuilder.createDungeon(new PositionComponent(55, 55, 0));
 	}
 
-	public static Chunk[][][] getMap() {
+	public Chunk[][][] getMap() {
 		return map;
 	}
 	
 	
 	
-	public static HashSet<Location> getLocations() {
+	public HashSet<Location> getLocations() {
 		return locations;
 	}
 	

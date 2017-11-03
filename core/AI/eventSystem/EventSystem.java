@@ -11,9 +11,9 @@ import com.mygdx.juego.Juego;
 
 public class EventSystem extends EntitySystem {
 	
-	private static Set<Entity> timedEntities = null;
+	private static Set<Entity> timedEntities = null; // Las entidades del ActiveMap que actuen por turnos
 	
-	public static void setEventList(Set<Entity> e) {
+	public static void setTimedEntities(Set<Entity> e) {
 		timedEntities = e;
 	}
 	
@@ -21,9 +21,10 @@ public class EventSystem extends EntitySystem {
 	public void update(float deltaTime) {
 		while(timedMap.get(Juego.PLAYER).actionPoints < 100){
 			for(Entity entity : timedEntities){
-				if(!timedMap.get(entity).isActive)
-					continue;
-				if(timedMap.get(entity).actionPoints < 100)
+				if(!timedMap.get(entity).isActive) {
+					Juego.ENGINE.removeEntity(entity);
+				}
+				else if(timedMap.get(entity).actionPoints < 100)
 					timedMap.get(entity).actionPoints++;
 				else
 					AIMap.get(entity).fsm.update();

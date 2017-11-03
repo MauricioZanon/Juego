@@ -11,10 +11,7 @@ import static components.Mappers.timedMap;
 import java.util.NoSuchElementException;
 
 import com.badlogic.ashley.core.Entity;
-import com.mygdx.juego.Juego;
 
-import FOV.VisionCalculator;
-import activeMap.ActiveMap;
 import components.InventoryComponent;
 import components.Mappers;
 import components.MovementComponent.MovementType;
@@ -24,6 +21,7 @@ import console.MessageFactory;
 import effects.DamageCalculator;
 import effects.Effects;
 import effects.Trigger;
+import eventSystem.ActiveMap;
 import features.FeaturesEffects;
 import main.Tile;
 import main.Tile.Visibility;
@@ -46,18 +44,18 @@ public abstract class Actions {
 	 */
 	public static void bump(PositionComponent oldPos, Direction dir){
 		Tile oldTile = oldPos.getTile();
-		PositionComponent newPos = new PositionComponent(oldPos.getGx(), oldPos.getGy(), oldPos.getGz(), oldPos.getLx() + dir.movX, oldPos.getLy() + dir.movY);
+		PositionComponent newPos = new PositionComponent(oldPos.coord[0] + dir.movX, oldPos.coord[1] + dir.movY, oldPos.getGz());
 		Tile newTile = newPos.getTile();
 		Entity actor = oldTile.get(Type.ACTOR);
 		
 		if(newTile.get(Type.ACTOR) != null){
 			attack(oldTile, newTile);
 		}
-		else if(newTile.get(Type.FEATURE) != null && !newTile.isTransitable()){
-			useFeature(actor, newPos);
-		}
 		else if(Mappers.transitableMap.get(newTile.get(Type.TERRAIN)).allowedMovementType.contains(MovementType.WALK)){
 			walk(oldPos, newPos);
+		}
+		else if(newTile.get(Type.FEATURE) != null && !newTile.isTransitable()){
+			useFeature(actor, newPos);
 		}
 		if(!newTile.isTransitable()) {
 			return;
@@ -139,7 +137,7 @@ public abstract class Actions {
 	 */
 	public static void explore(Entity actor){
 		Tile origin = posMap.get(actor).getTile();
-		Tile destination = Explorer.getNearbyTile(origin, t -> t.getVisibility() == Visibility.NOT_VISIBLE);
+		Tile destination = Explorer.getClosestTile(origin, t -> t.getVisibility() == Visibility.NOT_VISIBLE);
 		if(destination != null) {
 			movMap.get(actor).path = PathFinder.findPath(origin.getPos(), destination.getPos(), actor);
 			followPath(actor);
@@ -187,11 +185,10 @@ public abstract class Actions {
 	 * @param action la última acción realizada
 	 */
 	public static void endTurn(Entity entity, ActionType action) {
-		VisionCalculator.calculateVision(entity);
-		timedMap.get(entity).actionPoints = (int) attMap.get(entity).get(action.asociatedStat);
 		if(playerMap.has(entity)) {
 			ActiveMap.refresh();
 		}
+		timedMap.get(entity).actionPoints = (int) attMap.get(entity).get(action.asociatedStat);
 		Mappers.statusEffectsMap.get(entity).affect(Trigger.END_TURN);
 	}
 
@@ -206,7 +203,6 @@ public abstract class Actions {
 		PositionComponent pos = posMap.get(actor);
 		pos.getTile().remove(actor);
 		timedMap.get(actor).isActive = false;
-		Juego.ENGINE.removeEntity(actor);
 	}
 	
 }

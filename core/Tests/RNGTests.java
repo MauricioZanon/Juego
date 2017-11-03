@@ -1,4 +1,4 @@
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Collections;
 import java.util.Set;
@@ -7,10 +7,11 @@ import java.util.function.Predicate;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.mygdx.juego.Juego;
+
 import RNG.RNG;
 import main.Chunk;
 import main.Tile;
-import world.World;
 
 public class RNGTests {
 
@@ -42,7 +43,7 @@ public class RNGTests {
 	@Ignore //FIXME se freezea en las pruebas
 	@Test
 	public void randomTile(){
-		Chunk level = World.getMap()[1][1][0];
+		Chunk level = Juego.world.getMap()[1][1][0];
 		Predicate<Tile> cond = t -> !t.isTransitable();
 		for(int i = 0; i < 1000; i++){
 			Tile tile = RNG.getRandom(level.getChunkMap(), cond);

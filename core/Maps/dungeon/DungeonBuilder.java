@@ -21,7 +21,7 @@ public class DungeonBuilder {
 	//FIXME: Hay que sacar las escaleras que bajan del último piso
 	public static void createDungeon(PositionComponent entrancePos, DungeonType type, DungeonSize size) {
 		Set<DungeonLevel> levels = new HashSet<>();
-		int depth = RNG.nextGaussian(4, 2);
+		int depth = 1;//RNG.nextGaussian(4, 2);
 		
 		Entity stair = FeatureFactory.createFeature("stair");
 		Mappers.graphMap.get(stair).ASCII = ">";
@@ -29,14 +29,14 @@ public class DungeonBuilder {
 		entrancePos.getTile().put(stair);
 		
 		PositionComponent startingPos = entrancePos.clone();
-		startingPos.setGz(startingPos.getGz() + 1);
+		startingPos.coord[2]++;
 		
 		while(levels.size() < depth) {
 			DungeonLevel level = new DungeonLevel(startingPos, type, size);
 			if(level.isValidLevel()) {
 				levels.add(level);
 				startingPos = level.getDownStair().clone();
-				startingPos.setGz(startingPos.getGz() + 1);
+				startingPos.coord[2]++;
 			}
 		}
 		

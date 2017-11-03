@@ -12,5 +12,11 @@ public class AIComponent implements Component{
 	public HashMap<String, State<Entity>> states = new HashMap<>();
 	
 	public DefaultStateMachine<Entity, State<Entity>> fsm = new DefaultStateMachine<>();
+	
+	public void setState(String stateName) {
+		if(states.keySet().contains(stateName)) {
+			fsm.changeState(states.get(stateName));
+		}
+	}
 
 }

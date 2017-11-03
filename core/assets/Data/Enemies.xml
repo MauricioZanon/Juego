@@ -75,8 +75,8 @@
 		<components.AIComponent>
 			<states>
 				<entry>
-					<string>idling</string>
-					<states.IdleState/>
+					<string>wandering</string>
+					<states.WanderState/>
 				</entry>
 				<entry>
 					<string>exploring</string>
@@ -176,8 +176,8 @@
 		<components.AIComponent>
 			<states>
 				<entry>
-					<string>idling</string>
-					<states.IdleState/>
+					<string>wandering</string>
+					<states.WanderState/>
 				</entry>
 				<entry>
 					<string>exploring</string>
@@ -273,8 +273,8 @@
 		<components.AIComponent>
 			<states>
 				<entry>
-					<string>idling</string>
-					<states.IdleState/>
+					<string>wandering</string>
+					<states.WanderState/>
 				</entry>
 				<entry>
 					<string>exploring</string>

@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.Comparator;
 
 import com.badlogic.ashley.core.Entity;
+import com.mygdx.juego.Juego;
 
 import components.PositionComponent;
 import main.Tile;
 import world.Explorer;
-import world.World;
 
 public abstract class PathFinder {
 
-	private static final int MAX_DISTANCE = World.CHUNK_SIZE;
+	private static final int MAX_DISTANCE = Juego.world.CHUNK_SIZE;
 	private static Comparator<Node> comparador = new Comparator<Node>(){
 		@Override
 		public int compare(Node n1, Node n2) {

@@ -21,7 +21,6 @@ import com.mygdx.juego.Juego;
 
 import actions.ActionType;
 import actions.Actions;
-import activeMap.ActiveMap;
 import components.GraphicsComponent;
 import components.HealthComponent;
 import components.Mappers;
@@ -30,6 +29,7 @@ import components.Type;
 import console.Console;
 import console.Message;
 import console.MessageFactory;
+import eventSystem.ActiveMap;
 import factories.ItemFactory;
 import factories.TerrainFactory;
 import main.Tile;
@@ -55,7 +55,7 @@ public class GameScreenASCII implements Screen{
 	private CustomShapeRenderer shapeRenderer;
 	
 	private static GameScreenASCII instance = new GameScreenASCII();
-	public final static int TILE_SIZE = 18; // tamaño anterior 18
+	public final static int TILE_SIZE = 18;
 	private int gameScreenSize = Gdx.graphics.getHeight(); 
 	private int gameScreenTiles = Gdx.graphics.getHeight()/TILE_SIZE;
 	
@@ -114,10 +114,9 @@ public class GameScreenASCII implements Screen{
 				Tile tile = null;
 				try {tile = map[center+x][center+y];}
 				catch(ArrayIndexOutOfBoundsException e) {continue;}
+				if(tile == null) continue;
 				GraphicsComponent gc = tile.getBackGC();
-				if(tile == null || gc == null || tile.getVisibility() == Visibility.NOT_VISIBLE) {
-					continue;
-				}
+				if(tile.getVisibility() == Visibility.NOT_VISIBLE || gc == null) continue;
 				int xImg = (x * TILE_SIZE) + (gameScreenSize / 2) - 8;
 				int yImg = (y * TILE_SIZE) + (gameScreenSize / 2) - 8;
 				
@@ -453,7 +452,8 @@ public class GameScreenASCII implements Screen{
 				switch(button){
 					case 0: //click izquierdo
 						Mappers.movMap.get(Juego.PLAYER).path = PathFinder.findPath(playerPos, clickedTile.getPos(), Juego.PLAYER);
-						Actions.followPath(Juego.PLAYER);
+						State<Entity> exploreState = Mappers.AIMap.get(Juego.PLAYER).states.get("wandering");
+						Mappers.AIMap.get(Juego.PLAYER).fsm.changeState(exploreState);
 						break;
 					case 1: //click derecho
 						lista = Explorer.getStraigthLine(playerPos, clickedTile.getPos());

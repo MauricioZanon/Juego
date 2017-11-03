@@ -6,7 +6,6 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Color;
 
 import FOV.VisionCalculator;
-import activeMap.ActiveMap;
 import components.AIComponent;
 import components.AttributeComponent;
 import components.EquipmentComponent;
@@ -22,12 +21,13 @@ import components.StatusEffectsComponent;
 import components.TimedComponent;
 import components.Type;
 import components.VisionComponent;
+import eventSystem.ActiveMap;
 import eventSystem.EventSystem;
 import screens.GameScreenASCII;
 import screens.MainScreen;
 import states.AttackState;
 import states.PlayerExploreState;
-import states.PlayerIdleState;
+import states.PlayerWanderState;
 import tools.RenderSystem;
 import world.World;
 
@@ -35,6 +35,7 @@ public class Juego extends Game {
 	
 	public static final PooledEngine ENGINE = new PooledEngine();
 	public static final Entity PLAYER = ENGINE.createEntity();
+	public static World world = new World();
 	
     public void create() {
     	ENGINE.addSystem(new RenderSystem());
@@ -42,10 +43,9 @@ public class Juego extends Game {
     }
     
     public static void startGame() {
-    	World.initialize();
+    	world.initialize();
     	
     	ENGINE.addSystem(new EventSystem());
-    	
     	spawnPlayer();
     	
     	ENGINE.getSystem(RenderSystem.class).setScreen(GameScreenASCII.getInstance());
@@ -58,7 +58,7 @@ public class Juego extends Game {
     	PLAYER.add(Type.ACTOR);
     	PLAYER.add(Faction.HUMANS);
     	
-		PositionComponent playerPos = new PositionComponent(5, 5, 0, 5, 5);
+		PositionComponent playerPos = new PositionComponent(5, 5, 0);
 		playerPos.getTile().put(PLAYER);
 		PLAYER.add(playerPos);
 		
@@ -93,9 +93,10 @@ public class Juego extends Game {
 		
 		AIComponent ai = ENGINE.createComponent(AIComponent.class);
 		ai.fsm.setOwner(PLAYER);
-		ai.states.put("idling", new PlayerIdleState());
+		ai.states.put("wandering", new PlayerWanderState());
 		ai.states.put("exploring", new PlayerExploreState());
 		ai.states.put("attacking", new AttackState());
+		ai.fsm.setGlobalState(ai.states.get("idling"));
 		PLAYER.add(ai);
 		
 		PLAYER.add(ENGINE.createComponent(MovementComponent.class));

@@ -28,7 +28,7 @@ public class Cave extends Location{
 		startingPos.getTile().put(stair);
 		
 		PositionComponent firstPos = startingPos.clone();
-		firstPos.setGz(firstPos.getGz() + 1);
+		firstPos.coord[2] += 1;
 		Entity stair2 = FeatureFactory.createFeature("stair");
 		Mappers.graphMap.get(stair2).ASCII = "<";
 		stair2.add(firstPos);

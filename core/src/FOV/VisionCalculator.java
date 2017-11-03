@@ -44,14 +44,20 @@ public abstract class VisionCalculator {
 
 	private static void calculateNPCVision(Entity npc){
 		Tile originTile = Mappers.posMap.get(npc).getTile();
+		Set<Tile> enemyTiles = new HashSet<>();
 
 		HashSet<Tile> visibleTiles = new HashSet<Tile>();
 		for(Tile tile : Explorer.getCircundatingArea(visionMap.get(npc).sightRange, originTile, true)){
 			if(!tile.isEmpty()){
+				Entity actor = tile.get(Type.ACTOR);
+				if(actor != null && Mappers.factionMap.get(npc).isEnemy(actor)) {
+					enemyTiles.add(tile);
+				}
 				calculateLOS(originTile, tile, visibleTiles);
 			}
 		}
 		visionMap.get(npc).visionMap = visibleTiles;
+		visionMap.get(npc).enemyTiles = enemyTiles;
 	}
 	
 	private static void calculateLOS(Tile start, Tile end, HashSet<Tile> visibleTiles){

@@ -1,12 +1,12 @@
 package components;
 
 import com.badlogic.ashley.core.Component;
+import static com.mygdx.juego.Juego.world;
 import com.mygdx.juego.Juego;
 
 import main.Tile;
 import world.Direction;
 import world.Explorer;
-import world.World;
 
 //TODO eliminar Constructor, hacer que el engine cree un position component y darle un array de coordenadas
 public class PositionComponent implements Cloneable, Component{
@@ -19,80 +19,34 @@ public class PositionComponent implements Cloneable, Component{
 	 * 3 - Local X
 	 * 4 - Local Y
 	 */
-	private int[] coord = new int[5];
+	public int[] coord = new int[3];
 
-	public PositionComponent(int gx, int gy, int gz, int lx, int ly) {
-		setGx(gx);
-		setGy(gy);
-		setGz(gz);
-		setLx(lx);
-		setLy(ly);
+	public PositionComponent(int x, int y, int z) {
+		coord[0] = x;
+		coord[1] = y;
+		coord[2] = z;
 	}
 	
-	public void setCoord(int[] c) {
-		setGx(c[0]);
-		setGy(c[1]);
-		setGz(c[2]);
-		setLx(c[3]);
-		setLy(c[4]);
+	public int getGx() {
+		return coord[0] / world.CHUNK_SIZE;
+	}
+	public int getLx() {
+		return coord[0] % world.CHUNK_SIZE;
+	}
+	public int getGy() {
+		return coord[1] / world.CHUNK_SIZE;
+	}
+	public int getLy() {
+		return coord[1] % world.CHUNK_SIZE;
+	}
+	public int getGz() {
+		return coord[2];
 	}
 	
 	public PositionComponent() {
 		//Constructor vacío para que el engine pueda instanciar esta clase
 	}
 
-	public int getGx() {
-		return coord[0];
-	}
-	public void setGx(int newGx) {
-		coord[0] = newGx;
-	}
-	public int getGy() {
-		return coord[1];
-	}
-	public void setGy(int newGy) {
-		coord[1] = newGy;
-	}
-	public int getGz() {
-		return coord[2];
-	}
-	public void setGz(int newGz) {
-		coord[2] = newGz;
-	}
-	public int getLx() {
-		return coord[3];
-	}
-	public void setLx(int newLx) {
-		if(newLx >= World.CHUNK_SIZE){
-			setLx(newLx - World.CHUNK_SIZE);
-			if(coord[0] + 1 < World.getMap().length)
-				coord[0]++;
-		}else if(newLx < 0){
-			setLx(World.CHUNK_SIZE + newLx);
-			if(coord[0] - 1 >= 0)
-				coord[0]--;
-		}else{
-			coord[3] = newLx;
-		}
-	}
-	public int getLy() {
-		return coord[4];
-	}
-	public void setLy(int newLy) {
-		if(newLy >= World.CHUNK_SIZE){
-			setLy(newLy - World.CHUNK_SIZE);
-			if(coord[1] + 1 >= World.getMap()[0].length)
-				return;
-			coord[1]++;
-		}else if(newLy < 0){
-			setLy(World.CHUNK_SIZE + newLy);
-			if(coord[1] - 1 < 0)
-				return;
-			coord[1]--;
-		}else{
-			coord[4] = newLy;
-		}
-	}
 	
 	public Tile getTile(){
 		return Explorer.getTile(this);
@@ -100,31 +54,28 @@ public class PositionComponent implements Cloneable, Component{
 	
 	@Override
 	public String toString(){
-		return "GX: " + coord[0] + " GY: " + coord[1] + " GZ: " + coord[2] + " LX: " + coord[3] + " LY: " + coord[4];
+		return "GX: " + getGx() + " GY: " + getGy() + " GZ: " + coord[2] + " LX: " + getLx() + " LY: " + getLy();
 	}
 	
 	@Override
 	public boolean equals(Object p){
 		if(p == null) return false;
-		PositionComponent pos = (PositionComponent) p;
-		return coord[0] == pos.getGx() && coord[1] == pos.getGy() && coord[2] == pos.getGz() && coord[3] == pos.getLx() && coord[4] == pos.getLy();
+		int[] pos = ((PositionComponent) p).coord;
+		return coord[0] == pos[0] && coord[1] == pos[1] && coord[2] == pos[2];
 	}
 
 	public void move(Direction dir) {
-		coord[3] += dir.movX;
-		coord[4] += dir.movY;
+		coord[0] += dir.movX;
+		coord[1] += dir.movY;
 		
 	}
 	
 	@Override
 	public PositionComponent clone(){
 		PositionComponent newComp = Juego.ENGINE.createComponent(PositionComponent.class);
-		newComp.setGx(coord[0]);
-		newComp.setGy(coord[1]);
-		newComp.setGz(coord[2]);
-		newComp.setLx(coord[3]);
-		newComp.setLy(coord[4]);
-		
+		newComp.coord[0] = coord[0];
+		newComp.coord[1] = coord[1];
+		newComp.coord[2] = coord[2];
 		return newComp;
 	}
 	

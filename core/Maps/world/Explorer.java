@@ -1,9 +1,12 @@
 package world;
 
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Predicate;
+
+import static com.mygdx.juego.Juego.world;
 
 import components.PositionComponent;
 import main.Chunk;
@@ -15,7 +18,7 @@ public class Explorer {
 	
 	public static Chunk getChunk(int x, int y, int z){
 		try{
-			return World.getMap()[x][y][z];
+			return world.getMap()[x][y][z];
 		}catch(ArrayIndexOutOfBoundsException e){
 			return null;
 		}
@@ -30,29 +33,19 @@ public class Explorer {
 		return tile == null ? new Tile(p) : tile;
 	}
 	
+	public static Tile getTile(int x, int y, int z) {
+		return getTile(x/world.CHUNK_SIZE, y/world.CHUNK_SIZE, z, x%world.CHUNK_SIZE, y%world.CHUNK_SIZE);
+	}
+	
 	public static Tile getTile(int gx, int gy, int gz, int lx, int ly){
-		if(lx < 0){
-			gx--;
-			lx = World.CHUNK_SIZE - 1;
-		}else if(lx >= World.CHUNK_SIZE){
-			gx++;
-			lx = 0;
-		}
-		if(ly < 0){
-			gy--;
-			ly = World.CHUNK_SIZE - 1;
-		}else if(ly >= World.CHUNK_SIZE){
-			gy++;
-			ly = 0;
-		}
-		Chunk chunk = World.getMap()[gx][gy][gz];
+		Chunk chunk = world.getMap()[gx][gy][gz];
 		if(chunk == null){
-			World.getMap()[gx][gy][gz] = new EmptyMap(gx, gy, gz);
-			chunk = World.getMap()[gx][gy][gz];
+			world.getMap()[gx][gy][gz] = new EmptyMap(gx, gy, gz);
+			chunk = world.getMap()[gx][gy][gz];
 		}
 		Tile tile = chunk.getChunkMap()[lx][ly];
 		if(tile == null){
-			chunk.getChunkMap()[lx][ly] = new Tile(new PositionComponent(gx, gy, gz, lx, ly));
+			chunk.getChunkMap()[lx][ly] = new Tile(new PositionComponent(gx*world.CHUNK_SIZE + lx, gy*world.CHUNK_SIZE + ly, gz));
 			tile = chunk.getChunkMap()[lx][ly];
 		}
 		return tile;
@@ -69,32 +62,29 @@ public class Explorer {
 	}
 	
 	public static Set<Tile> getOrthogonalTiles(Tile tile, Predicate<Tile> cond) {
-		int lx = tile.getPos().getLx();
-		int ly = tile.getPos().getLy();
-		
-		int gx = tile.getPos().getGx();
-		int gy = tile.getPos().getGy();
-		int gz = tile.getPos().getGz();
+		int x = tile.getPos().coord[0];
+		int y = tile.getPos().coord[1];
+		int z = tile.getPos().coord[2];
 		
 		Set<Tile> tiles = new HashSet<Tile>();
 		Tile evaluatedTile;
 		try {
-			evaluatedTile = getTile(gx, gy, gz, lx + 1, ly);
+			evaluatedTile = getTile(x + 1, y, z);
 			if(evaluatedTile != null && cond.test(evaluatedTile))
 				tiles.add(evaluatedTile);
 		} catch (ArrayIndexOutOfBoundsException | NullPointerException e) {}
 		try {
-			evaluatedTile = getTile(gx, gy, gz, lx - 1, ly);
+			evaluatedTile = getTile(x - 1, y, z);
 			if(evaluatedTile != null && cond.test(evaluatedTile))
 				tiles.add(evaluatedTile);
 		} catch (ArrayIndexOutOfBoundsException | NullPointerException e) {}
 		try {
-			evaluatedTile = getTile(gx, gy, gz, lx, ly + 1);
+			evaluatedTile = getTile(x, y + 1, z);
 			if(evaluatedTile != null && cond.test(evaluatedTile))
 				tiles.add(evaluatedTile);
 		} catch (ArrayIndexOutOfBoundsException | NullPointerException e) {}
 		try {
-			evaluatedTile = getTile(gx, gy, gz, lx, ly - 1);
+			evaluatedTile = getTile(x, y - 1, z);
 			if(evaluatedTile != null && cond.test(evaluatedTile))
 				tiles.add(evaluatedTile);
 		} catch (ArrayIndexOutOfBoundsException | NullPointerException e) {}
@@ -103,32 +93,29 @@ public class Explorer {
 	}
 
 	public static Set<Tile> getDiagonalTiles(Tile tile, Predicate<Tile> cond) {
-		int lx = tile.getPos().getLx();
-		int ly = tile.getPos().getLy();
-		
-		int gx = tile.getPos().getGx();
-		int gy = tile.getPos().getGy();
-		int gz = tile.getPos().getGz();
+		int x = tile.getPos().coord[0];
+		int y = tile.getPos().coord[1];
+		int z = tile.getPos().coord[2];
 		
 		Set<Tile> tiles = new HashSet<Tile>();
 		Tile evaluatedTile;
 		try {
-			evaluatedTile = getTile(gx, gy, gz, lx + 1, ly + 1);
+			evaluatedTile = getTile(x + 1, y + 1, z);
 			if(evaluatedTile != null && cond.test(evaluatedTile))
 				tiles.add(evaluatedTile);
 		} catch (ArrayIndexOutOfBoundsException | NullPointerException e) {}
 		try {
-			evaluatedTile = getTile(gx, gy, gz, lx - 1, ly - 1);
+			evaluatedTile = getTile(x - 1, y - 1, z);
 			if(evaluatedTile != null && cond.test(evaluatedTile))
 				tiles.add(evaluatedTile);
 		} catch (ArrayIndexOutOfBoundsException | NullPointerException e) {}
 		try {
-			evaluatedTile = getTile(gx, gy, gz, lx - 1, ly + 1);
+			evaluatedTile = getTile(x - 1, y + 1, z);
 			if(evaluatedTile != null && cond.test(evaluatedTile))
 				tiles.add(evaluatedTile);
 		} catch (ArrayIndexOutOfBoundsException | NullPointerException e) {}
 		try {
-			evaluatedTile = getTile(gx, gy, gz, lx + 1, ly - 1);
+			evaluatedTile = getTile(x + 1, y - 1, z);
 			if(evaluatedTile != null && cond.test(evaluatedTile))
 				tiles.add(evaluatedTile);
 		} catch (ArrayIndexOutOfBoundsException | NullPointerException e) {}
@@ -167,19 +154,14 @@ public class Explorer {
 	}
 	
 	public static Set<Tile> getCircundatingArea(int radius, Tile tile, boolean isRound){
-		int gx0 = tile.getPos().getGx();
-		int gy0 = tile.getPos().getGy();
-		int gz0 = tile.getPos().getGz();
-		int lx0 = tile.getPos().getLx();
-		int ly0 = tile.getPos().getLy();
+		int x = tile.getPos().coord[0];
+		int y = tile.getPos().coord[1];
+		int z = tile.getPos().coord[2];
 		HashSet<Tile> list = new HashSet<Tile>();
-		PositionComponent evalPos;
 		for(int i = -radius; i <= radius; i++){
 			for (int j = -radius; j <= radius; j++){
-				evalPos = new PositionComponent(gx0, gy0, gz0, lx0, ly0);
 				try {
-					evalPos.setLx(lx0 + i);
-					evalPos.setLy(ly0 + j);
+					PositionComponent evalPos = new PositionComponent(x+i, y+j, z);
 					if(!isRound || getDistance(tile.getPos(), evalPos) <= radius){
 						Tile t = getTile(evalPos);
 						list.add(t);
@@ -191,36 +173,18 @@ public class Explorer {
 	}
 	
 	public static int getDistanceInX(PositionComponent start, PositionComponent end){
-		if(start.getGx() == end.getGx()){
-			return end.getLx() - start.getLx();
-		}else{
-			int gxDistance = Math.abs(start.getGx() - end.getGx());
-			if(start.getGx() < end.getGx()){
-				return World.CHUNK_SIZE - start.getLx() + end.getLx() + (World.CHUNK_SIZE * (gxDistance - 1));
-			}else{
-				return -(World.CHUNK_SIZE - end.getLx() + start.getLx() + (World.CHUNK_SIZE * (gxDistance - 1)));
-			}
-		}
+		return end.coord[0] - start.coord[0];
 	}
 	
 	public static int getDistanceInY(PositionComponent start, PositionComponent end){
-		if(start.getGy() == end.getGy()){
-			return start.getLy() - end.getLy();
-		}else{
-			int gyDistance = Math.abs(start.getGy() - end.getGy());
-			if(start.getGy() < end.getGy()){
-				return -(World.CHUNK_SIZE - start.getLy() + end.getLy() + (World.CHUNK_SIZE * (gyDistance - 1)));
-			}else{
-				return World.CHUNK_SIZE - end.getLy() + start.getLy() + (World.CHUNK_SIZE * (gyDistance - 1));
-			}
-		}
+		return start.coord[1] - end.coord[1];
 	}
 	
 	public static double getDistance(PositionComponent start, PositionComponent end){
 		double dx = getDistanceInX(start, end);
 		double dy = getDistanceInY(start, end);
 		
-		return Math.sqrt(dx * dx + dy * dy);
+		return Math.sqrt(dx*dx + dy*dy);
 	}
 	
 	public static ArrayList<Tile> getStraigthLine(PositionComponent start, PositionComponent end){
@@ -246,11 +210,11 @@ public class Explorer {
 			
 			if (e2 > -dy) {
 				err = err - dy;
-				linePos.setLx(linePos.getLx() + sx);
+				linePos.coord[0] += sx;
 			}
 			if (e2 < dx) {
 				err = err + dx;
-				linePos.setLy(linePos.getLy() + sy);
+				linePos.coord[1] += sy;
 			}
 		}
 		line.add(getTile(end));
@@ -258,9 +222,9 @@ public class Explorer {
 		return line;
 	}
 	
-	public static Tile getNearbyTile(Tile origin, Predicate<Tile> cond){
+	public static Tile getClosestTile(Tile origin, Predicate<Tile> cond){
 		Set<Tile> possibleTiles = getAdjacentTiles(origin, t -> t.isTransitable());
-		for(int i = 0; i < World.CHUNK_SIZE; i++){
+		for(int i = 0; i < world.CHUNK_SIZE; i++){
 			Set<Tile> newSet = new HashSet<>();
 			for(Tile tile : possibleTiles){
 				if(cond.test(tile)){
@@ -272,5 +236,20 @@ public class Explorer {
 			possibleTiles = newSet;
 		}
 		return null;
+	}
+	
+	public static Tile getClosestTile(Tile origin, Set<Tile> tiles) {
+		Tile closest = null;
+		double shortestDistance = 1000;
+		
+		for(Tile tile : tiles) {
+			double distance = getDistance(origin.getPos(), tile.getPos());
+			if(distance < shortestDistance) {
+				closest = tile;
+				shortestDistance = distance;
+			}
+		}
+		return closest;
+		
 	}
 }

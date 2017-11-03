@@ -5,13 +5,13 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 import com.badlogic.ashley.core.Entity;
+import static com.mygdx.juego.Juego.world;
 
 import components.PositionComponent;
-import world.World;
 
 public abstract class Chunk{
 	
-	protected Tile[][] chunkMap = new Tile[World.CHUNK_SIZE][World.CHUNK_SIZE];
+	protected Tile[][] chunkMap = new Tile[world.CHUNK_SIZE][world.CHUNK_SIZE];
 	
 	protected int globalPosX = 0;
 	protected int globalPosY = 0;
@@ -21,15 +21,15 @@ public abstract class Chunk{
 	protected Set<Entity> featureList = new HashSet<>();
 	
 	protected void fillLevel(Consumer<Tile> createNewTerrain){
-		int size = World.CHUNK_SIZE;
+		int size = world.CHUNK_SIZE;
 		chunkMap = new Tile[size][size];
 		for (int x = 0; x < size; x++){
 			for (int y = 0; y < size; y++){
-				chunkMap[x][y] = new Tile(new PositionComponent(globalPosX, globalPosY, globalPosZ, x, y));
+				chunkMap[x][y] = new Tile(new PositionComponent(globalPosX*chunkMap.length + x, globalPosY*chunkMap.length + y, globalPosZ));
 				createNewTerrain.accept(chunkMap[x][y]);
 			}
 		} 
-		World.getMap()[globalPosX][globalPosY][globalPosZ] = this; 
+		world.getMap()[globalPosX][globalPosY][globalPosZ] = this; 
 	}  
 	
 	protected abstract void buildLevel();

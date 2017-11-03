@@ -8,6 +8,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import com.badlogic.ashley.core.Entity;
+import static com.mygdx.juego.Juego.world;
 
 import RNG.RNG;
 import components.Type;
@@ -16,7 +17,6 @@ import main.Chunk;
 import main.Tile;
 import world.Direction;
 import world.Explorer;
-import world.World;
 
 public class VillageLevel extends Chunk{
 	
@@ -53,9 +53,9 @@ public class VillageLevel extends Chunk{
 	 */
 	private void buildRoad(){
 		int wide = RNG.nextInt(2, 4);
-		int yPos = World.CHUNK_SIZE / 2; 
+		int yPos = world.CHUNK_SIZE / 2; 
 		
-		for(int i = 0; i < World.CHUNK_SIZE; i += wide){
+		for(int i = 0; i < world.CHUNK_SIZE; i += wide){
 			road.addAll(Explorer.getCircundatingArea(wide, getChunkMap()[i][yPos], false));
 		}
 		

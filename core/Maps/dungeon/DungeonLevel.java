@@ -86,27 +86,33 @@ public class DungeonLevel {
 				Tile tile = correctedPos.getTile();
 				String ASCII = blueprintArray[x][y];
 				
-				if(ASCII.equals(".")){
+				switch(ASCII) {
+				case ".":
 					if(!validTile(tile)) {
 						return;
 					}
 					roomTiles.add(tile);
-				}else if (ASCII.equals("u")){
+					break;
+				case "u":
 					newExpansionTiles.add(tile);
-				}else if(ASCII.equals("+")){
+					break;
+				case "+":
 					roomTiles.add(tile);
 					doorTiles.add(tile);
-				}else if(ASCII.equals(">")){
+					break;
+				case ">":
 					roomTiles.add(tile);
 					downStairTile = tile;
-				}else if(ASCII.equals("<")){
+					break;
+				case "<":
 					roomTiles.add(tile);
 					upStairTile = tile;
 				}
-				correctedPos.setLy(correctedPos.getLy() - 1);
+				
+				correctedPos.coord[1]--;
 			}
-			correctedPos.setLy(correctedPos.getLy() + blueprintArray[0].length);
-			correctedPos.setLx(correctedPos.getLx() + 1);
+			correctedPos.coord[1] += blueprintArray[0].length;
+			correctedPos.coord[0]++;
 		}
 		
 		roomTiles.add(startingPos.getTile());

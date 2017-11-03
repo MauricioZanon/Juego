@@ -8,7 +8,6 @@ import com.badlogic.gdx.math.MathUtils;
 import FOV.VisionCalculator;
 import RNG.RNG;
 import actions.Actions;
-import activeMap.ActiveMap;
 import components.HealthComponent;
 import components.Mappers;
 import components.NameComponent;
@@ -16,6 +15,7 @@ import components.PositionComponent;
 import components.StatusEffectsComponent;
 import components.Type;
 import console.MessageFactory;
+import eventSystem.ActiveMap;
 import main.Tile;
 
 public abstract class Effects {
@@ -53,11 +53,10 @@ public abstract class Effects {
 		newTile.put(entity);
 		entity.add(newPos);
 		
-		if(Mappers.visionMap.has(entity)) {
+		if(Mappers.visionMap.has(entity)) { //TODO mover para que se calcule vision siempre que empieza un turno
 			VisionCalculator.calculateVision(entity);
 		}
-		
-		if(playerMap.has(entity) && newTile.get(Type.ITEM) != null){
+		if(playerMap.has(entity) && newTile.get(Type.ITEM) != null) {
 			String[] extraText = {newTile.get(Type.ITEM).getComponent(NameComponent.class).name}; 
 			MessageFactory.loadMessage("StandingOnItem", extraText);
 		}

@@ -56,8 +56,8 @@ public class Blueprint {
 		}
 		
 		PositionComponent correctedPos = startingPos.clone();
-		correctedPos.setLx(correctedPos.getLx() - location[0]);
-		correctedPos.setLy(correctedPos.getLy() + location[1]);
+		correctedPos.coord[0] -= location[0];
+		correctedPos.coord[1] += location[1];
 		
 		return correctedPos;
 	}
@@ -68,60 +68,64 @@ public class Blueprint {
 	 * @return
 	 */
 	
-	public PositionComponent correctPosition(PositionComponent startingPos, Direction dir){
-		int[] location = new int[2];
+	public PositionComponent correctPosition(PositionComponent startingPos, Direction dir) {
+		int[] coord = new int[2];
 		
 		switch(dir){
-			case N:
-				for(int i = 0; i < array.length; i++){
-					for(int j = 0; j < array[0].length; j++){
-						if((array[i][j].equals("u") || array[i][j].equals("U")) &&
-								(j == array[0].length - 1 || array[i][j + 1].equals(" "))){
-							location[0] = i;
-							location[1] = j;
-						}
+		case N:
+			for(int i = 0; i < array.length; i++){
+				for(int j = 0; j < array[0].length; j++){
+					if((j == array[0].length - 1 || array[i][j + 1].equals(" ")) &&
+							(array[i][j].equals("u") || array[i][j].equals("U"))){
+						coord[0] = i;
+						coord[1] = j;
+						break;
 					}
 				}
-				break;
-			case S:
-				for(int i = 0; i < array.length; i++){
-					for(int j = 0; j < array[0].length; j++){
-						if((array[i][j].equals("u") || array[i][j].equals("U")) &&
-								(j == 0 || array[i][j - 1].equals(" "))){
-							location[0] = i;
-							location[1] = j;
-						}
+			}
+			break;
+		case S:
+			for(int i = 0; i < array.length; i++){
+				for(int j = 0; j < array[0].length; j++){
+					if((j == 0 || array[i][j - 1].equals(" ")) &&
+							(array[i][j].equals("u") || array[i][j].equals("U"))){
+						coord[0] = i;
+						coord[1] = j;
+						break;
 					}
 				}
-				break;
-			case W:
-				for(int i = 0; i < array.length; i++){
-					for(int j = 0; j < array[0].length; j++){
-						if((array[i][j].equals("u") || array[i][j].equals("U")) &&
-								(i == array.length - 1 || array[i + 1][j].equals(" "))){
-							location[0] = i;
-							location[1] = j;
-						}
+			}
+			break;
+		case W:
+			for(int i = 0; i < array.length; i++){
+				for(int j = 0; j < array[0].length; j++){
+					if((i == array.length - 1 || array[i + 1][j].equals(" ")) &&
+							(array[i][j].equals("u") || array[i][j].equals("U"))){
+						coord[0] = i;
+						coord[1] = j;
+						break;
 					}
 				}
-				break;
-			case E:
-				for(int i = 0; i < array.length; i++){
-					for(int j = 0; j < array[0].length; j++){
-						if((array[i][j].equals("u") || array[i][j].equals("U")) &&
-								(i == 0 || array[i - 1][j].equals(" "))){
-							location[0] = i;
-							location[1] = j;
-						}
+			}
+			break;
+		case E:
+			for(int i = 0; i < array.length; i++){
+				for(int j = 0; j < array[0].length; j++){
+					if((i == 0 || array[i - 1][j].equals(" ")) 
+							&& (array[i][j].equals("u") || array[i][j].equals("U"))){
+						coord[0] = i;
+						coord[1] = j;
+						break;
 					}
 				}
-				break;
+			}
+			break;
 		default:
 			break;
 		}
 		PositionComponent correctedPos = startingPos.clone();
-		correctedPos.setLx(correctedPos.getLx() - location[0]);
-		correctedPos.setLy(correctedPos.getLy() + location[1]);
+		correctedPos.coord[0] -= coord[0];
+		correctedPos.coord[1] += coord[1];
 		
 		return correctedPos;
 	}

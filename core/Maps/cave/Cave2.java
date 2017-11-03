@@ -38,7 +38,7 @@ public class Cave2 extends Location{
 	
 	private void dig(PositionComponent startingPos) {
 		PositionComponent firstPos = startingPos.clone();
-		firstPos.setGz(firstPos.getGz() + 1);
+		firstPos.coord[2]++;
 		
 		Set<Tile> area = Explorer.getCircundatingArea(40, firstPos.getTile(), true);
 		for(Tile tile : area) {
