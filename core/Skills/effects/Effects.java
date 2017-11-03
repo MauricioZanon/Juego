@@ -10,7 +10,7 @@ import RNG.RNG;
 import actions.Actions;
 import components.HealthComponent;
 import components.Mappers;
-import components.NameComponent;
+import components.DescriptionComponent;
 import components.PositionComponent;
 import components.StatusEffectsComponent;
 import components.Type;
@@ -57,7 +57,7 @@ public abstract class Effects {
 			VisionCalculator.calculateVision(entity);
 		}
 		if(playerMap.has(entity) && newTile.get(Type.ITEM) != null) {
-			String[] extraText = {newTile.get(Type.ITEM).getComponent(NameComponent.class).name}; 
+			String[] extraText = {newTile.get(Type.ITEM).getComponent(DescriptionComponent.class).name}; 
 			MessageFactory.loadMessage("StandingOnItem", extraText);
 		}
 	}

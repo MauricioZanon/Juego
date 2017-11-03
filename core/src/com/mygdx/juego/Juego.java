@@ -14,7 +14,7 @@ import components.GraphicsComponent;
 import components.HealthComponent;
 import components.InventoryComponent;
 import components.MovementComponent;
-import components.NameComponent;
+import components.DescriptionComponent;
 import components.PlayerComponent;
 import components.PositionComponent;
 import components.StatusEffectsComponent;
@@ -62,7 +62,7 @@ public class Juego extends Game {
 		playerPos.getTile().put(PLAYER);
 		PLAYER.add(playerPos);
 		
-		NameComponent nc = ENGINE.createComponent(NameComponent.class);
+		DescriptionComponent nc = ENGINE.createComponent(DescriptionComponent.class);
 		nc.name = "player";
 		PLAYER.add(nc);
 		

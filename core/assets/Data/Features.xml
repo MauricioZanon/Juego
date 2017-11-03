@@ -2,9 +2,9 @@
 
 	<object-array>
 		<components.Type>FEATURE</components.Type>
-		<components.NameComponent>
+		<components.DescriptionComponent>
 			<name>stair</name>
-		</components.NameComponent>
+		</components.DescriptionComponent>
 		<components.GraphicsComponent>
 			<ASCII>></ASCII>
 			<font>general</font>
@@ -29,9 +29,9 @@
 	
 		<object-array>
 		<components.Type>FEATURE</components.Type>
-		<components.NameComponent>
+		<components.DescriptionComponent>
 			<name>tree</name>
-		</components.NameComponent>
+		</components.DescriptionComponent>
 		<components.GraphicsComponent>
 			<ASCII>&#x2551;</ASCII>
 			<font>general</font>
@@ -54,9 +54,9 @@
 
 	<object-array>
 		<components.Type>FEATURE</components.Type>
-		<components.NameComponent>
+		<components.DescriptionComponent>
 			<name>closed door</name>
-		</components.NameComponent>
+		</components.DescriptionComponent>
 		<components.GraphicsComponent>
 			<ASCII>+</ASCII>
 			<font>general</font>

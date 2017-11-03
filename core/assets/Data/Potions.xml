@@ -5,9 +5,9 @@
 		<components.Type>ITEM</components.Type>
 		<components.ItemType>POTION</components.ItemType>
 		<components.PickupableComponent/>
-		<components.NameComponent>
+		<components.DescriptionComponent>
 			<name>healing potion</name>
-		</components.NameComponent>
+		</components.DescriptionComponent>
 		<components.GraphicsComponent>
 			<ASCII>!</ASCII>
 			<font>general</font>
@@ -33,9 +33,9 @@
 		<components.Type>ITEM</components.Type>
 		<components.ItemType>POTION</components.ItemType>
 		<components.PickupableComponent/>
-		<components.NameComponent>
+		<components.DescriptionComponent>
 			<name>teleportation potion</name>
-		</components.NameComponent>
+		</components.DescriptionComponent>
 		<components.GraphicsComponent>
 			<ASCII>!</ASCII>
 			<font>general</font>

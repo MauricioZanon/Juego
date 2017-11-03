@@ -27,7 +27,7 @@ import components.ItemType;
 import components.LightSourceComponent;
 import components.LockComponent;
 import components.MovementComponent;
-import components.NameComponent;
+import components.DescriptionComponent;
 import components.PickupableComponent;
 import components.PlayerComponent;
 import components.SkillsComponent;
@@ -79,7 +79,7 @@ public class EjemploXStream {
 			e.add((Component) p[i]);
 		}
 		
-		System.out.println(e.getComponent(NameComponent.class).name);
+		System.out.println(e.getComponent(DescriptionComponent.class).name);
 		
 		return e;
 	}
@@ -89,7 +89,7 @@ public class EjemploXStream {
 		
 		actor.add(Type.ACTOR);
 		
-		NameComponent nc = Juego.ENGINE.createComponent(NameComponent.class);
+		DescriptionComponent nc = Juego.ENGINE.createComponent(DescriptionComponent.class);
 		nc.name = "Actor template";
 		actor.add(nc);
 		
@@ -144,7 +144,7 @@ public class EjemploXStream {
 		item.add(Type.ITEM);
 		item.add(ItemType.WEAPON);
 		
-		NameComponent nc = Juego.ENGINE.createComponent(NameComponent.class);
+		DescriptionComponent nc = Juego.ENGINE.createComponent(DescriptionComponent.class);
 		nc.name = "Item template";
 		item.add(nc);
 		
@@ -170,7 +170,7 @@ public class EjemploXStream {
 		
 		feature.add(Type.FEATURE);
 		
-		NameComponent nc = Juego.ENGINE.createComponent(NameComponent.class);
+		DescriptionComponent nc = Juego.ENGINE.createComponent(DescriptionComponent.class);
 		nc.name = "Feature template";
 		feature.add(nc);
 		
@@ -192,7 +192,7 @@ public class EjemploXStream {
 		feature.add(ItemType.POTION);
 		feature.add(Juego.ENGINE.createComponent(PickupableComponent.class));
 		
-		NameComponent nc = Juego.ENGINE.createComponent(NameComponent.class);
+		DescriptionComponent nc = Juego.ENGINE.createComponent(DescriptionComponent.class);
 		nc.name = "Potion template";
 		feature.add(nc);
 		
@@ -212,7 +212,7 @@ public class EjemploXStream {
 		
 		e.add(Juego.ENGINE.createComponent(GraphicsComponent.class));
 		e.add(Type.ACTOR);
-		e.add(Juego.ENGINE.createComponent(NameComponent.class));
+		e.add(Juego.ENGINE.createComponent(DescriptionComponent.class));
 		e.add(Juego.ENGINE.createComponent(TransitableComponent.class));
 		e.add(Juego.ENGINE.createComponent(TranslucentComponent.class));
 		e.add(Juego.ENGINE.createComponent(TimedComponent.class));

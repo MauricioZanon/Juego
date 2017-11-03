@@ -1,8 +1,8 @@
 <object-array>
   <components.Type>ACTOR</components.Type>
-  <components.NameComponent>
+  <components.DescriptionComponent>
     <name>Actor template</name>
-  </components.NameComponent>
+  </components.DescriptionComponent>
   <components.GraphicsComponent>
     <ASCII>g</ASCII>
     <font>general</font>

@@ -2,9 +2,9 @@
 
 	<object-array>
 		<components.Type>TERRAIN</components.Type>
-		<components.NameComponent>
+		<components.DescriptionComponent>
 			<name>concrete wall</name>
-		</components.NameComponent>
+		</components.DescriptionComponent>
 		<components.GraphicsComponent>
 			<ASCII>#</ASCII>
 			<font>terrain</font>
@@ -33,9 +33,9 @@
 
 	<object-array>
 		<components.Type>TERRAIN</components.Type>
-		<components.NameComponent>
+		<components.DescriptionComponent>
 			<name>concrete floor</name>
-		</components.NameComponent>
+		</components.DescriptionComponent>
 		<components.GraphicsComponent>
 			<ASCII>·</ASCII>
 			<font>terrain</font>
@@ -66,9 +66,9 @@
 
 	<object-array>
 		<components.Type>TERRAIN</components.Type>
-		<components.NameComponent>
+		<components.DescriptionComponent>
 			<name>wooden wall</name>
-		</components.NameComponent>
+		</components.DescriptionComponent>
 		<components.GraphicsComponent>
 			<ASCII>#</ASCII>
 			<font>terrain</font>
@@ -97,9 +97,9 @@
 
 	<object-array>
 		<components.Type>TERRAIN</components.Type>
-		<components.NameComponent>
+		<components.DescriptionComponent>
 			<name>wooden floor</name>
-		</components.NameComponent>
+		</components.DescriptionComponent>
 		<components.GraphicsComponent>
 			<ASCII>·</ASCII>
 			<font>terrain</font>
@@ -130,9 +130,9 @@
 
 	<object-array>
 		<components.Type>TERRAIN</components.Type>
-		<components.NameComponent>
+		<components.DescriptionComponent>
 			<name>grass floor</name>
-		</components.NameComponent>
+		</components.DescriptionComponent>
 		<components.GraphicsComponent>
 			<ASCII>·</ASCII>
 			<font>terrain</font>
@@ -163,9 +163,9 @@
 
 	<object-array>
 		<components.Type>TERRAIN</components.Type>
-		<components.NameComponent>
+		<components.DescriptionComponent>
 			<name>dirt wall</name>
-		</components.NameComponent>
+		</components.DescriptionComponent>
 		<components.GraphicsComponent>
 			<ASCII>#</ASCII>
 			<font>terrain</font>
@@ -194,9 +194,9 @@
 
 	<object-array>
 		<components.Type>TERRAIN</components.Type>
-		<components.NameComponent>
+		<components.DescriptionComponent>
 			<name>dirt floor</name>
-		</components.NameComponent>
+		</components.DescriptionComponent>
 		<components.GraphicsComponent>
 			<ASCII>·</ASCII>
 			<font>terrain</font>
@@ -227,9 +227,9 @@
 
 	<object-array>
 		<components.Type>TERRAIN</components.Type>
-		<components.NameComponent>
+		<components.DescriptionComponent>
 			<name>stone wall</name>
-		</components.NameComponent>
+		</components.DescriptionComponent>
 		<components.GraphicsComponent>
 			<ASCII>#</ASCII>
 			<font>terrain</font>
@@ -258,9 +258,9 @@
 
 	<object-array>
 		<components.Type>TERRAIN</components.Type>
-		<components.NameComponent>
+		<components.DescriptionComponent>
 			<name>stone floor</name>
-		</components.NameComponent>
+		</components.DescriptionComponent>
 		<components.GraphicsComponent>
 			<ASCII>·</ASCII>
 			<font>terrain</font>

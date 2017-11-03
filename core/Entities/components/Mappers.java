@@ -8,7 +8,7 @@ public class Mappers {
 	public static ComponentMapper<Type> typeMap = ComponentMapper.getFor(Type.class);
 	public static ComponentMapper<PositionComponent> posMap = ComponentMapper.getFor(PositionComponent.class);
 	public static ComponentMapper<GraphicsComponent> graphMap = ComponentMapper.getFor(GraphicsComponent.class);
-	public static ComponentMapper<NameComponent> nameMap = ComponentMapper.getFor(NameComponent.class);
+	public static ComponentMapper<DescriptionComponent> nameMap = ComponentMapper.getFor(DescriptionComponent.class);
 	public static ComponentMapper<TransitableComponent> transitableMap = ComponentMapper.getFor(TransitableComponent.class);
 	public static ComponentMapper<TranslucentComponent> translucentMap = ComponentMapper.getFor(TranslucentComponent.class);
 	public static ComponentMapper<TimedComponent> timedMap = ComponentMapper.getFor(TimedComponent.class);

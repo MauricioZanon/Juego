@@ -4,9 +4,9 @@
 	<object-array>
 		<components.Type>ITEM</components.Type>
 		<components.ItemType>SWORD</components.ItemType>
-		<components.NameComponent>
+		<components.DescriptionComponent>
 			<name>sword</name>
-		</components.NameComponent>
+		</components.DescriptionComponent>
 		<components.GraphicsComponent>
 			<ASCII>/</ASCII>
 			<font>general</font>
@@ -36,9 +36,9 @@
 	<object-array>
 		<components.Type>ITEM</components.Type>
 		<components.ItemType>WEAPON</components.ItemType>
-		<components.NameComponent>
+		<components.DescriptionComponent>
 			<name>Item template2</name>
-		</components.NameComponent>
+		</components.DescriptionComponent>
 		<components.GraphicsComponent>
 			<ASCII>/</ASCII>
 			<font>general</font>

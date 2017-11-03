@@ -2,9 +2,9 @@
 
 	<object-array>
 		<components.Type>ACTOR</components.Type>
-		<components.NameComponent>
+		<components.DescriptionComponent>
 			<name>slime</name>
-		</components.NameComponent>
+		</components.DescriptionComponent>
 		<components.GraphicsComponent>
 			<ASCII>s</ASCII>
 			<font>general</font>
@@ -99,9 +99,9 @@
 
 	<object-array>
 		<components.Type>ACTOR</components.Type>
-		<components.NameComponent>
+		<components.DescriptionComponent>
 			<name>goblin</name>
-		</components.NameComponent>
+		</components.DescriptionComponent>
 		<components.GraphicsComponent>
 			<ASCII>g</ASCII>
 			<font>general</font>
@@ -200,9 +200,9 @@
 
 	<object-array>
 		<components.Type>ACTOR</components.Type>
-		<components.NameComponent>
+		<components.DescriptionComponent>
 			<name>rat</name>
-		</components.NameComponent>
+		</components.DescriptionComponent>
 		<components.GraphicsComponent>
 			<ASCII>r</ASCII>
 			<font>general</font>

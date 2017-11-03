@@ -4,9 +4,9 @@
 	<object-array>
 		<components.Type>ITEM</components.Type>
 		<components.ItemType>BREASTPLATE</components.ItemType>
-		<components.NameComponent>
+		<components.DescriptionComponent>
 			<name>iron plate</name>
-		</components.NameComponent>
+		</components.DescriptionComponent>
 		<components.GraphicsComponent>
 			<ASCII>[</ASCII>
 			<font>general</font>
@@ -36,9 +36,9 @@
 	<object-array>
 		<components.Type>ITEM</components.Type>
 		<components.ItemType>PANTS</components.ItemType>
-		<components.NameComponent>
+		<components.DescriptionComponent>
 			<name>iron greaves</name>
-		</components.NameComponent>
+		</components.DescriptionComponent>
 		<components.GraphicsComponent>
 			<ASCII>[</ASCII>
 			<font>general</font>
@@ -68,9 +68,9 @@
 	<object-array>
 		<components.Type>ITEM</components.Type>
 		<components.ItemType>BOOTS</components.ItemType>
-		<components.NameComponent>
+		<components.DescriptionComponent>
 			<name>iron boots</name>
-		</components.NameComponent>
+		</components.DescriptionComponent>
 		<components.GraphicsComponent>
 			<ASCII>[</ASCII>
 			<font>general</font>
@@ -100,9 +100,9 @@
 	<object-array>
 		<components.Type>ITEM</components.Type>
 		<components.ItemType>HAT</components.ItemType>
-		<components.NameComponent>
+		<components.DescriptionComponent>
 			<name>iron helmet</name>
-		</components.NameComponent>
+		</components.DescriptionComponent>
 		<components.GraphicsComponent>
 			<ASCII>[</ASCII>
 			<font>general</font>
@@ -132,9 +132,9 @@
 	<object-array>
 		<components.Type>ITEM</components.Type>
 		<components.ItemType>GLOVES</components.ItemType>
-		<components.NameComponent>
+		<components.DescriptionComponent>
 			<name>iron gloves</name>
-		</components.NameComponent>
+		</components.DescriptionComponent>
 		<components.GraphicsComponent>
 			<ASCII>[</ASCII>
 			<font>general</font>
