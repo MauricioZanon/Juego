@@ -5,16 +5,15 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Color;
 
-import FOV.VisionCalculator;
 import components.AIComponent;
 import components.AttributeComponent;
+import components.DescriptionComponent;
 import components.EquipmentComponent;
 import components.Faction;
 import components.GraphicsComponent;
 import components.HealthComponent;
 import components.InventoryComponent;
 import components.MovementComponent;
-import components.DescriptionComponent;
 import components.PlayerComponent;
 import components.PositionComponent;
 import components.StatusEffectsComponent;
@@ -25,9 +24,9 @@ import eventSystem.ActiveMap;
 import eventSystem.EventSystem;
 import screens.GameScreenASCII;
 import screens.MainScreen;
-import states.AttackState;
-import states.PlayerExploreState;
-import states.PlayerWanderState;
+import states.player.PlayerAttackState;
+import states.player.PlayerExploreState;
+import states.player.PlayerWanderState;
 import tools.RenderSystem;
 import world.World;
 
@@ -58,7 +57,7 @@ public class Juego extends Game {
     	PLAYER.add(Type.ACTOR);
     	PLAYER.add(Faction.HUMANS);
     	
-		PositionComponent playerPos = new PositionComponent(5, 5, 0);
+		PositionComponent playerPos = new PositionComponent(200, 200, 0);
 		playerPos.getTile().put(PLAYER);
 		PLAYER.add(playerPos);
 		
@@ -95,13 +94,13 @@ public class Juego extends Game {
 		ai.fsm.setOwner(PLAYER);
 		ai.states.put("wandering", new PlayerWanderState());
 		ai.states.put("exploring", new PlayerExploreState());
-		ai.states.put("attacking", new AttackState());
-		ai.fsm.setGlobalState(ai.states.get("idling"));
+		ai.states.put("attacking", new PlayerAttackState());
+		ai.fsm.setGlobalState(ai.states.get("wandering"));
+		ai.fsm.setInitialState(ai.states.get("wandering"));
 		PLAYER.add(ai);
 		
 		PLAYER.add(ENGINE.createComponent(MovementComponent.class));
 		
-		VisionCalculator.calculateVision(PLAYER);
 		ActiveMap.refresh();
 		
     }

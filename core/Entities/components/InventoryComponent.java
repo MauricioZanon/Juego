@@ -2,7 +2,7 @@ package components;
 
 import static components.Mappers.attMap;
 import static components.Mappers.itemTypeMap;
-import static components.Mappers.nameMap;
+import static components.Mappers.descMap;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,7 +16,7 @@ public class InventoryComponent implements Component{
 	public HashMap<String, Entity> inv = new HashMap<>();
 	
 	public void add(Entity i) {
-		String itemName = nameMap.get(i).name;
+		String itemName = descMap.get(i).name;
 		if(!inv.keySet().contains(itemName)) {
 			inv.put(itemName, i);
 		}else {
@@ -70,11 +70,11 @@ public class InventoryComponent implements Component{
 	}
 	
 	public Entity remove(Entity i) {
-		return remove(nameMap.get(i).name);
+		return remove(descMap.get(i).name);
 	}
 	
 	public Entity removeAll(Entity item) {
-		return removeAll(nameMap.get(item).name);
+		return removeAll(descMap.get(item).name);
 	}
 
 }

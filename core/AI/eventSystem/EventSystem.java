@@ -1,37 +1,64 @@
 package eventSystem;
 
 import static components.Mappers.AIMap;
+import static components.Mappers.playerMap;
 import static components.Mappers.timedMap;
 
-import java.util.Set;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.PriorityQueue;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.mygdx.juego.Juego;
 
+import FOV.VisionCalculator;
+
 public class EventSystem extends EntitySystem {
 	
-	private static Set<Entity> timedEntities = null; // Las entidades del ActiveMap que actuen por turnos
+	private long turn = 0;
+	private PriorityQueue<Entity> timedEntities = new PriorityQueue<>(createComparator()); // Las entidades del ActiveMap que actuen por turnos
 	
-	public static void setTimedEntities(Set<Entity> e) {
-		timedEntities = e;
+	public boolean waitingForPlayerInput = false;
+	
+	public void setTimedEntities(HashSet<Entity> e) {
+		timedEntities.clear();
+		timedEntities.addAll(e);
 	}
 	
 	@Override
 	public void update(float deltaTime) {
-		while(timedMap.get(Juego.PLAYER).actionPoints < 100){
-			for(Entity entity : timedEntities){
-				if(!timedMap.get(entity).isActive) {
-					Juego.ENGINE.removeEntity(entity);
-				}
-				else if(timedMap.get(entity).actionPoints < 100)
-					timedMap.get(entity).actionPoints++;
-				else
-					AIMap.get(entity).fsm.update();
+		if(!waitingForPlayerInput) {
+			Entity entity = timedEntities.remove();
+			if(!timedMap.get(entity).isActive) {
+				Juego.ENGINE.removeEntity(entity);
+				return;
 			}
-			timedMap.get(Juego.PLAYER).actionPoints++;
+			if(playerMap.has(entity)) waitingForPlayerInput = true;
+			long entityTurn = timedMap.get(entity).nextTurn;
+			if(entityTurn < turn) {
+				timedMap.get(entity).nextTurn = turn + 10;
+			}else {
+				turn = entityTurn;
+				VisionCalculator.calculateVision(entity);
+				AIMap.get(entity).fsm.update();
+			}
+			timedEntities.add(entity);
 		}
-		AIMap.get(Juego.PLAYER).fsm.update();
 	}
+	
+	private Comparator<Entity> createComparator(){
+		return new Comparator<Entity>() {
 
+			@Override
+			public int compare(Entity a, Entity b) {
+				long turnA = timedMap.get(a).nextTurn;
+				long turnB = timedMap.get(b).nextTurn;
+				
+				if(turnA > turnB) return 1;
+				if(turnA < turnB) return -1;
+				return 0;
+			}
+		};
+	}
 }

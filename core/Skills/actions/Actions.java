@@ -1,16 +1,19 @@
 package actions;
 
+import static components.Mappers.AIMap;
 import static components.Mappers.attMap;
+import static components.Mappers.descMap;
 import static components.Mappers.equipMap;
 import static components.Mappers.movMap;
-import static components.Mappers.nameMap;
 import static components.Mappers.playerMap;
 import static components.Mappers.posMap;
 import static components.Mappers.timedMap;
+import static components.Mappers.visionMap;
 
 import java.util.NoSuchElementException;
 
 import com.badlogic.ashley.core.Entity;
+import com.mygdx.juego.Juego;
 
 import components.InventoryComponent;
 import components.Mappers;
@@ -22,6 +25,7 @@ import effects.DamageCalculator;
 import effects.Effects;
 import effects.Trigger;
 import eventSystem.ActiveMap;
+import eventSystem.EventSystem;
 import features.FeaturesEffects;
 import main.Tile;
 import main.Tile.Visibility;
@@ -84,7 +88,7 @@ public abstract class Actions {
 		Entity attacker = attackerTile.get(Type.ACTOR);
 		Entity receiver = receiverTile.get(Type.ACTOR);
 		
-		String[] extraText = {nameMap.get(attacker).name, nameMap.get(receiver).name};
+		String[] extraText = {descMap.get(attacker).name, descMap.get(receiver).name};
 		if(attackerTile.getVisibility() == Visibility.VISIBLE && receiverTile.getVisibility() == Visibility.VISIBLE){
 			if(playerMap.has(attacker))
 				MessageFactory.loadMessage("PlayerAttacksNPC", extraText);
@@ -109,7 +113,7 @@ public abstract class Actions {
 			Entity item = tile.get(Type.ITEM);
 			actorInv.add(item);
 			if(playerMap.has(actor)){
-				String[] extraText = {nameMap.get(item).name};
+				String[] extraText = {descMap.get(item).name};
 				MessageFactory.loadMessage("PlayerPicksUp", extraText);
 			}
 			tile.remove(item);
@@ -123,7 +127,7 @@ public abstract class Actions {
 	 * @param potion la poción que se está tomando
 	 */
 	public static void quaff(Entity actor, Entity potion){
-		QuaffEffects.getFor(nameMap.get(potion).name).accept(actor);
+		QuaffEffects.getFor(descMap.get(potion).name).accept(actor);
 		endTurn(actor, ActionType.USE_ITEM);
 	}
 	
@@ -151,6 +155,14 @@ public abstract class Actions {
 	 * @param actor 
 	 */
 	public static void followPath(Entity actor) {
+		if(!visionMap.get(actor).enemyTiles.isEmpty() && !AIMap.get(actor).isInState("attacking")) {
+			if(playerMap.has(actor)) {
+				MessageFactory.createMessage("There's an enemy nearby.");
+			}
+			movMap.get(actor).path = null;
+			AIMap.get(actor).setState("attacking");
+			return;
+		}
 		PositionComponent next = null;
 		Path path = movMap.get(actor).path;
 		try{
@@ -185,11 +197,12 @@ public abstract class Actions {
 	 * @param action la última acción realizada
 	 */
 	public static void endTurn(Entity entity, ActionType action) {
+		timedMap.get(entity).nextTurn += (int) attMap.get(entity).get(action.asociatedStat);
+		Mappers.statusEffectsMap.get(entity).affect(Trigger.END_TURN);
 		if(playerMap.has(entity)) {
 			ActiveMap.refresh();
+			Juego.ENGINE.getSystem(EventSystem.class).waitingForPlayerInput = false;
 		}
-		timedMap.get(entity).actionPoints = (int) attMap.get(entity).get(action.asociatedStat);
-		Mappers.statusEffectsMap.get(entity).affect(Trigger.END_TURN);
 	}
 
 	/**

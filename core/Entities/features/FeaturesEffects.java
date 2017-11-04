@@ -1,6 +1,6 @@
 package features;
 
-import static components.Mappers.nameMap;
+import static components.Mappers.descMap;
 
 import java.util.HashMap;
 import java.util.function.BiConsumer;
@@ -22,7 +22,7 @@ public abstract class FeaturesEffects {
 	}
 	
 	public static void use(Entity feature, Entity user) {
-		String featureName = nameMap.get(feature).name;
+		String featureName = descMap.get(feature).name;
 		if(effects.containsKey(featureName))
 			effects.get(featureName).accept(feature, user);
 	}

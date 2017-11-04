@@ -2,7 +2,7 @@ package menu;
 
 import static components.Mappers.attMap;
 import static components.Mappers.inventoryMap;
-import static components.Mappers.nameMap;
+import static components.Mappers.descMap;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
@@ -42,7 +42,7 @@ public class EquipMenu extends Menu{
 		titleFont.draw(batch, "EQUIPMENT", x, y + 30);
 
 		for(Entity p : items){
-			String equipmentName = nameMap.get(p).name;
+			String equipmentName = descMap.get(p).name;
 			int quantity = (int) attMap.get(p).get("quantity");
 			String text = equipmentName;
 			if(quantity > 1) {

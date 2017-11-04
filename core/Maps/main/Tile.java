@@ -1,6 +1,6 @@
 package main;
 
-import static components.Mappers.nameMap;
+import static components.Mappers.descMap;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -28,7 +28,7 @@ public class Tile {
 	private LinkedList<Entity> items = new LinkedList<>();
 	private Entity terrain = null;
 	
-	private Visibility visibility = Visibility.NOT_VISIBLE;
+	private Visibility visibility = Visibility.VISIBLE;
 	
 	public Tile(PositionComponent p){
 		pos = p;
@@ -71,16 +71,16 @@ public class Tile {
 		Type type = e.getComponent(Type.class);
 		switch(type) {
 			case ACTOR:
-				if(nameMap.get(actor).name.equals(nameMap.get(e).name)) actor = null;
+				if(descMap.get(actor).name.equals(descMap.get(e).name)) actor = null;
 				break;
 			case FEATURE:
-				if(nameMap.get(feature).name.equals(nameMap.get(e).name)) feature = null;
+				if(descMap.get(feature).name.equals(descMap.get(e).name)) feature = null;
 				break;
 			case ITEM:
 				items.remove(e);
 				break;
 			case TERRAIN:
-				if(nameMap.get(terrain).name.equals(nameMap.get(e).name)) terrain = null;
+				if(descMap.get(terrain).name.equals(descMap.get(e).name)) terrain = null;
 				break;
 		}
 	}
@@ -167,10 +167,10 @@ public class Tile {
 	@Override
 	public String toString() {
 		String message = "=====>TILE " + pos + "<=====";
-		message += actor == null ? "" : "\nActor: \t\t" + nameMap.get(actor).name;
-		message += feature == null ? "" : "\nFeature: \t" + nameMap.get(feature).name;
-		message += items.isEmpty() ? "" : "\nItem: \t\t" + nameMap.get(items.getFirst()).name;
-		message += terrain == null ? "" : "\nTerrain: \t" + nameMap.get(terrain).name;
+		message += actor == null ? "" : "\nActor: \t\t" + descMap.get(actor).name;
+		message += feature == null ? "" : "\nFeature: \t" + descMap.get(feature).name;
+		message += items.isEmpty() ? "" : "\nItem: \t\t" + descMap.get(items.getFirst()).name;
+		message += terrain == null ? "" : "\nTerrain: \t" + descMap.get(terrain).name;
 		message += "\n= = = = = = = = = = = = = = = = = = = = = = = = \n";
 		
 		return message; 

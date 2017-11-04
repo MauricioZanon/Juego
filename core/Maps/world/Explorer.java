@@ -222,6 +222,12 @@ public class Explorer {
 		return line;
 	}
 	
+	/**
+	 * Usa flood fill solo en los tiles transitables y develve el primero que encuentra con la condicion dada
+	 * @param origin el origen de la busqueda
+	 * @param cond
+	 * @return
+	 */
 	public static Tile getClosestTile(Tile origin, Predicate<Tile> cond){
 		Set<Tile> possibleTiles = getAdjacentTiles(origin, t -> t.isTransitable());
 		for(int i = 0; i < world.CHUNK_SIZE; i++){

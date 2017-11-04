@@ -52,20 +52,16 @@
   <components.AIComponent>
     <states>
       <entry>
-        <string>idling</string>
-        <states.IdleState/>
-      </entry>
-      <entry>
-        <string>exploring</string>
-        <states.ExploreState/>
+        <string>wandering</string>
+        <states.npc.WanderState/>
       </entry>
       <entry>
         <string>attacking</string>
-        <states.AttackState/>
+        <states.npc.AttackState/>
       </entry>
     </states>
     <fsm>
-      <currentState class="states.ExploreState" reference="../../states/entry[2]/states.ExploreState"/>
+      <currentState class="states.npc.WanderState" reference="../../states/entry/states.npc.WanderState"/>
     </fsm>
   </components.AIComponent>
   <components.HealthComponent>
@@ -77,7 +73,7 @@
     <movementType>WALK</movementType>
   </components.MovementComponent>
   <components.TimedComponent>
-    <actionPoints>0</actionPoints>
+    <nextTurn>0</nextTurn>
     <isActive>true</isActive>
   </components.TimedComponent>
   <components.Faction>HUMANS</components.Faction>
@@ -91,5 +87,6 @@
   <components.VisionComponent>
     <sightRange>50</sightRange>
     <visionMap/>
+    <enemyTiles/>
   </components.VisionComponent>
 </object-array>

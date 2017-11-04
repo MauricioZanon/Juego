@@ -5,12 +5,11 @@ import static components.Mappers.posMap;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.MathUtils;
 
-import FOV.VisionCalculator;
 import RNG.RNG;
 import actions.Actions;
+import components.DescriptionComponent;
 import components.HealthComponent;
 import components.Mappers;
-import components.DescriptionComponent;
 import components.PositionComponent;
 import components.StatusEffectsComponent;
 import components.Type;
@@ -24,7 +23,7 @@ public abstract class Effects {
 		HealthComponent HC = Mappers.healthMap.get(actor);
 		HC.curHP = MathUtils.clamp(HC.curHP + amount, 0, HC.maxHP);
 		
-		String[] extraText = {Mappers.nameMap.get(actor).name};
+		String[] extraText = {Mappers.descMap.get(actor).name};
 		String messageType = playerMap.has(actor) ? "PlayerHeals" : "NpcHeals";
 		MessageFactory.loadMessage(messageType, extraText);
 	}
@@ -53,9 +52,6 @@ public abstract class Effects {
 		newTile.put(entity);
 		entity.add(newPos);
 		
-		if(Mappers.visionMap.has(entity)) { //TODO mover para que se calcule vision siempre que empieza un turno
-			VisionCalculator.calculateVision(entity);
-		}
 		if(playerMap.has(entity) && newTile.get(Type.ITEM) != null) {
 			String[] extraText = {newTile.get(Type.ITEM).getComponent(DescriptionComponent.class).name}; 
 			MessageFactory.loadMessage("StandingOnItem", extraText);

@@ -6,8 +6,8 @@ import com.badlogic.ashley.core.Component;
 
 public class TimedComponent implements Component{
 	
-	public int actionPoints = 0;
+	public long nextTurn = 0;
 	
 	public boolean isActive = true;
-	
+
 }

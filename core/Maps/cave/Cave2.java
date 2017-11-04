@@ -1,6 +1,6 @@
 package cave;
 
-import static components.Mappers.nameMap;
+import static components.Mappers.descMap;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -64,12 +64,12 @@ public class Cave2 extends Location{
 		tiles.addAll(wallTiles);
 		
 		for(Tile tile : tiles) {
-			if(nameMap.get(tile.get(Type.TERRAIN)).name.equals("dirt wall") &&
-					Explorer.countAdjacency(tile, t -> nameMap.get(t.get(Type.TERRAIN)).name.equals("dirt wall")) < 4) {
+			if(descMap.get(tile.get(Type.TERRAIN)).name.equals("dirt wall") &&
+					Explorer.countAdjacency(tile, t -> descMap.get(t.get(Type.TERRAIN)).name.equals("dirt wall")) < 4) {
 				newFloorTiles.add(tile);
 			}
-			else if(nameMap.get(tile.get(Type.TERRAIN)).name.equals("dirt floor") && 
-					Explorer.countAdjacency(tile, t -> nameMap.get(t.get(Type.TERRAIN)).name.equals("dirt wall")) >= 6) {
+			else if(descMap.get(tile.get(Type.TERRAIN)).name.equals("dirt floor") && 
+					Explorer.countAdjacency(tile, t -> descMap.get(t.get(Type.TERRAIN)).name.equals("dirt wall")) >= 6) {
 				newWallTiles.add(tile);
 			}
 		}

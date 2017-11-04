@@ -66,7 +66,7 @@ public class World {
 	}
 
 	private void createDungeons() {
-		DungeonBuilder.createDungeon(new PositionComponent(55, 55, 0));
+		DungeonBuilder.createDungeon(new PositionComponent(200, 200, 0));
 	}
 
 	public Chunk[][][] getMap() {

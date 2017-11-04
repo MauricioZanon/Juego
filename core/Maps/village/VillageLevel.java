@@ -1,6 +1,6 @@
 package village;
 
-import static components.Mappers.nameMap;
+import static components.Mappers.descMap;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -41,7 +41,7 @@ public class VillageLevel extends Chunk{
 		buildRoad();
 		
 		for(int i = 0; i < 10; i++){
-			Predicate<Tile> isGrassFloor = t -> t.get(Type.TERRAIN) != null && nameMap.get(t.get(Type.TERRAIN)).name.equals("grass floor");
+			Predicate<Tile> isGrassFloor = t -> t.get(Type.TERRAIN) != null && descMap.get(t.get(Type.TERRAIN)).name.equals("grass floor");
 			Predicate<Tile> adjacentToGrassFloor = t -> Explorer.isOrthogonallyAdjacent(t, isGrassFloor);
 			Tile startingTile = RNG.getRandom(road, adjacentToGrassFloor);
 			simulateHouse(startingTile);
@@ -67,7 +67,7 @@ public class VillageLevel extends Chunk{
 	
 	private void simulateHouse(Tile roadTile){
 		
-		Set<Tile> tiles = Explorer.getOrthogonalTiles(roadTile, t -> nameMap.get(t.get(Type.TERRAIN)).name.equals("grass floor"));
+		Set<Tile> tiles = Explorer.getOrthogonalTiles(roadTile, t -> descMap.get(t.get(Type.TERRAIN)).name.equals("grass floor"));
 
 		Tile initialHouseTile = RNG.getRandom(tiles);
 		
@@ -114,7 +114,7 @@ public class VillageLevel extends Chunk{
 	}
 	
 	private boolean validHouseTile(Tile tile) {
-		return nameMap.get(tile.get(Type.TERRAIN)).name.equals("grass floor");
+		return descMap.get(tile.get(Type.TERRAIN)).name.equals("grass floor");
 	}
 
 	//TODO agregar las puertas y hacer que siempre esten mirando al camino

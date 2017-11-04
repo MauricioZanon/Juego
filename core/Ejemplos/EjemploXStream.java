@@ -18,6 +18,7 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 
 import components.AIComponent;
 import components.AttributeComponent;
+import components.DescriptionComponent;
 import components.EquipmentComponent;
 import components.Faction;
 import components.GraphicsComponent;
@@ -27,7 +28,6 @@ import components.ItemType;
 import components.LightSourceComponent;
 import components.LockComponent;
 import components.MovementComponent;
-import components.DescriptionComponent;
 import components.PickupableComponent;
 import components.PlayerComponent;
 import components.SkillsComponent;
@@ -37,9 +37,8 @@ import components.TransitableComponent;
 import components.TranslucentComponent;
 import components.Type;
 import components.VisionComponent;
-import states.AttackState;
-import states.ExploreState;
-import states.WanderState;
+import states.npc.AttackState;
+import states.npc.WanderState;
 
 
 @XStreamAlias("Ejemplos") // Hace que XStream use este alias cuando cree el XML
@@ -119,9 +118,8 @@ public class EjemploXStream {
 		
 		AIComponent ai = Juego.ENGINE.createComponent(AIComponent.class);
 		ai.states.put("attacking", new AttackState());
-		ai.states.put("exploring", new ExploreState());
-		ai.states.put("idling", new WanderState());
-		ai.fsm.setInitialState(ai.states.get("exploring"));
+		ai.states.put("wandering", new WanderState());
+		ai.fsm.setInitialState(ai.states.get("wandering"));
 		
 		actor.add(ai);
 		

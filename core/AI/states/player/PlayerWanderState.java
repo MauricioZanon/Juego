@@ -1,4 +1,4 @@
-package states;
+package states.player;
 
 import static components.Mappers.movMap;
 
@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Color;
 import actions.Actions;
 import components.Mappers;
 import pathFind.Path;
+import states.npc.WanderState;
 
 public class PlayerWanderState extends WanderState{
 	

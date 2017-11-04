@@ -30,6 +30,7 @@ import console.Console;
 import console.Message;
 import console.MessageFactory;
 import eventSystem.ActiveMap;
+import eventSystem.EventSystem;
 import factories.ItemFactory;
 import factories.TerrainFactory;
 import main.Tile;
@@ -103,6 +104,8 @@ public class GameScreenASCII implements Screen{
 //		System.out.println("Tiempo de render:   " + (System.currentTimeMillis() - tiempo) + "ms");
 	}
 	
+	private int mapCenter = (gameScreenSize / 2) - 8;
+	
 	private void drawMap(){
 		Tile[][] map = ActiveMap.getMap();
 		int center = map.length/2;
@@ -112,13 +115,15 @@ public class GameScreenASCII implements Screen{
 		for (int x = -gameScreenTiles/2; x <= gameScreenTiles/2; x++){
 			for(int y = -gameScreenTiles/2; y <= gameScreenTiles/2; y++){
 				Tile tile = null;
-				try {tile = map[center+x][center+y];}
-				catch(ArrayIndexOutOfBoundsException e) {continue;}
-				if(tile == null) continue;
-				GraphicsComponent gc = tile.getBackGC();
+				GraphicsComponent gc;
+				try {
+					tile = map[center+x][center+y];
+					gc = tile.getBackGC();
+				}
+				catch(ArrayIndexOutOfBoundsException | NullPointerException e) {continue;}
 				if(tile.getVisibility() == Visibility.NOT_VISIBLE || gc == null) continue;
-				int xImg = (x * TILE_SIZE) + (gameScreenSize / 2) - 8;
-				int yImg = (y * TILE_SIZE) + (gameScreenSize / 2) - 8;
+				int xImg = (x * TILE_SIZE) + mapCenter;
+				int yImg = (y * TILE_SIZE) + mapCenter;
 				
 				Color color = new Color(gc.backColor);
 				if(tile.getVisibility() == Visibility.VIEWED){
@@ -137,13 +142,15 @@ public class GameScreenASCII implements Screen{
 		for (int x = -gameScreenTiles/2; x <= gameScreenTiles/2; x++){
 			for(int y = -gameScreenTiles/2; y <= gameScreenTiles/2; y++){
 				Tile tile = null;
-				try {tile = map[center+x][center+y];}
-				catch(ArrayIndexOutOfBoundsException e) {continue;}
+				try {
+					tile = map[center+x][center+y];
+				}
+				catch(ArrayIndexOutOfBoundsException | NullPointerException e) {continue;}
 				if(tile == null || tile.getVisibility() == Visibility.NOT_VISIBLE) {
 					continue;
 				}
-				int xImg = (x * TILE_SIZE) + (gameScreenSize / 2) - 8;
-				int yImg = (y * TILE_SIZE) + (gameScreenSize / 2) - 8;
+				int xImg = (x * TILE_SIZE) + mapCenter;
+				int yImg = (y * TILE_SIZE) + mapCenter;
 				
 				GraphicsComponent gc;
 				Color color;
@@ -163,7 +170,6 @@ public class GameScreenASCII implements Screen{
 			}
 		}
 		batch.end();
-		
 	}
 	
 	private void drawASCII(SpriteBatch batch, BitmapFont font, Color color, GlyphLayout layout, String ASCII, int xPos, int yPos){
@@ -273,11 +279,11 @@ public class GameScreenASCII implements Screen{
 		if(tile != null && tile.getVisibility() != Visibility.NOT_VISIBLE && !tile.isEmpty()){
 			String text = "";
 			if(tile.get(Type.ACTOR) != null){
-				text = Mappers.nameMap.get(tile.get(Type.ACTOR)).name;
+				text = Mappers.descMap.get(tile.get(Type.ACTOR)).name;
 			}else if(tile.get(Type.FEATURE) != null){
-				text = Mappers.nameMap.get(tile.get(Type.FEATURE)).name;
+				text = Mappers.descMap.get(tile.get(Type.FEATURE)).name;
 			}else if(tile.get(Type.ITEM) != null){
-				text = Mappers.nameMap.get(tile.get(Type.ITEM)).name;
+				text = Mappers.descMap.get(tile.get(Type.ITEM)).name;
 			}
 			
 			batch.begin();
@@ -366,6 +372,8 @@ public class GameScreenASCII implements Screen{
 	private InputProcessor createGameInputProcessor() {
 		return new InputProcessor(){
 			public boolean keyDown(int keycode) {
+				if(!Juego.ENGINE.getSystem(EventSystem.class).waitingForPlayerInput) return false;
+				
 				switch(keycode){
 					case Keys.ESCAPE:
 						System.exit(0);
@@ -400,6 +408,7 @@ public class GameScreenASCII implements Screen{
 					case Keys.X:
 						State<Entity> exploreState = Mappers.AIMap.get(Juego.PLAYER).states.get("exploring");
 						Mappers.AIMap.get(Juego.PLAYER).fsm.changeState(exploreState);
+						Juego.ENGINE.getSystem(EventSystem.class).waitingForPlayerInput = false;
 						break;
 				}
 				return false;
@@ -410,6 +419,7 @@ public class GameScreenASCII implements Screen{
 			}
 
 			public boolean keyTyped(char character) {
+				if(!Juego.ENGINE.getSystem(EventSystem.class).waitingForPlayerInput) return false;
 				PositionComponent pos = Juego.PLAYER.getComponent(PositionComponent.class);
 				switch(character){
 					case '1':
@@ -445,6 +455,8 @@ public class GameScreenASCII implements Screen{
 			}
 
 			public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+				if(!Juego.ENGINE.getSystem(EventSystem.class).waitingForPlayerInput) return false;
+				
 				PositionComponent playerPos = Juego.PLAYER.getComponent(PositionComponent.class);
 				Tile clickedTile = getClickedTile();
 				ArrayList<Tile> lista;
@@ -454,6 +466,7 @@ public class GameScreenASCII implements Screen{
 						Mappers.movMap.get(Juego.PLAYER).path = PathFinder.findPath(playerPos, clickedTile.getPos(), Juego.PLAYER);
 						State<Entity> exploreState = Mappers.AIMap.get(Juego.PLAYER).states.get("wandering");
 						Mappers.AIMap.get(Juego.PLAYER).fsm.changeState(exploreState);
+						Juego.ENGINE.getSystem(EventSystem.class).waitingForPlayerInput = false;
 						break;
 					case 1: //click derecho
 						lista = Explorer.getStraigthLine(playerPos, clickedTile.getPos());
@@ -483,6 +496,7 @@ public class GameScreenASCII implements Screen{
 			}
 
 			public boolean mouseMoved(int screenX, int screenY) {
+				if(!Juego.ENGINE.getSystem(EventSystem.class).waitingForPlayerInput) return false;
 				GameScreenASCII.getInstance().refreshMarker(screenX, Gdx.graphics.getHeight() - screenY);
 				return false;
 			}
@@ -498,6 +512,7 @@ public class GameScreenASCII implements Screen{
 	private InputProcessor createUseFeatureInputProcessor() {
 		return new InputProcessor(){
 			public boolean keyDown(int keycode) {
+				if(!Juego.ENGINE.getSystem(EventSystem.class).waitingForPlayerInput) return false;
 				switch(keycode){
 					case Keys.ESCAPE:
 						setGameInput();
@@ -511,6 +526,7 @@ public class GameScreenASCII implements Screen{
 			}
 
 			public boolean keyTyped(char character) {
+				if(!Juego.ENGINE.getSystem(EventSystem.class).waitingForPlayerInput) return false;
 				
 				PositionComponent playerPos = Juego.PLAYER.getComponent(PositionComponent.class);
 				PositionComponent featurePos = null;
@@ -578,6 +594,7 @@ public class GameScreenASCII implements Screen{
 	private InputProcessor createAimInputProcessor() {
 		return new InputProcessor(){
 			public boolean keyDown(int keycode) {
+				if(!Juego.ENGINE.getSystem(EventSystem.class).waitingForPlayerInput) return false;
 				switch(keycode){
 					case Keys.ESCAPE:
 						Juego.ENGINE.getSystem(RenderSystem.class).setScreen(GameScreenASCII.getInstance());
@@ -598,6 +615,7 @@ public class GameScreenASCII implements Screen{
 			}
 
 			public boolean keyTyped(char character) {
+				if(!Juego.ENGINE.getSystem(EventSystem.class).waitingForPlayerInput) return false;
 				
 				switch(character){
 					case '1':
@@ -629,6 +647,7 @@ public class GameScreenASCII implements Screen{
 			}
 
 			public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+				if(!Juego.ENGINE.getSystem(EventSystem.class).waitingForPlayerInput) return false;
 //				Position pos = GameScreen.getInstance().getClickedPos();
 				switch(button){
 					case 0:
@@ -648,6 +667,7 @@ public class GameScreenASCII implements Screen{
 			}
 
 			public boolean mouseMoved(int screenX, int screenY) {
+				if(!Juego.ENGINE.getSystem(EventSystem.class).waitingForPlayerInput) return false;
 				refreshMarker(screenX, Gdx.graphics.getHeight() - screenY);
 				return false;
 			}

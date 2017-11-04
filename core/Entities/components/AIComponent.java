@@ -18,5 +18,9 @@ public class AIComponent implements Component{
 			fsm.changeState(states.get(stateName));
 		}
 	}
-
+	
+	public boolean isInState(String stateName) {
+		return fsm.isInState(states.get(stateName));
+	}
+	
 }

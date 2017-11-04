@@ -6,7 +6,6 @@ import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
 
-import FOV.VisionCalculator;
 import RNG.RNG;
 import components.Mappers;
 import components.PositionComponent;
@@ -184,7 +183,7 @@ public class DungeonLevel {
 	}
 	
 	private void putEnemies() {
-		int quantity = RNG.nextGaussian(rooms.size(), rooms.size()/3);
+		int quantity = 5;//RNG.nextGaussian(rooms.size()/2, rooms.size()/3);
 		Set<Tile> availableTiles = new HashSet<>();
 		rooms.forEach(r -> availableTiles.addAll(r.getFloorTiles()));
 		while(quantity > 0) {
@@ -192,7 +191,6 @@ public class DungeonLevel {
 			Tile tile = RNG.getRandom(availableTiles, t -> t.get(Type.FEATURE) == null);
 			npc.add(tile.getPos().clone());
 			tile.put(npc);
-			VisionCalculator.calculateVision(npc);
 			quantity--;
 		}
 	}

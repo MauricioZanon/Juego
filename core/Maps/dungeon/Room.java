@@ -22,7 +22,7 @@ public class Room {
 	public Set<Tile> getDoorTiles(){
 		Set<Tile> doorTiles = new HashSet<>();
 		for(Tile tile : floorTiles) {
-			if(tile.get(Type.FEATURE) != null && Mappers.nameMap.get(tile.get(Type.FEATURE)).name.equals("door")) {
+			if(tile.get(Type.FEATURE) != null && Mappers.descMap.get(tile.get(Type.FEATURE)).name.equals("door")) {
 				doorTiles.add(tile);
 			}
 		}

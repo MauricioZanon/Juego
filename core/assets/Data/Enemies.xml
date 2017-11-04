@@ -65,7 +65,7 @@
 			<movementType>WALK</movementType>
 		</components.MovementComponent>
 		<components.TimedComponent>
-			<actionPoints>0</actionPoints>
+			<nextTurn>0</nextTurn>
 			<isActive>true</isActive>
 		</components.TimedComponent>
 		<components.Faction>SLIMES</components.Faction>
@@ -76,19 +76,15 @@
 			<states>
 				<entry>
 					<string>wandering</string>
-					<states.WanderState/>
-				</entry>
-				<entry>
-					<string>exploring</string>
-					<states.ExploreState/>
+					<states.npc.WanderState/>
 				</entry>
 				<entry>
 					<string>attacking</string>
-					<states.AttackState/>
+					<states.npc.AttackState/>
 				</entry>
 			</states>
 			<fsm>
-				<currentState class="states.ExploreState" reference="../../states/entry[2]/states.ExploreState"/>
+				<currentState class="states.npc.WanderState" reference="../../states/entry/states.npc.WanderState"/>
 			</fsm>
 		</components.AIComponent>
 		<components.VisionComponent>
@@ -162,7 +158,7 @@
 			<movementType>WALK</movementType>
 		</components.MovementComponent>
 		<components.TimedComponent>
-			<actionPoints>0</actionPoints>
+			<nextTurn>0</nextTurn>
 			<isActive>true</isActive>
 		</components.TimedComponent>
 		<components.Faction>GOBLINS</components.Faction>
@@ -177,19 +173,15 @@
 			<states>
 				<entry>
 					<string>wandering</string>
-					<states.WanderState/>
-				</entry>
-				<entry>
-					<string>exploring</string>
-					<states.ExploreState/>
+					<states.npc.WanderState/>
 				</entry>
 				<entry>
 					<string>attacking</string>
-					<states.AttackState/>
+					<states.npc.AttackState/>
 				</entry>
 			</states>
 			<fsm>
-				<currentState class="states.ExploreState" reference="../../states/entry[2]/states.ExploreState"/>
+				<currentState class="states.npc.WanderState" reference="../../states/entry/states.npc.WanderState"/>
 			</fsm>
 		</components.AIComponent>
 		<components.VisionComponent>
@@ -263,7 +255,7 @@
 			<movementType>WALK</movementType>
 		</components.MovementComponent>
 		<components.TimedComponent>
-			<actionPoints>0</actionPoints>
+			<nextTurn>0</nextTurn>
 			<isActive>true</isActive>
 		</components.TimedComponent>
 		<components.Faction>ANIMALS</components.Faction>
@@ -274,19 +266,15 @@
 			<states>
 				<entry>
 					<string>wandering</string>
-					<states.WanderState/>
-				</entry>
-				<entry>
-					<string>exploring</string>
-					<states.ExploreState/>
+					<states.npc.WanderState/>
 				</entry>
 				<entry>
 					<string>attacking</string>
-					<states.AttackState/>
+					<states.npc.AttackState/>
 				</entry>
 			</states>
 			<fsm>
-				<currentState class="states.ExploreState" reference="../../states/entry[2]/states.ExploreState"/>
+				<currentState class="states.npc.WanderState" reference="../../states/entry/states.npc.WanderState"/>
 			</fsm>
 		</components.AIComponent>
 		<components.VisionComponent>

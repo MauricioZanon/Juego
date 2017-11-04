@@ -54,16 +54,16 @@ public abstract class WorldSaver {
 			switch(Mappers.typeMap.get(e)) {
 				case ACTOR:
 					e.remove(AIComponent.class);
-					s += xstream.toXML("Actor: " + Mappers.nameMap.get(e).name);
+					s += xstream.toXML("Actor: " + Mappers.descMap.get(e).name);
 					break;
 				case FEATURE:
-					s += xstream.toXML("Feature: " + Mappers.nameMap.get(e).name);
+					s += xstream.toXML("Feature: " + Mappers.descMap.get(e).name);
 					break;
 				case ITEM:
-					s += xstream.toXML("Item: " + Mappers.nameMap.get(e).name);
+					s += xstream.toXML("Item: " + Mappers.descMap.get(e).name);
 					break;
 				case TERRAIN:
-					s += xstream.toXML("Terreno: " + Mappers.nameMap.get(e).name);
+					s += xstream.toXML("Terreno: " + Mappers.descMap.get(e).name);
 					break;
 				default:
 					break;

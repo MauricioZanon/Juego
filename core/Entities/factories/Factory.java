@@ -67,7 +67,7 @@ public abstract class Factory {
 		List<String> list = findEntitiesXMLStrings(doc);
 		for(String entityString : list){
 			Entity e = create(entityString);
-			entities.put(Mappers.nameMap.get(e).name, entityString);
+			entities.put(Mappers.descMap.get(e).name, entityString);
 		}
 		return entities;
 	}

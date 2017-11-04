@@ -2,7 +2,7 @@ package menu;
 
 import static components.Mappers.attMap;
 import static components.Mappers.inventoryMap;
-import static components.Mappers.nameMap;
+import static components.Mappers.descMap;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
@@ -42,7 +42,7 @@ public class QuaffMenu extends Menu{
 		titleFont.draw(batch, "POTIONS", x, y + 30);
 
 		for(Entity p : items){
-			String potionName = nameMap.get(p).name;
+			String potionName = descMap.get(p).name;
 			int quantity = (int) attMap.get(p).get("quantity");
 			String text = potionName;
 			if(quantity > 1) {
