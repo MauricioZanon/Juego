@@ -28,7 +28,7 @@ public class Tile {
 	private LinkedList<Entity> items = new LinkedList<>();
 	private Entity terrain = null;
 	
-	private Visibility visibility = Visibility.VISIBLE;
+	private Visibility visibility = Visibility.NOT_VISIBLE;
 	
 	public Tile(PositionComponent p){
 		pos = p;

@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.mygdx.juego.Juego;
 
+import inputProcessors.GameInput;
 import screens.GameScreenASCII;
 import tools.CustomShapeRenderer;
 
@@ -88,7 +89,7 @@ public  class InventoryMenu extends Menu{
 				switch(keycode){
 				case Keys.ESCAPE:
 					GameScreenASCII.getInstance().menu = null;
-					GameScreenASCII.getInstance().setGameInput();
+					Gdx.input.setInputProcessor(new GameInput());
 					break;
 				case Keys.DOWN:
 					changeSelectedItem(1);

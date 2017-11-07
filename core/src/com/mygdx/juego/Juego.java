@@ -1,8 +1,10 @@
 package com.mygdx.juego;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 
 import components.AIComponent;
@@ -22,6 +24,7 @@ import components.Type;
 import components.VisionComponent;
 import eventSystem.ActiveMap;
 import eventSystem.EventSystem;
+import inputProcessors.GameInput;
 import screens.GameScreenASCII;
 import screens.MainScreen;
 import states.player.PlayerAttackState;
@@ -36,9 +39,26 @@ public class Juego extends Game {
 	public static final Entity PLAYER = ENGINE.createEntity();
 	public static World world = new World();
 	
+	public static Thread gameThread;
+	public static Engine GRAPHICS_ENGINE = new Engine();
+	
     public void create() {
-    	ENGINE.addSystem(new RenderSystem());
-    	ENGINE.getSystem(RenderSystem.class).setScreen(MainScreen.getInstance());
+    	RenderSystem render = new RenderSystem();
+    	render.setScreen(MainScreen.getInstance());
+    	GRAPHICS_ENGINE.addSystem(render);
+    	
+    	gameThread = new Thread(() -> {
+    		while(true) {
+    			long tiempo = System.currentTimeMillis();
+    			ENGINE.update(0);
+    			try {
+					Thread.sleep((1000/30) - (System.currentTimeMillis() - tiempo));
+				} catch (InterruptedException | IllegalArgumentException e) {}
+    		}
+    	});
+    	gameThread.setName("game thread");
+    	
+    	
     }
     
     public static void startGame() {
@@ -47,7 +67,9 @@ public class Juego extends Game {
     	ENGINE.addSystem(new EventSystem());
     	spawnPlayer();
     	
-    	ENGINE.getSystem(RenderSystem.class).setScreen(GameScreenASCII.getInstance());
+    	GRAPHICS_ENGINE.getSystem(RenderSystem.class).setScreen(GameScreenASCII.getInstance());
+    	Gdx.input.setInputProcessor(new GameInput());
+    	gameThread.start();
 	}
 
     
@@ -113,7 +135,10 @@ public class Juego extends Game {
     @Override
     public void render() {
     	long tiempo = System.currentTimeMillis();
-    	ENGINE.update((1000/60) - (System.currentTimeMillis() - tiempo));
+    	GRAPHICS_ENGINE.update((1000/60) - (System.currentTimeMillis() - tiempo));
+    	try {
+			Thread.sleep((1000/60) - (System.currentTimeMillis() - tiempo));
+		} catch (InterruptedException | IllegalArgumentException e) {}
     }
 
     @Override

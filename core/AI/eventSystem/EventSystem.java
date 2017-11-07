@@ -26,13 +26,25 @@ public class EventSystem extends EntitySystem {
 		timedEntities.addAll(e);
 	}
 	
+	
+	/**
+	 * FIXME:
+	 * Con el if tarda mucho porque despues de cada ciclo tiene que renderizar antes de empezar el siguiente
+	 * Hay que cambiar el if por un while para que simuler todos los movimientos antes de darle control al personaje
+	 * 
+	 * FIXME:
+	 * Cuando se cambia el if por el while si se hace explorar al personaje la pantalla no se renderiza hasta que termina,
+	 * esto es porque mientras explora no se le da el control al personaje, entonces nunca sale del while, la manera correcta de arreglarlo
+	 * seria moviendo el renderizado a otro thread
+	 */
 	@Override
 	public void update(float deltaTime) {
-		if(!waitingForPlayerInput) {
-			Entity entity = timedEntities.remove();
+		Entity entity = null;
+		do {
+			entity = timedEntities.remove();
 			if(!timedMap.get(entity).isActive) {
 				Juego.ENGINE.removeEntity(entity);
-				return;
+				continue;
 			}
 			if(playerMap.has(entity)) waitingForPlayerInput = true;
 			long entityTurn = timedMap.get(entity).nextTurn;
@@ -44,12 +56,11 @@ public class EventSystem extends EntitySystem {
 				AIMap.get(entity).fsm.update();
 			}
 			timedEntities.add(entity);
-		}
+		}while(!playerMap.has(entity));
 	}
 	
 	private Comparator<Entity> createComparator(){
 		return new Comparator<Entity>() {
-
 			@Override
 			public int compare(Entity a, Entity b) {
 				long turnA = timedMap.get(a).nextTurn;

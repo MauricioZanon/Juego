@@ -35,6 +35,9 @@ public class AttackState implements State<Entity> {
 	public void update(Entity entity) {
 		if(targetEnemy == null) {  // si no hay enemigo, wander
 			AIMap.get(entity).setState("wandering");
+		}else if(targetEnemy.getComponents().size() == 0) { // si el enemigo se está removiendo del juego
+			targetEnemy = null;
+			AIMap.get(entity).setState("wandering");
 		}else {
 			if(visionMap.get(entity).enemyTiles.contains(posMap.get(targetEnemy).getTile())) { // si el enemigo esta a la vista se actualiza el path
 				movMap.get(entity).path = PathFinder.findPath(posMap.get(entity), posMap.get(targetEnemy), entity);
@@ -42,7 +45,6 @@ public class AttackState implements State<Entity> {
 			if(movMap.get(entity).path == null) { // si no hay camino para llegar al enemigo, wander
 				AIMap.get(entity).setState("wandering");
 			}else {
-				System.out.println("attacking");
 				Actions.followPath(entity);
 			}
 		}

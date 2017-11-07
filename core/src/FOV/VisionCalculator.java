@@ -27,9 +27,9 @@ public abstract class VisionCalculator {
 
 	private static void calculatePlayerVision(Entity player) {
 		HashSet<Tile> visibleTiles = visionMap.get(player).visionMap;
-		visibleTiles.forEach(t -> t.setVisibiliy(Visibility.VIEWED));
-		visibleTiles.clear();
 		
+		HashSet<Tile> newVisibleTiles = new HashSet<>();
+
 		HashSet<Tile> enemyTiles = visionMap.get(player).enemyTiles;
 		enemyTiles.clear();
 		
@@ -39,13 +39,16 @@ public abstract class VisionCalculator {
 		
 		Faction faction = factionMap.get(player);
 		for(Tile t : area) {
-			if(!visibleTiles.contains(t)){
-				calculateLOS(originTile, t, visibleTiles, enemyTiles, faction);
+			if(!newVisibleTiles.contains(t)){
+				calculateLOS(originTile, t, newVisibleTiles, enemyTiles, faction);
 			}
 		}
 		visibleTiles.forEach(t -> t.setVisibiliy(Visibility.VISIBLE));
 		
-		visionMap.get(player).visionMap = visibleTiles;
+		visibleTiles.removeAll(newVisibleTiles);
+		visibleTiles.forEach(t -> t.setVisibiliy(Visibility.VIEWED));
+		
+		visionMap.get(player).visionMap = newVisibleTiles;
 		visionMap.get(player).enemyTiles = enemyTiles;
 	}
 	

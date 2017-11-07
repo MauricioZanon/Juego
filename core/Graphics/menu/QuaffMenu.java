@@ -15,6 +15,7 @@ import com.mygdx.juego.Juego;
 
 import actions.Actions;
 import components.ItemType;
+import inputProcessors.GameInput;
 import screens.GameScreenASCII;
 import tools.CustomShapeRenderer;
 
@@ -65,7 +66,7 @@ public class QuaffMenu extends Menu{
 				switch(keycode){
 				case Keys.ESCAPE:
 					GameScreenASCII.getInstance().menu = null;
-					GameScreenASCII.getInstance().setGameInput();
+					Gdx.input.setInputProcessor(new GameInput());
 					break;
 				case Keys.DOWN:
 					changeSelectedItem(1);
@@ -75,7 +76,7 @@ public class QuaffMenu extends Menu{
 					break;
 				case Keys.ENTER:
 					GameScreenASCII.getInstance().menu = null;
-					GameScreenASCII.getInstance().setGameInput();
+					Gdx.input.setInputProcessor(new GameInput());
 					if(!items.isEmpty()){
 						Entity potion = items.get(selectedItem);
 						Actions.quaff(Juego.PLAYER, potion);

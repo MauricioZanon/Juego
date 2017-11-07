@@ -23,10 +23,8 @@ public class WanderState implements State<Entity> {
 	@Override
 	public void update(Entity entity) {
 		if(!visionMap.get(entity).enemyTiles.isEmpty()) {
-			System.out.println("enemy found");
 			AIMap.get(entity).setState("attacking");
 		}else {
-			System.out.println("wander");
 			Actions.bump(posMap.get(entity), RNG.getRandom(Direction.values()));
 		}
 	}
