@@ -68,6 +68,7 @@ public class DungeonLevel {
 		}
 		createLoops();
 		putStairs();
+		putDoors();
 		putEnemies();
 		putItems();
 	}
@@ -179,6 +180,14 @@ public class DungeonLevel {
 			stair.add(downStair);
 			Mappers.graphMap.get(stair).ASCII = ">";
 			downStair.getTile().put(stair);
+		}
+	}
+	
+	private void putDoors() {
+		for(Tile tile : doors) {
+			if(tile.isEmpty()) {
+				tile.put(FeatureFactory.createFeature("door"));
+			}
 		}
 	}
 	

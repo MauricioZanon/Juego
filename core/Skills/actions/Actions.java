@@ -55,11 +55,11 @@ public abstract class Actions {
 		if(newTile.get(Type.ACTOR) != null){
 			attack(oldTile, newTile);
 		}
-		else if(Mappers.transitableMap.get(newTile.get(Type.TERRAIN)).allowedMovementType.contains(MovementType.WALK)){
-			walk(oldPos, newPos);
-		}
 		else if(newTile.get(Type.FEATURE) != null && !newTile.isTransitable()){
 			useFeature(actor, newPos);
+		}
+		else if(Mappers.transitableMap.get(newTile.get(Type.TERRAIN)).allowedMovementType.contains(MovementType.WALK)){
+			walk(oldPos, newPos);
 		}
 		if(!newTile.isTransitable()) {
 			return;

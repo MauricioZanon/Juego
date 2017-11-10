@@ -22,7 +22,7 @@ public  class InventoryMenu extends Menu{
 	private final InputProcessor INVENTORY_INPUT = createInventoryInputProcessor();
 	
 	public InventoryMenu() {
-		items = inventoryMap.get(Juego.PLAYER).getAll();
+		items = inventoryMap.get(Juego.player).getAll();
 		recalculateSize();
 		Gdx.input.setInputProcessor(INVENTORY_INPUT);
 	}
@@ -43,7 +43,10 @@ public  class InventoryMenu extends Menu{
 
 		for(Entity i : items){
 			String itemName = descMap.get(i).name;
-			int quantity = (int) attMap.get(i).get("quantity");
+			int quantity = 0;
+			try{
+				quantity = (int) attMap.get(i).get("quantity");
+			}catch(NullPointerException e) {}
 			String text = itemName;
 			if(quantity > 1) {
 				text += " (" + quantity + ")";
@@ -56,30 +59,6 @@ public  class InventoryMenu extends Menu{
 		
 		batch.end();
 		
-//		Gdx.gl.glClearColor(0, 0, 0, 1); // Color de fondo
-//		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-//		batch.setProjectionMatrix(camera.combined);
-//		batch.begin();
-//		BitmapFont font = new BitmapFont();
-//		int x = - Gdx.graphics.getWidth() / 2 + 10;
-//		int y = Gdx.graphics.getHeight() / 2 - 50;
-//		BitmapFont titleFont = new BitmapFont();
-//		titleFont.setColor(Color.RED);
-//		titleFont.draw(batch, "INVENTORY", x, y + 30);
-//		int index = 0;
-//		for(Entity item : items.values()){
-//			int quantity = (int) Mappers.attMap.get(item).get("quantity");
-//			String text = nameMap.get(item).name;
-//			if(quantity > 1) {
-//				text += " (" + quantity + ")";
-//			}
-//			font.setColor(index == selectedItem ? Color.CHARTREUSE : Color.WHITE);
-//			font.draw(batch, text, x, y);
-//			y -= 15;
-//			index++;
-//		}
-//		
-//		batch.end();
 	}
 	
 	private InputProcessor createInventoryInputProcessor() {

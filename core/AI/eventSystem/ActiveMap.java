@@ -38,7 +38,7 @@ public abstract class ActiveMap {
 	}
 	
 	private static PositionComponent getPos00(){
-		PositionComponent playerPos = Juego.PLAYER.getComponent(PositionComponent.class);
+		PositionComponent playerPos = Juego.player.getComponent(PositionComponent.class);
 		
 		int x = playerPos.coord[0] - (MAP_SIZE_IN_TILES/2);
 		int y = playerPos.coord[1] - (MAP_SIZE_IN_TILES/2);

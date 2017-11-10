@@ -24,7 +24,7 @@ public class EquipMenu extends Menu{
 	private final InputProcessor EQUIP_INPUT = createEquipProcessor();
 	
 	public EquipMenu() {
-		items = inventoryMap.get(Juego.PLAYER).getList(ItemType.EQUIPMENT);
+		items = inventoryMap.get(Juego.player).getList(ItemType.EQUIPMENT);
 		recalculateSize();
 		Gdx.input.setInputProcessor(EQUIP_INPUT);
 	}
@@ -80,8 +80,8 @@ public class EquipMenu extends Menu{
 					Gdx.input.setInputProcessor(new GameInput());
 					if(!items.isEmpty()){
 						Entity equipment = items.get(selectedItem);
-						Actions.equip(Juego.PLAYER, equipment);
-						inventoryMap.get(Juego.PLAYER).remove(equipment);
+						Actions.equip(Juego.player, equipment);
+						inventoryMap.get(Juego.player).remove(equipment);
 					}
 					break;
 			}

@@ -11,10 +11,12 @@ public abstract class ItemFactory extends Factory{
 	private final static String PATH_WEAPONS = "../core/assets/Data/Weapons.xml";
 	private final static String PATH_ARMORS = "../core/assets/Data/Armors.xml";
 	private final static String PATH_POTIONS = "../core/assets/Data/Potions.xml";
+	private final static String PATH_SPECIAL_ITEMS = "../core/assets/Data/Special items.xml";
 	
 	private static HashMap<String, String> weaponStrings = loadEntities(PATH_WEAPONS);
 	private static HashMap<String, String> armorStrings = loadEntities(PATH_ARMORS);
 	private static HashMap<String, String> potionStrings = loadEntities(PATH_POTIONS);
+	private static HashMap<String, String> specialItemStrings = loadEntities(PATH_SPECIAL_ITEMS);
 	
 	public static Entity createRandomItem(){
 		int rarity = RNG.nextInt(100) + 1;
@@ -38,6 +40,9 @@ public abstract class ItemFactory extends Factory{
 		}
 		else if(potionStrings.keySet().contains(itemName)){
 			return create(potionStrings.get(itemName)); 
+		}
+		else if(specialItemStrings.keySet().contains(itemName)){
+			return create(specialItemStrings.get(itemName)); 
 		}
 		else {
 			return null;

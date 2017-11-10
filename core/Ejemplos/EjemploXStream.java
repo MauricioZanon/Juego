@@ -25,11 +25,9 @@ import components.GraphicsComponent;
 import components.HealthComponent;
 import components.InventoryComponent;
 import components.ItemType;
-import components.LightSourceComponent;
 import components.LockComponent;
 import components.MovementComponent;
 import components.PickupableComponent;
-import components.PlayerComponent;
 import components.SkillsComponent;
 import components.StatusEffectsComponent;
 import components.TimedComponent;
@@ -140,24 +138,20 @@ public class EjemploXStream {
 		Entity item = Juego.ENGINE.createEntity();
 		
 		item.add(Type.ITEM);
-		item.add(ItemType.WEAPON);
+		item.add(ItemType.KEY);
 		
 		DescriptionComponent nc = Juego.ENGINE.createComponent(DescriptionComponent.class);
-		nc.name = "Item template";
+		nc.name = "key";
 		item.add(nc);
 		
 		GraphicsComponent gc = Juego.ENGINE.createComponent(GraphicsComponent.class);
-		gc.ASCII = "/";
+		gc.ASCII = ",";
+		gc.font = "general";
 		gc.frontColor = Color.GRAY;
 		gc.renderPriority = 1;
 		item.add(gc);
-		
 
 		item.add(Juego.ENGINE.createComponent(PickupableComponent.class));
-		
-		AttributeComponent ac = Juego.ENGINE.createComponent(AttributeComponent.class);
-		ac.set("damage", 10f);
-		item.add(ac);
 		
 		saveObject(item.getComponents().toArray());
 		loadObject();
@@ -169,83 +163,61 @@ public class EjemploXStream {
 		feature.add(Type.FEATURE);
 		
 		DescriptionComponent nc = Juego.ENGINE.createComponent(DescriptionComponent.class);
-		nc.name = "Feature template";
+		nc.name = "door";
 		feature.add(nc);
 		
 		GraphicsComponent gc = Juego.ENGINE.createComponent(GraphicsComponent.class);
-		gc.ASCII = "?";
+		gc.ASCII = "+";
 		gc.font = "general";
-		gc.frontColor = Color.RED;
+		gc.frontColor = Color.BROWN;
 		gc.renderPriority = 2;
 		feature.add(gc);
-
+		
+		LockComponent lc = Juego.ENGINE.createComponent(LockComponent.class);
+		lc.isClosed = true;
+		lc.isLocked = false;
+		feature.add(lc);
+		
+		TransitableComponent tc = Juego.ENGINE.createComponent(TransitableComponent.class);
+		feature.add(tc);
+		
+		TranslucentComponent translucentC = Juego.ENGINE.createComponent(TranslucentComponent.class);
+		translucentC.translucent = false;
+		feature.add(translucentC);
+		
 		saveObject(feature.getComponents().toArray());
 		loadObject();
 	}
 	
 	private static void createPotion() {
-		Entity feature = Juego.ENGINE.createEntity();
+		Entity potion = Juego.ENGINE.createEntity();
 		
-		feature.add(Type.ITEM);
-		feature.add(ItemType.POTION);
-		feature.add(Juego.ENGINE.createComponent(PickupableComponent.class));
+		potion.add(Type.ITEM);
+		potion.add(ItemType.POTION);
+		potion.add(Juego.ENGINE.createComponent(PickupableComponent.class));
 		
 		DescriptionComponent nc = Juego.ENGINE.createComponent(DescriptionComponent.class);
 		nc.name = "Potion template";
-		feature.add(nc);
+		potion.add(nc);
 		
 		GraphicsComponent gc = Juego.ENGINE.createComponent(GraphicsComponent.class);
 		gc.ASCII = "i";
 		gc.font = "general";
 		gc.frontColor = Color.RED;
 		gc.renderPriority = 1;
-		feature.add(gc);
+		potion.add(gc);
 
-		saveObject(feature.getComponents().toArray());
+		saveObject(potion.getComponents().toArray());
 		loadObject();
 	}
 	
-	private static void createEntityWithAllComponents() {
-		Entity e = Juego.ENGINE.createEntity();
-		
-		e.add(Juego.ENGINE.createComponent(GraphicsComponent.class));
-		e.add(Type.ACTOR);
-		e.add(Juego.ENGINE.createComponent(DescriptionComponent.class));
-		e.add(Juego.ENGINE.createComponent(TransitableComponent.class));
-		e.add(Juego.ENGINE.createComponent(TranslucentComponent.class));
-		e.add(Juego.ENGINE.createComponent(TimedComponent.class));
-		e.add(Juego.ENGINE.createComponent(LightSourceComponent.class));
-		e.add(Juego.ENGINE.createComponent(AttributeComponent.class));
-		e.add(Juego.ENGINE.createComponent(LockComponent.class));
-
-		//Actor components
-		e.add(Juego.ENGINE.createComponent(PlayerComponent.class));
-		e.add(Juego.ENGINE.createComponent(HealthComponent.class));
-		e.add(Juego.ENGINE.createComponent(EquipmentComponent.class));
-		e.add(Juego.ENGINE.createComponent(InventoryComponent.class));
-		e.add(Juego.ENGINE.createComponent(StatusEffectsComponent.class));
-		e.add(Juego.ENGINE.createComponent(SkillsComponent.class));
-		e.add(Juego.ENGINE.createComponent(AIComponent.class));
-		e.add(Juego.ENGINE.createComponent(VisionComponent.class));
-		e.add(Faction.HUMANS);
-		
-		//Item components
-		e.add(Juego.ENGINE.createComponent(PickupableComponent.class));
-		e.add(ItemType.WEAPON);
-
-		saveObject(e.getComponents().toArray());
-		loadObject();
-	}
 	
 	public static void main(String[] args) throws XPathExpressionException, SAXException, IOException, ParserConfigurationException {
 		
-		createEntityWithAllComponents();
-		createItem();
 		createPotion();
 		createFeature();
+		createItem();
 		createActor();
-		
-		loadObject();
 		
 	}
 

@@ -12,6 +12,7 @@ import static com.mygdx.juego.Juego.world;
 
 import RNG.RNG;
 import components.Type;
+import factories.FeatureFactory;
 import factories.TerrainFactory;
 import main.Chunk;
 import main.Tile;
@@ -32,7 +33,6 @@ public class VillageLevel extends Chunk{
 		fillLevel(createGrassFloor);
 		
 		buildLevel();
-//		spawnNPCs("villager"); 
 		
 	}
 	
@@ -110,6 +110,13 @@ public class VillageLevel extends Chunk{
 		}
 		
 		buildHouse(walls, floors);
+
+		Predicate<Tile> isGrassFloor = t -> t.get(Type.TERRAIN) != null && descMap.get(t.get(Type.TERRAIN)).name.equals("grass floor");
+		Predicate<Tile> adjacentToRoad = t -> !Explorer.isOrthogonallyAdjacent(t, isGrassFloor);
+		Tile doorTile = RNG.getRandom(walls, adjacentToRoad);
+		
+		doorTile.put(TerrainFactory.get("wooden floor"));
+		doorTile.put(FeatureFactory.createFeature("door"));
 		
 	}
 	

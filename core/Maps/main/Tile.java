@@ -14,15 +14,17 @@ import com.badlogic.ashley.core.Entity;
 
 import components.GraphicsComponent;
 import components.Mappers;
+import components.MovementComponent.MovementType;
 import components.PositionComponent;
 import components.TransitableComponent;
+import components.TranslucentComponent;
 import components.Type;
-import components.MovementComponent.MovementType;
 
 public class Tile {
 	
 	private PositionComponent pos;
 	
+	private Entity gas = null;
 	private Entity actor = null;
 	private Entity feature = null;
 	private LinkedList<Entity> items = new LinkedList<>();
@@ -48,6 +50,9 @@ public class Tile {
 				break;
 			case TERRAIN:
 				terrain = e;
+				break;
+			case GAS:
+				gas = e;
 		}
 	}
 	
@@ -82,6 +87,9 @@ public class Tile {
 			case TERRAIN:
 				if(descMap.get(terrain).name.equals(descMap.get(e).name)) terrain = null;
 				break;
+			case GAS:
+				if(descMap.get(gas).name.equals(descMap.get(e).name)) gas = null;
+				
 		}
 	}
 	public void remove(Type type) {
@@ -98,6 +106,8 @@ public class Tile {
 		case TERRAIN:
 			terrain = null;
 			break;
+		case GAS:
+			gas = null;
 		}
 	}
 	
@@ -107,6 +117,7 @@ public class Tile {
 		if(feature != null) entities.add(feature);
 		if(terrain != null) entities.add(terrain);
 		if(!items.isEmpty()) entities.addAll(items);
+		if(gas != null) entities.add(gas);
 		
 		return entities;
 	}
@@ -158,8 +169,16 @@ public class Tile {
 	
 	public boolean isTransitable() {
 		if(terrain == null) return false;
-		for(TransitableComponent t : getComponents(Mappers.transitableMap)) {
-			if(!t.allowedMovementType.contains(MovementType.WALK)) return false;
+		for(TransitableComponent c : getComponents(Mappers.transitableMap)) {
+			if(!c.allowedMovementType.contains(MovementType.WALK)) return false;
+		}
+		return true;
+	}
+	
+	public boolean isTranslucent() {
+		if(terrain == null) return false;
+		for(TranslucentComponent c : getComponents(Mappers.translucentMap)) {
+			if(!c.translucent) return false;
 		}
 		return true;
 	}
@@ -171,6 +190,7 @@ public class Tile {
 		message += feature == null ? "" : "\nFeature: \t" + descMap.get(feature).name;
 		message += items.isEmpty() ? "" : "\nItem: \t\t" + descMap.get(items.getFirst()).name;
 		message += terrain == null ? "" : "\nTerrain: \t" + descMap.get(terrain).name;
+		message += gas == null ? "" : "\nGas: \t" + descMap.get(gas).name;
 		message += "\n= = = = = = = = = = = = = = = = = = = = = = = = \n";
 		
 		return message; 

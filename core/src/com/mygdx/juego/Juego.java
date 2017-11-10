@@ -36,7 +36,7 @@ import world.World;
 public class Juego extends Game {
 	
 	public static final PooledEngine ENGINE = new PooledEngine();
-	public static final Entity PLAYER = ENGINE.createEntity();
+	public volatile static Entity player = ENGINE.createEntity();
 	public static World world = new World();
 	
 	public static Thread gameThread;
@@ -74,54 +74,54 @@ public class Juego extends Game {
 
     
     private static void spawnPlayer(){
-    	PLAYER.add(ENGINE.createComponent(PlayerComponent.class));
+    	player.add(ENGINE.createComponent(PlayerComponent.class));
     	
-    	PLAYER.add(Type.ACTOR);
-    	PLAYER.add(Faction.HUMANS);
+    	player.add(Type.ACTOR);
+    	player.add(Faction.HUMANS);
     	
 		PositionComponent playerPos = new PositionComponent(200, 200, 0);
-		playerPos.getTile().put(PLAYER);
-		PLAYER.add(playerPos);
+		playerPos.getTile().put(player);
+		player.add(playerPos);
 		
 		DescriptionComponent nc = ENGINE.createComponent(DescriptionComponent.class);
 		nc.name = "player";
-		PLAYER.add(nc);
+		player.add(nc);
 		
 		GraphicsComponent gc = ENGINE.createComponent(GraphicsComponent.class);
 		gc.ASCII = "@";
 		gc.font = "general";
 		gc.frontColor = Color.WHITE;
 		gc.renderPriority = 3;
-		PLAYER.add(gc);
+		player.add(gc);
 		
 		AttributeComponent ac = ENGINE.createComponent(AttributeComponent.class);
 		ac.set("damage", 15f);
 		ac.set("move speed", 25f);
 		ac.set("attack speed", 25f);
-		PLAYER.add(ac);
+		player.add(ac);
 		
 		HealthComponent hc = ENGINE.createComponent(HealthComponent.class);
 		hc.maxHP = 1000;
 		hc.curHP = 1000;
 		hc.HPreg = 100;
-		PLAYER.add(hc);
+		player.add(hc);
 		
-		PLAYER.add(ENGINE.createComponent(VisionComponent.class));
-		PLAYER.add(ENGINE.createComponent(TimedComponent.class));
-		PLAYER.add(ENGINE.createComponent(StatusEffectsComponent.class));
-		PLAYER.add(ENGINE.createComponent(InventoryComponent.class));
-		PLAYER.add(ENGINE.createComponent(EquipmentComponent.class));
+		player.add(ENGINE.createComponent(VisionComponent.class));
+		player.add(ENGINE.createComponent(TimedComponent.class));
+		player.add(ENGINE.createComponent(StatusEffectsComponent.class));
+		player.add(ENGINE.createComponent(InventoryComponent.class));
+		player.add(ENGINE.createComponent(EquipmentComponent.class));
 		
 		AIComponent ai = ENGINE.createComponent(AIComponent.class);
-		ai.fsm.setOwner(PLAYER);
+		ai.fsm.setOwner(player);
 		ai.states.put("wandering", new PlayerWanderState());
 		ai.states.put("exploring", new PlayerExploreState());
 		ai.states.put("attacking", new PlayerAttackState());
 		ai.fsm.setGlobalState(ai.states.get("wandering"));
 		ai.fsm.setInitialState(ai.states.get("wandering"));
-		PLAYER.add(ai);
+		player.add(ai);
 		
-		PLAYER.add(ENGINE.createComponent(MovementComponent.class));
+		player.add(ENGINE.createComponent(MovementComponent.class));
 		
 		ActiveMap.refresh();
 		

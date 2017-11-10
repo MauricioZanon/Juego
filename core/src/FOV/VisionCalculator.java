@@ -1,8 +1,7 @@
 package FOV;
 
-import static components.Mappers.translucentMap;
-import static components.Mappers.visionMap;
 import static components.Mappers.factionMap;
+import static components.Mappers.visionMap;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -75,7 +74,7 @@ public abstract class VisionCalculator {
 		for(Tile tile : Explorer.getStraigthLine(start.getPos(), end.getPos())){
 			visibleTiles.add(tile);
 			if(tile.get(Type.ACTOR) != null && faction.isEnemy(tile.get(Type.ACTOR))) enemyTiles.add(tile);
-			if(tile.get(Type.TERRAIN) == null || !translucentMap.get(tile.get(Type.TERRAIN)).translucent){
+			if(tile.get(Type.TERRAIN) == null || !tile.isTranslucent()){
 				return;
 			}
 		}

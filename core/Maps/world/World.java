@@ -31,6 +31,8 @@ public class World {
 		
 //		new Cave(new PositionComponent(5, 5, 0, 5, 5), RNG.getRandom(CaveSize.values()));
 		createDungeons();
+		map[5][5][0] = new VillageLevel(5, 5);
+
 		System.out.println("Tiempo de creación del World Map: " + (System.currentTimeMillis() - time));
 	}
 	

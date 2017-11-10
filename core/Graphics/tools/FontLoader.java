@@ -72,6 +72,7 @@ public abstract class FontLoader {
 		parameter.characters += searchASCII(potionsDoc);
 		parameter.characters += searchASCII(npcsDoc);
 		parameter.characters += searchASCII(featuresDoc);
+		parameter.characters += "\u2592";
 		parameter.size = (int) (tileSize * 0.85);
 		parameter.shadowColor = Color.BLACK;
 		parameter.shadowOffsetX = 1;

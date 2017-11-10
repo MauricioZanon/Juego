@@ -76,5 +76,5 @@ public class InventoryComponent implements Component{
 	public Entity removeAll(Entity item) {
 		return removeAll(descMap.get(item).name);
 	}
-
+	
 }

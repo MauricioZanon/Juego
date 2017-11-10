@@ -24,7 +24,7 @@ public class QuaffMenu extends Menu{
 	private final InputProcessor QUAFF_INPUT = createQuaffProcessor();
 	
 	public QuaffMenu() {
-		items = inventoryMap.get(Juego.PLAYER).getList(ItemType.POTION);
+		items = inventoryMap.get(Juego.player).getList(ItemType.POTION);
 		recalculateSize();
 		Gdx.input.setInputProcessor(QUAFF_INPUT);
 	}
@@ -79,8 +79,8 @@ public class QuaffMenu extends Menu{
 					Gdx.input.setInputProcessor(new GameInput());
 					if(!items.isEmpty()){
 						Entity potion = items.get(selectedItem);
-						Actions.quaff(Juego.PLAYER, potion);
-						inventoryMap.get(Juego.PLAYER).remove(potion);
+						Actions.quaff(Juego.player, potion);
+						inventoryMap.get(Juego.player).remove(potion);
 					}
 					break;
 			}

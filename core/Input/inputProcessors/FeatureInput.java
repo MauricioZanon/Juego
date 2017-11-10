@@ -30,7 +30,7 @@ public class FeatureInput implements InputProcessor{
 	public boolean keyTyped(char character) {
 		if(!Juego.ENGINE.getSystem(EventSystem.class).waitingForPlayerInput) return false;
 		
-		PositionComponent playerPos = Juego.PLAYER.getComponent(PositionComponent.class);
+		PositionComponent playerPos = Juego.player.getComponent(PositionComponent.class);
 		PositionComponent featurePos = null;
 		
 		switch(character){
@@ -65,7 +65,7 @@ public class FeatureInput implements InputProcessor{
 				break;
 		}
 		if(featurePos != null) {
-			Actions.useFeature(Juego.PLAYER, featurePos);
+			Actions.useFeature(Juego.player, featurePos);
 		}
 		Gdx.input.setInputProcessor(new GameInput());
 		return false;

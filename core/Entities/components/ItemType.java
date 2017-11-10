@@ -4,7 +4,6 @@ import com.badlogic.ashley.core.Component;
 
 /**
  * Cada tipo de item guarda un atributo (group) que es el tipo de item del cual desciende
- * @author Mauro
  */
 
 public enum ItemType implements Component{
@@ -41,8 +40,10 @@ public enum ItemType implements Component{
 			RING(JEWELRY),
 			NECKLACE(JEWELRY),
 	
-	MATERIAL(null),
-	TOOL(null);
+	TOOL(null),
+		KEY(TOOL),
+		
+	MATERIAL(null);
 	
 	private ItemType group = null;
 	

@@ -68,6 +68,9 @@
 			<nextTurn>0</nextTurn>
 			<isActive>true</isActive>
 		</components.TimedComponent>
+		<components.InventoryComponent>
+			<inv/>
+		</components.InventoryComponent>
 		<components.Faction>SLIMES</components.Faction>
 		<components.InventoryComponent/>
 		<components.StatusEffectsComponent/>
@@ -160,7 +163,10 @@
 		<components.TimedComponent>
 			<nextTurn>0</nextTurn>
 			<isActive>true</isActive>
-		</components.TimedComponent>
+		</components.TimedComponent>>
+		<components.InventoryComponent>
+			<inv/>
+		</components.InventoryComponent>
 		<components.Faction>GOBLINS</components.Faction>
 		<components.EquipmentComponent>
 			<equipment>
@@ -257,7 +263,10 @@
 		<components.TimedComponent>
 			<nextTurn>0</nextTurn>
 			<isActive>true</isActive>
-		</components.TimedComponent>
+		</components.TimedComponent>>
+		<components.InventoryComponent>
+			<inv/>
+		</components.InventoryComponent>
 		<components.Faction>ANIMALS</components.Faction>
 		<components.InventoryComponent/>
 		<components.StatusEffectsComponent/>

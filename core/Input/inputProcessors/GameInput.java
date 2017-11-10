@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ai.fsm.State;
 import com.mygdx.juego.Juego;
 
@@ -13,6 +13,7 @@ import actions.ActionType;
 import actions.Actions;
 import components.Mappers;
 import components.PositionComponent;
+import components.Type;
 import console.MessageFactory;
 import eventSystem.EventSystem;
 import factories.ItemFactory;
@@ -36,15 +37,15 @@ public class GameInput implements InputProcessor{
 				System.exit(0);
 				break;
 			case Keys.SPACE:
-				Tile tile = Mappers.posMap.get(Juego.PLAYER).getTile();
+				Tile tile = Mappers.posMap.get(Juego.player).getTile();
 				tile.put(ItemFactory.createPotion());
 				break;
 			case Keys.CONTROL_LEFT:
-				Tile tile2 = Mappers.posMap.get(Juego.PLAYER).getTile();
+				Tile tile2 = Mappers.posMap.get(Juego.player).getTile();
 				tile2.put(ItemFactory.createRandomItem());
 				break;
 			case Keys.COMMA:
-				Actions.pickUp(Explorer.getTile(Juego.PLAYER.getComponent(PositionComponent.class)));
+				Actions.pickUp(Explorer.getTile(Juego.player.getComponent(PositionComponent.class)));
 				break;
 			case Keys.E:
 				MessageFactory.createMessage("Use what?");
@@ -63,8 +64,8 @@ public class GameInput implements InputProcessor{
 //				RenderSystem.setScreen(SkillsScreen.getInstance());
 				break;
 			case Keys.X:
-				State<Entity> exploreState = Mappers.AIMap.get(Juego.PLAYER).states.get("exploring");
-				Mappers.AIMap.get(Juego.PLAYER).fsm.changeState(exploreState);
+				State<Entity> exploreState = Mappers.AIMap.get(Juego.player).states.get("exploring");
+				Mappers.AIMap.get(Juego.player).fsm.changeState(exploreState);
 				Juego.ENGINE.getSystem(EventSystem.class).waitingForPlayerInput = false;
 				break;
 		}
@@ -77,7 +78,7 @@ public class GameInput implements InputProcessor{
 
 	public boolean keyTyped(char character) {
 		if(!Juego.ENGINE.getSystem(EventSystem.class).waitingForPlayerInput) return false;
-		PositionComponent pos = Juego.PLAYER.getComponent(PositionComponent.class);
+		PositionComponent pos = Juego.player.getComponent(PositionComponent.class);
 		switch(character){
 			case '1':
 				Actions.bump(pos, Direction.SW);
@@ -92,7 +93,7 @@ public class GameInput implements InputProcessor{
 				Actions.bump(pos, Direction.W);
 				break;
 			case '5':
-				Actions.endTurn(Juego.PLAYER, ActionType.WAIT);
+				Actions.endTurn(Juego.player, ActionType.WAIT);
 				break;
 			case '6':
 				Actions.bump(pos, Direction.E);
@@ -114,15 +115,15 @@ public class GameInput implements InputProcessor{
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		if(!Juego.ENGINE.getSystem(EventSystem.class).waitingForPlayerInput) return false;
 		
-		PositionComponent playerPos = Juego.PLAYER.getComponent(PositionComponent.class);
+		PositionComponent playerPos = Juego.player.getComponent(PositionComponent.class);
 		Tile clickedTile = GameScreenASCII.getInstance().getClickedTile();
 		ArrayList<Tile> lista;
 		
 		switch(button){
 			case 0: //click izquierdo
-				Mappers.movMap.get(Juego.PLAYER).path = PathFinder.findPath(playerPos, clickedTile.getPos(), Juego.PLAYER);
-				State<Entity> exploreState = Mappers.AIMap.get(Juego.PLAYER).states.get("wandering");
-				Mappers.AIMap.get(Juego.PLAYER).fsm.changeState(exploreState);
+				Mappers.movMap.get(Juego.player).path = PathFinder.findPath(playerPos, clickedTile.getPos(), Juego.player);
+				State<Entity> exploreState = Mappers.AIMap.get(Juego.player).states.get("wandering");
+				Mappers.AIMap.get(Juego.player).fsm.changeState(exploreState);
 				Juego.ENGINE.getSystem(EventSystem.class).waitingForPlayerInput = false;
 				break;
 			case 1: //click derecho
@@ -133,11 +134,13 @@ public class GameInput implements InputProcessor{
 				}
 				break;
 			case 2: //ruedita
-//					lista = World.getStraigthLine(clickedPos, playerPos);
-//					for(Tile tile : lista){
-//						Entity wall = TerrainPool.get("concrete wall");
-//						tile.setTerrain(wall);
-//					}
+				Entity item = ItemFactory.createItem("key");
+				
+				Mappers.lockMap.get(clickedTile.get(Type.FEATURE)).isLocked = true;
+				Mappers.lockMap.get(clickedTile.get(Type.FEATURE)).key = item;
+				
+				playerPos.getTile().put(item);
+				
 				break;
 		}
 		

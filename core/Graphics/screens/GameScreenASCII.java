@@ -1,6 +1,8 @@
 package screens;
 
 import static tools.FontLoader.fonts;
+import static components.Mappers.graphMap;
+import static components.Mappers.playerMap;
 
 import java.util.ArrayList;
 
@@ -98,16 +100,12 @@ public class GameScreenASCII implements Screen{
 					gc = tile.getBackGC();
 				}
 				catch(ArrayIndexOutOfBoundsException | NullPointerException e) {continue;}
-				if(tile.getVisibility() == Visibility.NOT_VISIBLE || gc == null) continue;
+				if(tile.getVisibility() != Visibility.VISIBLE || gc == null) continue;
 				int xImg = (x * TILE_SIZE) + mapCenter;
 				int yImg = (y * TILE_SIZE) + mapCenter;
 				
 				Color color = new Color(gc.backColor);
-				if(tile.getVisibility() == Visibility.VIEWED){
-					shapeRenderer.setColor(color.lerp(Color.BLACK, 0.5f));
-				}else {
-					shapeRenderer.setColor(color);
-				}
+				shapeRenderer.setColor(color);
 				shapeRenderer.rect(xImg, yImg, TILE_SIZE, TILE_SIZE);
 			}
 		}
@@ -123,7 +121,7 @@ public class GameScreenASCII implements Screen{
 					tile = map[center+x][center+y];
 				}
 				catch(ArrayIndexOutOfBoundsException | NullPointerException e) {continue;}
-				if(tile == null || tile.getVisibility() == Visibility.NOT_VISIBLE) {
+				if(tile == null || tile.getVisibility() != Visibility.VISIBLE) {
 					continue;
 				}
 				int xImg = (x * TILE_SIZE) + mapCenter;
@@ -131,18 +129,9 @@ public class GameScreenASCII implements Screen{
 				
 				GraphicsComponent gc;
 				Color color;
-				if(tile.getVisibility() == Visibility.VIEWED){
-					try {gc = Mappers.graphMap.get(tile.get(Type.TERRAIN));}
-					catch(NullPointerException e) {continue;}
-					
-					if(gc == null) continue;
-					color = new Color(gc.frontColor);
-					color.lerp(Color.BLACK, 0.5f);
-				}else {
-					gc = tile.getFrontGC();
-					if(gc == null) continue;
-					color = new Color(gc.frontColor);
-				}
+				gc = tile.getFrontGC();
+				if(gc == null) continue;
+				color = new Color(gc.frontColor);
 				drawASCII(batch, fonts.get(gc.font), color, layout, gc.ASCII, xImg, yImg);
 			}
 		}
@@ -171,23 +160,26 @@ public class GameScreenASCII implements Screen{
 		
 		for (int x = 0; x < map.length; x++){
 			for(int y = 0; y < map[0].length; y++){
-				if(map[x][y] == null || map[x][y].getVisibility() == Visibility.NOT_VISIBLE)
+				Tile tile = map[x][y];
+				if(tile == null || tile.getVisibility() == Visibility.NOT_VISIBLE)
 					shapeRenderer.setColor(new Color(.2f,.2f,.2f,0));
 				else{
-					GraphicsComponent gc = map[x][y].getBackGC();
-					if(gc == null) continue;
-					Color color = gc.backColor;
-					if(color != null) {
-						shapeRenderer.setColor(color);
+					Color color;
+					if(tile.get(Type.ACTOR) != null && playerMap.has(tile.get(Type.ACTOR))) {
+						color = graphMap.get(tile.get(Type.ACTOR)).frontColor;
 					}
+					else if(tile.get(Type.FEATURE) != null) {
+						color = graphMap.get(tile.get(Type.FEATURE)).frontColor;
+					}else {
+						color = graphMap.get(tile.get(Type.TERRAIN)).backColor;
+					}
+					shapeRenderer.setColor(color);
 				}
 				shapeRenderer.rect(SIDE_BAR_X_POS + x*PIXEL_SIZE, MINI_MAP_Y_POS + y*PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
 			}
 		}
 		shapeRenderer.end();
 	}
-	
-	
 	
 	private void drawFrame(){
 		shapeRenderer.begin(ShapeType.Line);
@@ -207,7 +199,6 @@ public class GameScreenASCII implements Screen{
 		shapeRenderer.line(gameScreenSize + 4, y - 2, Gdx.graphics.getWidth(), y - 2);
 		
 		shapeRenderer.end();
-		
 	}
 	
 	private final int HEALTH_BAR_X_POS = SIDE_BAR_X_POS + 20;
@@ -219,7 +210,7 @@ public class GameScreenASCII implements Screen{
 	private final Color HEALTH_BAR_BORDER_COLOR = new Color(HEALTH_BAR_BACK_COLOR).lerp(Color.BLACK, .2f);
 	
 	private void drawStats(){
-		HealthComponent playerHP = Mappers.healthMap.get(Juego.PLAYER);
+		HealthComponent playerHP = Mappers.healthMap.get(Juego.player);
 		float healthPercent = HEALTH_BAR_WIDTH * playerHP.curHP / playerHP.maxHP;
 		
 		shapeRenderer.begin(ShapeType.Filled);
@@ -306,7 +297,6 @@ public class GameScreenASCII implements Screen{
 		int clickY = Y0 + (markerY / TILE_SIZE) - gameScreenSize / (2 * TILE_SIZE);
 		try {return ActiveMap.getMap()[clickX][clickY];}
 		catch(ArrayIndexOutOfBoundsException e) {return null;}
-		
 	}
 	
 	public void resize(int width, int height) {

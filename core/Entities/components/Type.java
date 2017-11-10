@@ -10,4 +10,5 @@ public enum Type implements Component{
 	FEATURE,
 	ITEM,
 	TERRAIN,
+	GAS,
 }

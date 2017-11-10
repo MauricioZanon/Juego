@@ -80,7 +80,7 @@ public abstract class PathFinder {
 	private static Path createPath(Node currentNode){
 		Path path = new Path();
 		while(currentNode.parent != null){
-			path.add(currentNode.pos);
+			path.addFirst(currentNode.pos);
 			currentNode = currentNode.parent;
 		}
 		return path;

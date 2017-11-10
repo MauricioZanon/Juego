@@ -15,7 +15,6 @@ public abstract class Menu{
 	
 	protected List<Entity> items;
 	
-	/** 0/0 esta en la esquina inferior izquierda*/
 	protected int startingX = 350;
 	protected int startingY = 350;
 	
@@ -31,13 +30,7 @@ public abstract class Menu{
 	public abstract void render(SpriteBatch batch, CustomShapeRenderer sr);
 	
 	protected void changeSelectedItem(int v){
-		if(selectedItem + v >= 0 && selectedItem + v <= items.size() - 1){
-			selectedItem += v;
-		}else if(selectedItem + v < 0) {
-			selectedItem = items.size() - 1;
-		}else {
-			selectedItem = 0;
-		}
+		selectedItem = Math.abs((selectedItem+v) % (items.size()));
 	}
 	
 	protected void recalculateSize() {
