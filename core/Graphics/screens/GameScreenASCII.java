@@ -29,6 +29,7 @@ import main.Tile.Visibility;
 import menu.Menu;
 import tools.CustomShapeRenderer;
 import tools.FontLoader;
+import world.Time;
 
 public class GameScreenASCII implements Screen{
 	
@@ -41,12 +42,6 @@ public class GameScreenASCII implements Screen{
 	private int gameScreenTiles = Gdx.graphics.getHeight()/TILE_SIZE;
 	
 	public Menu menu = null;
-	
-	/**
-	 * Para poner caracteres unicode en el XML hay que poner
-	 * 
-	 * &#x0d74; en el XML si se quiere agregar el caracter \u0d74 (൴)
-	 */
 	
 	private GameScreenASCII(){
 		FontLoader.load(TILE_SIZE);
@@ -70,6 +65,7 @@ public class GameScreenASCII implements Screen{
 		drawConsole();
 		drawMiniMap();
 		drawStats();
+		drawTime();
 		drawFrame();
 		if(menu == null) {
 			drawMarker();
@@ -104,7 +100,7 @@ public class GameScreenASCII implements Screen{
 				int xImg = (x * TILE_SIZE) + mapCenter;
 				int yImg = (y * TILE_SIZE) + mapCenter;
 				
-				Color color = new Color(gc.backColor);
+				Color color = new Color(gc.backColor).lerp(Color.BLACK, 1f - tile.getLightLevel());
 				shapeRenderer.setColor(color);
 				shapeRenderer.rect(xImg, yImg, TILE_SIZE, TILE_SIZE);
 			}
@@ -131,7 +127,7 @@ public class GameScreenASCII implements Screen{
 				Color color;
 				gc = tile.getFrontGC();
 				if(gc == null) continue;
-				color = new Color(gc.frontColor);
+				color = new Color(gc.frontColor).lerp(Color.BLACK, 1 - tile.getLightLevel());
 				drawASCII(batch, fonts.get(gc.font), color, layout, gc.ASCII, xImg, yImg);
 			}
 		}
@@ -225,6 +221,15 @@ public class GameScreenASCII implements Screen{
 		shapeRenderer.rect(HEALTH_BAR_X_POS, HEALTH_BAR_Y_POS, healthPercent, HEALTH_BAR_HEIGHT);
 		
 		shapeRenderer.end();
+	}
+	
+	private void drawTime() {
+		BitmapFont font = FontLoader.fonts.get("general");
+		font.setColor(Color.WHITE);
+		
+		batch.begin();
+		font.draw(batch, Time.getHour(), HEALTH_BAR_X_POS, HEALTH_BAR_Y_POS - 50);
+		batch.end();
 	}
 	
 	private void drawConsole(){

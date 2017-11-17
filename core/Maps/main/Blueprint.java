@@ -5,10 +5,6 @@ import world.Direction;
 
 public class Blueprint {
 	
-	/**
-	 * TODO: hacer que el blueprint se cree como arrays de terrenos y features
-	 */
-	
 	private String[][] array;
 	private boolean possible = true;
 	
@@ -18,17 +14,17 @@ public class Blueprint {
 	
 	public void rotate() {
 		int ii = 0;
-        int jj = 0;
-        String[][] rotatedArray = new String[array[0].length][array.length]; 
-        for(int i=0; i<array[0].length; i++){
-            for(int j=array.length-1; j>=0; j--){
-            	rotatedArray[ii][jj] = array[j][i];
-                jj++;
-            }
-            jj = 0;
-            ii++;
-        }
-        array = rotatedArray;
+		int jj = 0;
+		String[][] rotatedArray = new String[array[0].length][array.length]; 
+		for(int i=0; i<array[0].length; i++){
+			for(int j=array.length-1; j>=0; j--){
+				rotatedArray[ii][jj] = array[j][i];
+				jj++;
+			}
+			jj = 0;
+			ii++;
+		}
+		array = rotatedArray;
 	}
 
 	public boolean isPossible() {

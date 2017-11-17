@@ -11,6 +11,7 @@ import java.util.TreeSet;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.MathUtils;
 
 import components.GraphicsComponent;
 import components.Mappers;
@@ -19,6 +20,7 @@ import components.PositionComponent;
 import components.TransitableComponent;
 import components.TranslucentComponent;
 import components.Type;
+import world.Time;
 
 public class Tile {
 	
@@ -30,6 +32,8 @@ public class Tile {
 	private LinkedList<Entity> items = new LinkedList<>();
 	private Entity terrain = null;
 	
+	private float lightLevel = 0;
+	
 	private Visibility visibility = Visibility.NOT_VISIBLE;
 	
 	public Tile(PositionComponent p){
@@ -39,56 +43,56 @@ public class Tile {
 	public void put(Entity e) {
 		Type type = e.getComponent(Type.class);
 		switch(type) {
-			case ACTOR:
-				actor = e;
-				break;
-			case FEATURE:
-				feature = e;
-				break;
-			case ITEM:
-				items.add(e);
-				break;
-			case TERRAIN:
-				terrain = e;
-				break;
-			case GAS:
-				gas = e;
+		case ACTOR:
+			actor = e;
+			break;
+		case FEATURE:
+			feature = e;
+			break;
+		case ITEM:
+			items.add(e);
+			break;
+		case TERRAIN:
+			terrain = e;
+			break;
+		case GAS:
+			gas = e;
 		}
 	}
 	
 	public Entity get(Type type) {
 		switch(type) {
-			case ACTOR:
-				return actor;
-			case FEATURE:
-				return feature;
-			case ITEM:
-				if(items.isEmpty()) return null;
-				else return items.getFirst();
-			case TERRAIN:
-				return terrain;
-			default:
-				return null;
+		case ACTOR:
+			return actor;
+		case FEATURE:
+			return feature;
+		case ITEM:
+			if(items.isEmpty()) return null;
+			else return items.getFirst();
+		case TERRAIN:
+			return terrain;
+		default:
+			return null;
 		}
 	}
 	
 	public void remove(Entity e) {
 		Type type = e.getComponent(Type.class);
 		switch(type) {
-			case ACTOR:
-				if(descMap.get(actor).name.equals(descMap.get(e).name)) actor = null;
-				break;
-			case FEATURE:
-				if(descMap.get(feature).name.equals(descMap.get(e).name)) feature = null;
-				break;
-			case ITEM:
-				items.remove(e);
-				break;
-			case TERRAIN:
-				if(descMap.get(terrain).name.equals(descMap.get(e).name)) terrain = null;
-				break;
-			case GAS:
-				if(descMap.get(gas).name.equals(descMap.get(e).name)) gas = null;
+		case ACTOR:
+			if(descMap.get(actor).name.equals(descMap.get(e).name)) actor = null;
+			break;
+		case FEATURE:
+			if(descMap.get(feature).name.equals(descMap.get(e).name)) feature = null;
+			break;
+		case ITEM:
+			items.remove(e);
+			break;
+		case TERRAIN:
+			if(descMap.get(terrain).name.equals(descMap.get(e).name)) terrain = null;
+			break;
+		case GAS:
+			if(descMap.get(gas).name.equals(descMap.get(e).name)) gas = null;
 				
 		}
 	}
@@ -155,6 +159,14 @@ public class Tile {
 		catch(NoSuchElementException e) {return null;}
 	}
 	
+	public float getLightLevel() {
+		return Time.getLightLevel();
+	}
+
+	public void setLightLevel(float lightLevel) {
+		this.lightLevel = MathUtils.clamp(this.lightLevel + lightLevel, 0.15f, 1f);
+	}
+
 	public Visibility getVisibility() {
 		return visibility;
 	}
@@ -205,6 +217,4 @@ public class Tile {
 		VISIBLE,
 		VIEWED;
 	}
-
-
 }

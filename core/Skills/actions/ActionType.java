@@ -4,7 +4,8 @@ package actions;
  * Los tipos de acción que pueden terminar un turno
  * @author Mauro
  *
- * TODO una speed asociada a cada tipo de accion
+ * TODO Cada acción tiene que tener un delay base (6 segundos para caminar por ejemplo) que se reduce o aumenta dependiendo del stat
+ * 		asociado
  */
 public enum ActionType{
 	WALK("move speed"),

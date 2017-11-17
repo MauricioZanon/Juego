@@ -8,25 +8,21 @@ import main.Tile;
 import world.Direction;
 import world.Explorer;
 
-//TODO eliminar Constructor, hacer que el engine cree un position component y darle un array de coordenadas
 public class PositionComponent implements Cloneable, Component{
 	
-	/**
-	 * Coordinates:
-	 * 0 - Global X
-	 * 1 - Global Y
-	 * 2 - Global Z
-	 * 3 - Local X
-	 * 4 - Local Y
-	 */
 	public int[] coord = new int[3];
 
+	//TODO eliminar Constructor, hacer que el engine cree un position component y darle un array de coordenadas
 	public PositionComponent(int x, int y, int z) {
 		coord[0] = x;
 		coord[1] = y;
 		coord[2] = z;
 	}
 	
+	public PositionComponent() {
+		//Constructor vacío para que el engine pueda instanciar esta clase
+	
+	}
 	public int getGx() {
 		return coord[0] / world.CHUNK_SIZE;
 	}
@@ -42,11 +38,6 @@ public class PositionComponent implements Cloneable, Component{
 	public int getGz() {
 		return coord[2];
 	}
-	
-	public PositionComponent() {
-		//Constructor vacío para que el engine pueda instanciar esta clase
-	}
-
 	
 	public Tile getTile(){
 		return Explorer.getTile(this);

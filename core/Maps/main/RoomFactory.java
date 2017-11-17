@@ -33,13 +33,11 @@ public abstract class RoomFactory {
 		while((line = in.readLine()) != null){
 			if(line.contains("size")){
 				String[] roomSize = line.split(" ");
-				newRoom = new String[Integer.parseInt(roomSize[1])][Integer.parseInt(roomSize[2])];
+				newRoom = new String[Integer.parseInt(roomSize[2])][Integer.parseInt(roomSize[1])];
 			}
 			else if(line.length() > 1){
 				String[] chars = line.split("");
-				for(int i = 0; i < chars.length; i++){
-					newRoom[i][roomLineNumber] = chars[i];
-				}
+				newRoom[roomLineNumber] = chars;
 				roomLineNumber++;
 			}
 			else{

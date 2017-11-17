@@ -42,7 +42,7 @@ import world.Explorer;
 public abstract class Actions {
 	
 	/**
-	 * Intentar moverse en una direccion
+	 * Intentar moverse en una dirección, la acción realizada depende de lo que se encuentre
 	 * @param oldPos
 	 * @param dir
 	 */
@@ -122,7 +122,7 @@ public abstract class Actions {
 	}
 	
 	/**
-	 * tomar poción
+	 * tomar poción TODO: hacer que se manejen los efectos de las pociones igual a como se manejan los efectos de las features
 	 * @param actor el actor que toma la poción
 	 * @param potion la poción que se está tomando
 	 */
@@ -206,7 +206,7 @@ public abstract class Actions {
 	}
 
 	/**
-	 * Hace que el actor ya no figure como activo y lo elimina del engine
+	 * Hace que el actor ya no figure como activo
 	 * @param actor el actor a eliminar
 	 */
 	public static void die(Entity actor) {

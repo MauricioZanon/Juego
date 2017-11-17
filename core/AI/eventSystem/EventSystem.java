@@ -13,6 +13,7 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.mygdx.juego.Juego;
 
 import FOV.VisionCalculator;
+import world.Time;
 
 public class EventSystem extends EntitySystem {
 	
@@ -27,29 +28,23 @@ public class EventSystem extends EntitySystem {
 	}
 	
 	
-	/**
-	 * FIXME:
-	 * Con el if tarda mucho porque despues de cada ciclo tiene que renderizar antes de empezar el siguiente
-	 * Hay que cambiar el if por un while para que simuler todos los movimientos antes de darle control al personaje
-	 * 
-	 * FIXME:
-	 * Cuando se cambia el if por el while si se hace explorar al personaje la pantalla no se renderiza hasta que termina,
-	 * esto es porque mientras explora no se le da el control al personaje, entonces nunca sale del while, la manera correcta de arreglarlo
-	 * seria moviendo el renderizado a otro thread
-	 */
 	@Override
 	public void update(float deltaTime) {
 		Entity entity = null;
 		do {
 			entity = timedEntities.remove();
-			if(!timedMap.get(entity).isActive) {
+			if(!timedMap.get(entity).isActive) { //Si la entidad no debería actuar se la quita del engine
 				Juego.ENGINE.removeEntity(entity);
 				continue;
 			}
-			if(playerMap.has(entity)) waitingForPlayerInput = true;
 			long entityTurn = timedMap.get(entity).nextTurn;
-			if(entityTurn < turn) {
-				timedMap.get(entity).nextTurn = turn + 10;
+			if(playerMap.has(entity)) {
+				waitingForPlayerInput = true;
+				Time.advanceTime((int) (entityTurn - turn));
+			}
+			// Si el turno de la entidad es menor al turno actual es porque se la acaba de agregar al engine
+			if(entityTurn < turn) { 
+				timedMap.get(entity).nextTurn = turn + 6;
 			}else {
 				turn = entityTurn;
 				VisionCalculator.calculateVision(entity);
