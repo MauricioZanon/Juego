@@ -26,7 +26,7 @@ import console.Message;
 import eventSystem.ActiveMap;
 import main.Tile;
 import main.Tile.Visibility;
-import menu.MenuGen;
+import menu.EntitySelectMenu;
 import tools.CustomShapeRenderer;
 import tools.FontLoader;
 import world.Time;
@@ -38,10 +38,10 @@ public class GameScreenASCII implements Screen{
 	
 	private static GameScreenASCII instance = new GameScreenASCII();
 	public final static int TILE_SIZE = 18;
-	private int gameScreenSize = Gdx.graphics.getHeight(); 
+	public int gameScreenSize = Gdx.graphics.getHeight(); 
 	private int gameScreenTiles = Gdx.graphics.getHeight()/TILE_SIZE;
 	
-	public MenuGen<?> menu = null;
+	public EntitySelectMenu menu = null;
 	
 	private GameScreenASCII(){
 		FontLoader.load(TILE_SIZE);

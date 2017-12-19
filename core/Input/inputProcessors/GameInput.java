@@ -24,7 +24,7 @@ import eventSystem.EventSystem;
 import factories.ItemFactory;
 import factories.TerrainFactory;
 import main.Tile;
-import menu.MenuGen;
+import menu.EntitySelectMenu;
 import pathFind.PathFinder;
 import screens.GameScreenASCII;
 import world.Direction;
@@ -56,7 +56,7 @@ public class GameInput implements InputProcessor{
 				break;
 			case Keys.I:
 				List<Entity> items = Mappers.inventoryMap.get(Juego.player).getAll();
-				GameScreenASCII.getInstance().menu = new MenuGen<Entity>(items, new LinkedList<String>(), (i) -> {},Color.RED, "Inventory");
+				GameScreenASCII.getInstance().menu = new EntitySelectMenu(items, new LinkedList<String>(), (i) -> {},Color.RED, "Inventory");
 				break;
 				
 			case Keys.W:
@@ -65,7 +65,7 @@ public class GameInput implements InputProcessor{
 				quipmentStats.add("defense");
 				quipmentStats.add("weigth");
 				Consumer<Entity> equip = i -> Actions.equip(Juego.player, i);
-				GameScreenASCII.getInstance().menu = new MenuGen<Entity>(equipment, quipmentStats, equip, Color.BLUE, "Wear");
+				GameScreenASCII.getInstance().menu = new EntitySelectMenu(equipment, quipmentStats, equip, Color.BLUE, "Wear");
 				break;
 				
 			case Keys.Q:
@@ -73,7 +73,7 @@ public class GameInput implements InputProcessor{
 				List<String> potionStats = new LinkedList<String>();
 				potionStats.add("effect");
 				Consumer<Entity> quaff = i -> Actions.quaff(Juego.player, (Entity)i);
-				GameScreenASCII.getInstance().menu = new MenuGen<Entity>(potions, potionStats, quaff, Color.GREEN, "Quaff");
+				GameScreenASCII.getInstance().menu = new EntitySelectMenu(potions, potionStats, quaff, Color.GREEN, "Quaff");
 				break;
 				
 			case Keys.S:

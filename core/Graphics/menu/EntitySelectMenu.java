@@ -1,6 +1,7 @@
 package menu;
 
 import static components.Mappers.descMap;
+import static components.Mappers.attMap;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -20,21 +21,21 @@ import screens.GameScreenASCII;
 import tools.CustomShapeRenderer;
 import tools.FontLoader;
 
-public class MenuGen<T> {
+public class EntitySelectMenu {
 	
 	public final InputProcessor INPUT = createInputProcessor();
 	
-	private List<T> list;
+	private List<Entity> list;
 	private List<String> relevantStats; //TODO implementar esto
-	private Consumer<T> action;
+	private Consumer<Entity> action;
 	private Color color;
 	private String title;
 	
-	private int startingX = 350;
-	private int startingY = 350;
+	private int startingX;
+	private int startingY;
 	
-	private int menuWidth = 350;
-	private int menuHeight = 350;
+	private int menuWidth;
+	private int menuHeight;
 	
 	//TODO font para titulos y atributos de la tabla (nombre, peso, etc)
 	protected BitmapFont itemsFont = FontLoader.fonts.get("menu");
@@ -42,13 +43,20 @@ public class MenuGen<T> {
 	
 	protected static int selectedItem = 0;
 	
-	public MenuGen(List<T> list, List<String> relevantStats, Consumer<T> action, Color color, String title) {
+	public EntitySelectMenu(List<Entity> list, List<String> relevantStats, Consumer<Entity> action, Color color, String title) {
 		this.list = list;
 		this.relevantStats = relevantStats;
 		this.action = action;
 		this.color = color;
 		this.title = title;
 		Gdx.input.setInputProcessor(INPUT);
+		
+		menuWidth = (relevantStats.size() + 1) * 100;
+		menuWidth = MathUtils.clamp(menuWidth, 150, GameScreenASCII.getInstance().gameScreenSize);
+		menuHeight = list.size() * 20 + 33;
+		
+		startingX = GameScreenASCII.getInstance().gameScreenSize / 2 - menuWidth / 2;
+		startingY = GameScreenASCII.getInstance().gameScreenSize / 2 - menuHeight / 2;
 	}
 	
 	public void render(SpriteBatch batch, CustomShapeRenderer sr) {
@@ -62,13 +70,23 @@ public class MenuGen<T> {
 		
 		titleFont.setColor(color);
 		titleFont.draw(batch, title, x, y + 30);
-
-		for(T item : list){
+		
+		itemsFont.setColor(Color.WHITE);
+		itemsFont.draw(batch, "NAME", x, y);
+		for(int i = 0; i < relevantStats.size(); i++) {
+			itemsFont.draw(batch, relevantStats.get(i).toUpperCase(), x + ((i+1)*100), y);
+		}
+		y-= 30;
+		
+		for(Entity item : list){
 			String name = descMap.get((Entity)item).name;
 			String text = name;
 			
 			itemsFont.setColor(list.indexOf(item) == selectedItem ? Color.CHARTREUSE : Color.WHITE);
 			itemsFont.draw(batch, text, x, y);
+			for(int i = 0; i < relevantStats.size(); i++) {
+				itemsFont.draw(batch, Float.toString(attMap.get(item).get(relevantStats.get(i))), x + ((i+1)*100), y);
+			}
 			y -= 15;
 		}
 		
