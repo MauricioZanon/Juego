@@ -4,18 +4,22 @@ import static components.Mappers.AIMap;
 import static components.Mappers.attMap;
 import static components.Mappers.descMap;
 import static components.Mappers.equipMap;
+import static components.Mappers.inventoryMap;
+import static components.Mappers.itemTypeMap;
 import static components.Mappers.movMap;
 import static components.Mappers.playerMap;
 import static components.Mappers.posMap;
 import static components.Mappers.timedMap;
 import static components.Mappers.visionMap;
 
+import java.util.HashMap;
 import java.util.NoSuchElementException;
 
 import com.badlogic.ashley.core.Entity;
 import com.mygdx.juego.Juego;
 
 import components.InventoryComponent;
+import components.ItemType;
 import components.Mappers;
 import components.MovementComponent.MovementType;
 import components.PositionComponent;
@@ -122,17 +126,36 @@ public abstract class Actions {
 	}
 	
 	/**
-	 * tomar poción TODO: hacer que se manejen los efectos de las pociones igual a como se manejan los efectos de las features
+	 * TODO: hacer que se manejen los efectos de las pociones igual a como se manejan los efectos de las features
+	 * 
+	 * Tomar poción 
 	 * @param actor el actor que toma la poción
 	 * @param potion la poción que se está tomando
 	 */
 	public static void quaff(Entity actor, Entity potion){
-		QuaffEffects.getFor(descMap.get(potion).name).accept(actor);
+		inventoryMap.get(Juego.player).remove(potion);
+		String name = descMap.get(potion).name;
+		MessageFactory.createMessage("You drink your " + name + ".");
+		QuaffEffects.getFor(name).accept(actor);
 		endTurn(actor, ActionType.USE_ITEM);
 	}
 	
+	/**
+	 * TODO separar en dos metodos, wear y wield
+	 */
 	public static void equip(Entity actor, Entity equipment) {
-		equipMap.get(actor).equip(equipment);
+		HashMap<ItemType, Entity> equipmentOnPlayer = equipMap.get(Juego.player).equipment;
+		
+		ItemType type = itemTypeMap.get(equipment);
+		if(equipmentOnPlayer.keySet().contains(type)) {
+			String name = descMap.get(equipmentOnPlayer.get(type)).name;
+			MessageFactory.createMessage("You must remove your " + name + " first.");
+		}else {
+			equipMap.get(actor).equip(equipment);
+			inventoryMap.get(Juego.player).remove(equipment);
+			String name = descMap.get(equipment).name;
+			MessageFactory.createMessage("You put on your " + name + ".");
+		}
 	}
 	
 	/**

@@ -80,10 +80,6 @@ public class Juego extends Game {
     	player.add(Type.ACTOR);
     	player.add(Faction.HUMANS);
     	
-		PositionComponent playerPos = new PositionComponent(200, 200, 0);
-		playerPos.getTile().put(player);
-		player.add(playerPos);
-		
 		DescriptionComponent nc = ENGINE.createComponent(DescriptionComponent.class);
 		nc.name = "player";
 		player.add(nc);
@@ -112,11 +108,13 @@ public class Juego extends Game {
 		player.add(ENGINE.createComponent(StatusEffectsComponent.class));
 		
 		InventoryComponent ic = ENGINE.createComponent(InventoryComponent.class);
-		ic.add(ItemFactory.createArmor());
-		ic.add(ItemFactory.createArmor());
-		ic.add(ItemFactory.createArmor());
-		ic.add(ItemFactory.createArmor());
-		ic.add(ItemFactory.createArmor());
+		ic.add(ItemFactory.createItem("iron plate"));
+		ic.add(ItemFactory.createItem("iron greaves"));
+		ic.add(ItemFactory.createItem("iron boots"));
+		ic.add(ItemFactory.createItem("iron helmet"));
+		ic.add(ItemFactory.createItem("iron gloves"));
+		ic.add(ItemFactory.createItem("healing potion"));
+		ic.add(ItemFactory.createItem("teleportation potion"));
 		player.add(ic);
 		
 		player.add(ENGINE.createComponent(EquipmentComponent.class));
@@ -132,8 +130,11 @@ public class Juego extends Game {
 		
 		player.add(ENGINE.createComponent(MovementComponent.class));
 		
-		ActiveMap.refresh();
+		PositionComponent playerPos = new PositionComponent(200, 200, 0);
+		playerPos.getTile().put(player);
+		player.add(playerPos);
 		
+		ActiveMap.refresh();
     }
 
 	@Override

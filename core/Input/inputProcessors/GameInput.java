@@ -1,16 +1,21 @@
 package inputProcessors;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.function.Consumer;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ai.fsm.State;
+import com.badlogic.gdx.graphics.Color;
 import com.mygdx.juego.Juego;
 
 import actions.ActionType;
 import actions.Actions;
+import components.ItemType;
 import components.Mappers;
 import components.PositionComponent;
 import components.Type;
@@ -19,9 +24,7 @@ import eventSystem.EventSystem;
 import factories.ItemFactory;
 import factories.TerrainFactory;
 import main.Tile;
-import menu.EquipMenu;
-import menu.InventoryMenu;
-import menu.QuaffMenu;
+import menu.MenuGen;
 import pathFind.PathFinder;
 import screens.GameScreenASCII;
 import world.Direction;
@@ -52,14 +55,27 @@ public class GameInput implements InputProcessor{
 				Gdx.input.setInputProcessor(new FeatureInput());
 				break;
 			case Keys.I:
-				GameScreenASCII.getInstance().menu = new InventoryMenu();
+				List<Entity> items = Mappers.inventoryMap.get(Juego.player).getAll();
+				GameScreenASCII.getInstance().menu = new MenuGen<Entity>(items, new LinkedList<String>(), (i) -> {},Color.RED, "Inventory");
 				break;
+				
 			case Keys.W:
-				GameScreenASCII.getInstance().menu = new EquipMenu();
+				List<Entity> equipment = Mappers.inventoryMap.get(Juego.player).getList(ItemType.EQUIPMENT);
+				List<String> quipmentStats = new LinkedList<String>();
+				quipmentStats.add("defense");
+				quipmentStats.add("weigth");
+				Consumer<Entity> equip = i -> Actions.equip(Juego.player, i);
+				GameScreenASCII.getInstance().menu = new MenuGen<Entity>(equipment, quipmentStats, equip, Color.BLUE, "Wear");
 				break;
+				
 			case Keys.Q:
-				GameScreenASCII.getInstance().menu = new QuaffMenu();
+				List<Entity> potions = Mappers.inventoryMap.get(Juego.player).getList(ItemType.POTION);
+				List<String> potionStats = new LinkedList<String>();
+				potionStats.add("effect");
+				Consumer<Entity> quaff = i -> Actions.quaff(Juego.player, (Entity)i);
+				GameScreenASCII.getInstance().menu = new MenuGen<Entity>(potions, potionStats, quaff, Color.GREEN, "Quaff");
 				break;
+				
 			case Keys.S:
 //				RenderSystem.setScreen(SkillsScreen.getInstance());
 				break;

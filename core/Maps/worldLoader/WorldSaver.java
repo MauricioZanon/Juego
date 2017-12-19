@@ -15,6 +15,12 @@ import main.Tile;
 
 public abstract class WorldSaver {
 	
+	/**
+	 * TODO: Se tiene que guardar solo el seed del mundo juntos con los tiles que hayan tenido algun cambio
+	 * 		 Cada vez que se carga una partida se ve que los tiles guardados sean distintos a los tiles generados con el seed,
+	 * 		 de no ser asi se elimina el tile del save file
+	 */
+	
 	private static final String PATH = "../core/assets/Data/";
 	private static XStream xstream = new XStream(new DomDriver());
 	private static FileWriter fw;
@@ -34,7 +40,6 @@ public abstract class WorldSaver {
 			s += "\n\t";
 			switch(Mappers.typeMap.get(e)) {
 			case ACTOR:
-				System.out.println(e.getComponents());
 				s += xstream.toXML("Actor: " + descMap.get(e).name);
 				break;
 			case FEATURE:

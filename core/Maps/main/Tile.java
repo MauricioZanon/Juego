@@ -21,6 +21,7 @@ import components.TransitableComponent;
 import components.TranslucentComponent;
 import components.Type;
 import world.Time;
+import worldLoader.WorldSaver;
 
 public class Tile {
 	
@@ -59,6 +60,7 @@ public class Tile {
 			gas = e;
 			break;
 		}
+		WorldSaver.saveTile(this);
 	}
 	
 	public Entity get(Type type) {
@@ -96,6 +98,7 @@ public class Tile {
 			if(descMap.get(gas).name.equals(descMap.get(e).name)) gas = null;
 			break;
 		}
+		WorldSaver.saveTile(this);
 	}
 	public void remove(Type type) {
 		switch(type) {
@@ -115,7 +118,8 @@ public class Tile {
 			gas = null;
 			break;
 		}
-		}
+		WorldSaver.saveTile(this);
+	}
 	
 	public Set<Entity> getEntities(){
 		Set<Entity> entities = new HashSet<>();

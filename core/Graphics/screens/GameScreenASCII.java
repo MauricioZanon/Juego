@@ -1,8 +1,8 @@
 package screens;
 
-import static tools.FontLoader.fonts;
 import static components.Mappers.graphMap;
 import static components.Mappers.playerMap;
+import static tools.FontLoader.fonts;
 
 import java.util.ArrayList;
 
@@ -26,7 +26,7 @@ import console.Message;
 import eventSystem.ActiveMap;
 import main.Tile;
 import main.Tile.Visibility;
-import menu.Menu;
+import menu.MenuGen;
 import tools.CustomShapeRenderer;
 import tools.FontLoader;
 import world.Time;
@@ -41,7 +41,7 @@ public class GameScreenASCII implements Screen{
 	private int gameScreenSize = Gdx.graphics.getHeight(); 
 	private int gameScreenTiles = Gdx.graphics.getHeight()/TILE_SIZE;
 	
-	public Menu menu = null;
+	public MenuGen<?> menu = null;
 	
 	private GameScreenASCII(){
 		FontLoader.load(TILE_SIZE);
