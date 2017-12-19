@@ -59,7 +59,7 @@ public abstract class Factory {
 	
 	/**
 	 * @param path: path del archivo XML con la data
-	 * @return un diccionario <nombre de la entidad, string xml de la entidad>
+	 * @return un map con <nombre de la entidad, string xml de la entidad>
 	 */
 	protected static HashMap<String, String> loadEntities(String path){
 		HashMap<String, String> entities = new HashMap<>();

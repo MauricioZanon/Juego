@@ -6,7 +6,7 @@ import com.badlogic.ashley.core.Entity;
 
 public abstract class TerrainFactory extends Factory {
 	
-	private final static String PATH_TERRAINS = "../core/assets/Data/Terrains.xml";
+	private final static String PATH_TERRAINS = "../core/assets/Data/Entities/Terrains.xml";
 	
 	private static HashMap<String, String> terrainStrings = loadEntities(PATH_TERRAINS);
 	private static HashMap<String, Entity> terrainPool = fillPool();

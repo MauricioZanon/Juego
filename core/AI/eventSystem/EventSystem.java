@@ -27,7 +27,6 @@ public class EventSystem extends EntitySystem {
 		timedEntities.addAll(e);
 	}
 	
-	
 	@Override
 	public void update(float deltaTime) {
 		Entity entity = null;

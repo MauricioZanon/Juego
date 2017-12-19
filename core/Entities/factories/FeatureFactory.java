@@ -6,7 +6,7 @@ import com.badlogic.ashley.core.Entity;
 
 public abstract class FeatureFactory extends Factory{
 	
-	private final static String PATH_FEATURES = "../core/assets/Data/Features.xml";
+	private final static String PATH_FEATURES = "../core/assets/Data/Entities/Features.xml";
 	
 	private static HashMap<String, String> featureStrings = loadEntities(PATH_FEATURES);
 	

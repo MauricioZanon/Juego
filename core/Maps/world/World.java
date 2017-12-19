@@ -11,6 +11,7 @@ import main.Chunk;
 import main.Location;
 import mountain.MountainLevel;
 import village.VillageLevel;
+import worldLoader.WorldSaver;
 
 public class World {
 	
@@ -25,6 +26,7 @@ public class World {
 	private HashSet<Location> locations = new HashSet<>();
 	
 	public void initialize(){
+		WorldSaver.createSaveFile();
 		long time = System.currentTimeMillis();
 		
 		createOverworld();

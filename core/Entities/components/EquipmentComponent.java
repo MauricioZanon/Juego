@@ -1,14 +1,12 @@
 package components;
 
+import static components.Mappers.attMap;
+import static components.Mappers.itemTypeMap;
+
 import java.util.HashMap;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
-
-import console.MessageFactory;
-
-import static components.Mappers.itemTypeMap;
-import static components.Mappers.attMap;
 
 public class EquipmentComponent implements Component{
 	
@@ -24,14 +22,7 @@ public class EquipmentComponent implements Component{
 	
 	public void equip(Entity e) {
 		ItemType type = itemTypeMap.get(e);
-		if(equipment.keySet().contains(type)) {
-			String name = Mappers.descMap.get(equipment.get(type)).name;
-			MessageFactory.createMessage("You must remove your " + name + " first.");
-		}else {
-			equipment.put(type, e);
-			String name = Mappers.descMap.get(e).name;
-			MessageFactory.createMessage("You put on your " + name + ".");
-		}
+		equipment.put(type, e);
 	}
 	
 	public float getStatsfor(String stat) {

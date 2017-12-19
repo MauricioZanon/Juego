@@ -1,8 +1,11 @@
 package menu;
 
 import static components.Mappers.attMap;
-import static components.Mappers.inventoryMap;
 import static components.Mappers.descMap;
+import static components.Mappers.inventoryMap;
+import static components.Mappers.itemTypeMap;
+
+import java.util.HashMap;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
@@ -15,11 +18,15 @@ import com.mygdx.juego.Juego;
 
 import actions.Actions;
 import components.ItemType;
+import components.Mappers;
+import console.MessageFactory;
 import inputProcessors.GameInput;
 import screens.GameScreenASCII;
 import tools.CustomShapeRenderer;
 
 public class EquipMenu extends Menu{
+	
+	//TODO: separar en dos menus, wear para la ropa, armadura, etc y wield para sostener algo en la mano
 	
 	private final InputProcessor EQUIP_INPUT = createEquipProcessor();
 	
@@ -79,9 +86,19 @@ public class EquipMenu extends Menu{
 					GameScreenASCII.getInstance().menu = null;
 					Gdx.input.setInputProcessor(new GameInput());
 					if(!items.isEmpty()){
-						Entity equipment = items.get(selectedItem);
-						Actions.equip(Juego.player, equipment);
-						inventoryMap.get(Juego.player).remove(equipment);
+						Entity e = items.get(selectedItem);
+						ItemType type = itemTypeMap.get(e);
+						HashMap<ItemType, Entity> equipmentOnPlayer = Mappers.equipMap.get(Juego.player).equipment;
+						
+						if(equipmentOnPlayer.keySet().contains(type)) {
+							String name = Mappers.descMap.get(equipmentOnPlayer.get(type)).name;
+							MessageFactory.createMessage("You must remove your " + name + " first.");
+						}else {
+							Actions.equip(Juego.player, e);
+							inventoryMap.get(Juego.player).remove(e);
+							String name = Mappers.descMap.get(e).name;
+							MessageFactory.createMessage("You put on your " + name + ".");
+						}
 					}
 					break;
 			}

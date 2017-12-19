@@ -57,8 +57,6 @@ public class GameScreenASCII implements Screen{
 	}
 
 	public void render(float delta) {
-//		long tiempo = System.currentTimeMillis();
-		
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		drawMap();
@@ -75,8 +73,6 @@ public class GameScreenASCII implements Screen{
 		}
 		
 		dispose();
-		
-//		System.out.println("Tiempo de render:   " + (System.currentTimeMillis() - tiempo) + "ms");
 	}
 	
 	private int mapCenter = (gameScreenSize / 2) - 8;

@@ -7,6 +7,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 
+import RNG.RNG;
 import components.AIComponent;
 import components.AttributeComponent;
 import components.DescriptionComponent;
@@ -24,6 +25,7 @@ import components.Type;
 import components.VisionComponent;
 import eventSystem.ActiveMap;
 import eventSystem.EventSystem;
+import factories.ItemFactory;
 import inputProcessors.GameInput;
 import screens.GameScreenASCII;
 import screens.MainScreen;
@@ -57,11 +59,10 @@ public class Juego extends Game {
     		}
     	});
     	gameThread.setName("game thread");
-    	
-    	
     }
     
     public static void startGame() {
+    	System.out.println(RNG.getSeed());
     	world.initialize();
     	
     	ENGINE.addSystem(new EventSystem());
@@ -109,7 +110,15 @@ public class Juego extends Game {
 		player.add(ENGINE.createComponent(VisionComponent.class));
 		player.add(ENGINE.createComponent(TimedComponent.class));
 		player.add(ENGINE.createComponent(StatusEffectsComponent.class));
-		player.add(ENGINE.createComponent(InventoryComponent.class));
+		
+		InventoryComponent ic = ENGINE.createComponent(InventoryComponent.class);
+		ic.add(ItemFactory.createArmor());
+		ic.add(ItemFactory.createArmor());
+		ic.add(ItemFactory.createArmor());
+		ic.add(ItemFactory.createArmor());
+		ic.add(ItemFactory.createArmor());
+		player.add(ic);
+		
 		player.add(ENGINE.createComponent(EquipmentComponent.class));
 		
 		AIComponent ai = ENGINE.createComponent(AIComponent.class);

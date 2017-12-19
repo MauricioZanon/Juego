@@ -57,6 +57,7 @@ public class Tile {
 			break;
 		case GAS:
 			gas = e;
+			break;
 		}
 	}
 	
@@ -93,7 +94,7 @@ public class Tile {
 			break;
 		case GAS:
 			if(descMap.get(gas).name.equals(descMap.get(e).name)) gas = null;
-				
+			break;
 		}
 	}
 	public void remove(Type type) {
@@ -112,8 +113,9 @@ public class Tile {
 			break;
 		case GAS:
 			gas = null;
+			break;
 		}
-	}
+		}
 	
 	public Set<Entity> getEntities(){
 		Set<Entity> entities = new HashSet<>();

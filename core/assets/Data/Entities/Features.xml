@@ -1,0 +1,85 @@
+<Features>
+
+	<object-array>
+		<components.Type>FEATURE</components.Type>
+		<components.DescriptionComponent>
+			<name>stair</name>
+		</components.DescriptionComponent>
+		<components.GraphicsComponent>
+			<ASCII>></ASCII>
+			<font>general</font>
+			<frontColor>
+				<r>1.0</r>
+				<g>0.0</g>
+				<b>0.0</b>
+				<a>1.0</a>
+			</frontColor>
+			<renderPriority>2</renderPriority>
+		</components.GraphicsComponent>
+		<components.TranslucentComponent>
+			<translucent>true</translucent>
+		</components.TranslucentComponent>
+		<components.TransitableComponent>
+			<allowedMovementType>
+				<components.MovementComponent_-MovementType>WALK</components.MovementComponent_-MovementType>
+				<components.MovementComponent_-MovementType>FLY</components.MovementComponent_-MovementType>
+			</allowedMovementType>
+		</components.TransitableComponent>
+	</object-array>
+	
+		<object-array>
+		<components.Type>FEATURE</components.Type>
+		<components.DescriptionComponent>
+			<name>tree</name>
+		</components.DescriptionComponent>
+		<components.GraphicsComponent>
+			<ASCII>&#x2551;</ASCII>
+			<font>general</font>
+			<frontColor>
+				<r>0.48</r>
+				<g>0.38</g>
+				<b>0.21</b>
+				<a>1.0</a>
+			</frontColor>
+			<renderPriority>2</renderPriority>
+		</components.GraphicsComponent>
+		<components.TranslucentComponent>
+			<translucent>false</translucent>
+		</components.TranslucentComponent>
+		<components.TransitableComponent>
+			<allowedMovementType>
+			</allowedMovementType>
+		</components.TransitableComponent>
+	</object-array>
+
+	<object-array>
+		<components.Type>FEATURE</components.Type>
+		<components.DescriptionComponent>
+			<name>door</name>
+		</components.DescriptionComponent>
+		<components.GraphicsComponent>
+			<ASCII>+</ASCII>
+			<font>general</font>
+			<frontColor>
+				<r>0.54509807</r>
+				<g>0.27058825</g>
+				<b>0.07450981</b>
+				<a>1.0</a>
+			</frontColor>
+			<renderPriority>2</renderPriority>
+		</components.GraphicsComponent>
+		<components.LockComponent>
+			<isClosed>true</isClosed>
+			<isLocked>false</isLocked>
+		</components.LockComponent>
+		<components.TransitableComponent>
+			<allowedMovementType>
+			</allowedMovementType>
+		</components.TransitableComponent>
+		<components.TranslucentComponent>
+			<translucent>false</translucent>
+		</components.TranslucentComponent>
+	</object-array>
+
+</Features>
+

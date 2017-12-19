@@ -8,10 +8,10 @@ import RNG.RNG;
 
 public abstract class ItemFactory extends Factory{
 	
-	private final static String PATH_WEAPONS = "../core/assets/Data/Weapons.xml";
-	private final static String PATH_ARMORS = "../core/assets/Data/Armors.xml";
-	private final static String PATH_POTIONS = "../core/assets/Data/Potions.xml";
-	private final static String PATH_SPECIAL_ITEMS = "../core/assets/Data/Special items.xml";
+	private final static String PATH_WEAPONS = "../core/assets/Data/Entities/Weapons.xml";
+	private final static String PATH_ARMORS = "../core/assets/Data/Entities/Armors.xml";
+	private final static String PATH_POTIONS = "../core/assets/Data/Entities/Potions.xml";
+	private final static String PATH_SPECIAL_ITEMS = "../core/assets/Data/Entities/Special items.xml";
 	
 	private static HashMap<String, String> weaponStrings = loadEntities(PATH_WEAPONS);
 	private static HashMap<String, String> armorStrings = loadEntities(PATH_ARMORS);

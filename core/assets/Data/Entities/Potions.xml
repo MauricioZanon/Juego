@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Potions>
+
+	<object-array>
+		<components.Type>ITEM</components.Type>
+		<components.ItemType>POTION</components.ItemType>
+		<components.PickupableComponent/>
+		<components.DescriptionComponent>
+			<name>healing potion</name>
+		</components.DescriptionComponent>
+		<components.GraphicsComponent>
+			<ASCII>!</ASCII>
+			<font>general</font>
+			<frontColor>
+				<r>1.0</r>
+				<g>0.0</g>
+				<b>0.0</b>
+				<a>1.0</a>
+			</frontColor>
+			<renderPriority>1</renderPriority>
+		</components.GraphicsComponent>
+		<components.AttributeComponent>
+			<att>
+				<entry>
+					<string>quantity</string>
+					<float>1.0</float>
+				</entry>
+			</att>
+		</components.AttributeComponent>
+	</object-array>
+	
+	<object-array>
+		<components.Type>ITEM</components.Type>
+		<components.ItemType>POTION</components.ItemType>
+		<components.PickupableComponent/>
+		<components.DescriptionComponent>
+			<name>teleportation potion</name>
+		</components.DescriptionComponent>
+		<components.GraphicsComponent>
+			<ASCII>!</ASCII>
+			<font>general</font>
+			<frontColor>
+				<r>1.0</r>
+				<g>0.0</g>
+				<b>0.0</b>
+				<a>1.0</a>
+			</frontColor>
+			<renderPriority>1</renderPriority>
+		</components.GraphicsComponent>
+		<components.AttributeComponent>
+			<att>
+				<entry>
+					<string>quantity</string>
+					<float>1.0</float>
+				</entry>
+			</att>
+		</components.AttributeComponent>
+	</object-array>
+
+	<names>
+		<name>healing potion</name>
+		<name>teleportation potion</name>
+		<name>poison potion</name>
+		<name>cure potion</name>
+	</names>
+
+
+	<descriptions>
+		<desc>bubbly</desc>
+		<desc>watery</desc>
+		<desc>thick</desc>
+		<desc>glowing</desc>
+		<desc>translucent</desc>
+		<desc>lumpy</desc>
+		<desc>steamy</desc>
+		<desc>hot</desc>
+		<desc>cold</desc>
+	</descriptions>
+
+
+	<colors>
+		<color>
+			<name>red</name>
+			<r>1.0</r>
+			<g>0</g>
+			<b>0</b>
+			<a>1.0</a>
+		</color>
+		<color>
+			<name>green</name>
+			<r>0</r>
+			<g>1.0</g>
+			<b>0</b>
+			<a>1.0</a>
+		</color>
+		<color>
+			<name>blue</name>
+			<r>0</r>
+			<g>0</g>
+			<b>1.0</b>
+			<a>1.0</a>
+		</color>
+		<color>
+			<name>yellow</name>
+			<r>1.0</r>
+			<g>1.0</g>
+			<b>0</b>
+			<a>1.0</a>
+		</color>
+		<color>
+			<name>purple</name>
+			<r>1.0</r>
+			<g>0</g>
+			<b>1.0</b>
+			<a>1.0</a>
+		</color>
+		<color>
+			<name>white</name>
+			<r>1.0</r>
+			<g>1.0</g>
+			<b>1.0</b>
+			<a>1.0</a>
+		</color>
+		<color>
+			<name>black</name>
+			<r>0</r>
+			<g>0</g>
+			<b>0</b>
+			<a>1.0</a>
+		</color>
+	</colors>
+
+
+</Potions>

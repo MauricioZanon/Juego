@@ -9,7 +9,7 @@ import components.Mappers;
 
 public abstract class NPCFactory extends Factory{
 	
-	private final static String PATH = "../core/assets/Data/Enemies.xml";
+	private final static String PATH = "../core/assets/Data/Entities/Enemies.xml";
 	
 	private static HashMap<String, String> NPCStrings = loadEntities(PATH);
 	

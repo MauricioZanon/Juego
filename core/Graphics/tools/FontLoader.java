@@ -28,11 +28,11 @@ public abstract class FontLoader {
 	
 	public static HashMap<String, BitmapFont> fonts = new HashMap<>();
 	
-	private final static String NPCS_PATH = "../core/assets/Data/Enemies.xml";
-	private final static String WEAPONS_PATH = "../core/assets/Data/Weapons.xml";
-	private final static String POTIONS_PATH = "../core/assets/Data/Potions.xml";
-	private final static String TERRAINS_PATH = "../core/assets/Data/Terrains.xml";
-	private final static String FEATURES_PATH = "../core/assets/Data/Features.xml";
+	private final static String NPCS_PATH = "../core/assets/Data/Entities/Enemies.xml";
+	private final static String WEAPONS_PATH = "../core/assets/Data/Entities/Weapons.xml";
+	private final static String POTIONS_PATH = "../core/assets/Data/Entities/Potions.xml";
+	private final static String TERRAINS_PATH = "../core/assets/Data/Entities/Terrains.xml";
+	private final static String FEATURES_PATH = "../core/assets/Data/Entities/Features.xml";
 	
 	private static Document npcsDoc;
 	private static Document weaponsDoc;

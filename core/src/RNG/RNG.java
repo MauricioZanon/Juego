@@ -11,7 +11,8 @@ import com.badlogic.gdx.math.MathUtils;
 
 public abstract class RNG {
 	
-	private static Random rng = new Random();
+	private static long seed = System.currentTimeMillis();
+	private static Random rng = new Random(seed);
 	
 	/**========================================================================
 	 * ============================COLLECTIONS=================================
@@ -79,7 +80,6 @@ public abstract class RNG {
 		}
 	}
 	
-	
 	/**========================================================================
 	 * ============================COLORS======================================
 	 * ========================================================================*/
@@ -126,19 +126,10 @@ public abstract class RNG {
 	 * ============================NUMBERS=====================================
 	 * ========================================================================*/
 	
-	/**
-	 * @param limit: Número máximo (no incluído)
-	 * @return
-	 */
 	public static int nextInt(int limit) {
 		return rng.nextInt(limit);
 	}
 	
-	/**
-	 * @param min: Mínimo número deseado
-	 * @param max: Máximo número deseado (no incluído)
-	 * @return
-	 */
 	public static int nextInt(int min, int max){
 		int range = max - min;
 		int number = rng.nextInt(range);
@@ -159,10 +150,9 @@ public abstract class RNG {
 	}
 	
 	/**
-	 * 
 	 * @param mean: valor base
 	 * @param variation: variación máxima desde el valor base
-	 * @return un entero entre (mean - variation) y (mean + variation) que tiende a quedarse cerca del valor base
+	 * @return un entero entre (mean - variation) y (mean + variation) que tiende a quedarse cerca del valor de mean
 	 */
 	public static int nextGaussian(int mean, int variation){
 		float result = (float) (rng.nextGaussian() * variation + mean);
@@ -174,5 +164,14 @@ public abstract class RNG {
 	
 	public static boolean getBoolean(){
 		return rng.nextBoolean();
+	}
+	
+	public static long getSeed() {
+		return seed;
+	}
+	
+	public static void setSeed(long newSeed) {
+		seed = newSeed;
+		rng = new Random(newSeed);
 	}
 }
