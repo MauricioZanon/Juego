@@ -6,6 +6,10 @@ import com.badlogic.ashley.core.Component;
 
 public class AttributeComponent implements Component{
 	
+	/**
+	 * TODO: unir esta clase con DescriptionComponent asi toda la informacion de las entidades esta en una misma clase
+	 */
+	
 	private HashMap<String, Float> att = new HashMap<>();
 	
 	public void set(String a, float value) {

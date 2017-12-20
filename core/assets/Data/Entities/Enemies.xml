@@ -169,8 +169,8 @@
 		</components.InventoryComponent>
 		<components.Faction>GOBLINS</components.Faction>
 		<components.EquipmentComponent>
-			<equipment>
-			</equipment>
+			<wearedEquipment>
+			</wearedEquipment>
 		</components.EquipmentComponent>
 		<components.InventoryComponent/>
 		<components.StatusEffectsComponent/>

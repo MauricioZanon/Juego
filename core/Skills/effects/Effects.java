@@ -37,7 +37,7 @@ public abstract class Effects {
 	public static void teleport(Entity actor, PositionComponent newPos){
 		move(actor, newPos);
 		if(playerMap.has(actor)){
-			MessageFactory.createMessage("You suddenly find yourself in another place");
+			MessageFactory.createMessage("Suddenly you find yourself in another place");
 		}
 	}
 	

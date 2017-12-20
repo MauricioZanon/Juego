@@ -10,25 +10,25 @@ import com.badlogic.ashley.core.Entity;
 
 public class EquipmentComponent implements Component{
 	
-	public HashMap<ItemType, Entity> equipment = new HashMap<>(); //TODO cambiar nombre
+	public HashMap<ItemType, Entity> wearedEquipment = new HashMap<>();
 	
 	public Entity get(ItemType type) {
-		return equipment.get(type);
+		return wearedEquipment.get(type);
 	}
 	
 	public Entity removeEquipmentOn(ItemType type) {
-		return equipment.remove(type);
+		return wearedEquipment.remove(type);
 	}
 	
 	public void equip(Entity e) {
 		ItemType type = itemTypeMap.get(e);
-		equipment.put(type, e);
+		wearedEquipment.put(type, e);
 	}
 	
 	public float getStatsfor(String stat) {
 		float value = 0;
 		try {
-			for(Entity eq : equipment.values()) {
+			for(Entity eq : wearedEquipment.values()) {
 				value += attMap.get(eq).get(stat);
 			}
 		}catch (NullPointerException e) {

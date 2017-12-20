@@ -144,7 +144,7 @@ public abstract class Actions {
 	 * TODO separar en dos metodos, wear y wield
 	 */
 	public static void equip(Entity actor, Entity equipment) {
-		HashMap<ItemType, Entity> equipmentOnPlayer = equipMap.get(Juego.player).equipment;
+		HashMap<ItemType, Entity> equipmentOnPlayer = equipMap.get(Juego.player).wearedEquipment;
 		
 		ItemType type = itemTypeMap.get(equipment);
 		if(equipmentOnPlayer.keySet().contains(type)) {

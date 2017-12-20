@@ -32,16 +32,16 @@ public class EntitySelectMenu {
 	private String title;
 	
 	private int startingX;
-	private int startingY;
+	private float startingY;
 	
 	private int menuWidth;
-	private int menuHeight;
+	private float menuHeight;
 	
 	//TODO font para titulos y atributos de la tabla (nombre, peso, etc)
 	protected BitmapFont itemsFont = FontLoader.fonts.get("menu");
 	protected BitmapFont titleFont = FontLoader.fonts.get("title");
 	
-	protected static int selectedItem = 0;
+	protected int selectedItem = 0;
 	
 	public EntitySelectMenu(List<Entity> list, List<String> relevantStats, Consumer<Entity> action, Color color, String title) {
 		this.list = list;
@@ -53,7 +53,7 @@ public class EntitySelectMenu {
 		
 		menuWidth = (relevantStats.size() + 1) * 100;
 		menuWidth = MathUtils.clamp(menuWidth, 150, GameScreenASCII.getInstance().gameScreenSize);
-		menuHeight = list.size() * 20 + 33;
+		menuHeight = list.size() * itemsFont.getCapHeight() + 63;
 		
 		startingX = GameScreenASCII.getInstance().gameScreenSize / 2 - menuWidth / 2;
 		startingY = GameScreenASCII.getInstance().gameScreenSize / 2 - menuHeight / 2;
@@ -66,7 +66,7 @@ public class EntitySelectMenu {
 		
 		batch.begin();
 		int x = startingX + 5;
-		int y = startingY + menuHeight - 33;
+		float y = startingY + menuHeight - 33;
 		
 		titleFont.setColor(color);
 		titleFont.draw(batch, title, x, y + 30);
@@ -76,7 +76,7 @@ public class EntitySelectMenu {
 		for(int i = 0; i < relevantStats.size(); i++) {
 			itemsFont.draw(batch, relevantStats.get(i).toUpperCase(), x + ((i+1)*100), y);
 		}
-		y-= 30;
+		y-= itemsFont.getCapHeight()*1.2;
 		
 		for(Entity item : list){
 			String name = descMap.get((Entity)item).name;
@@ -87,7 +87,7 @@ public class EntitySelectMenu {
 			for(int i = 0; i < relevantStats.size(); i++) {
 				itemsFont.draw(batch, Float.toString(attMap.get(item).get(relevantStats.get(i))), x + ((i+1)*100), y);
 			}
-			y -= 15;
+			y -= itemsFont.getCapHeight()*1.2;
 		}
 		
 		batch.end();
