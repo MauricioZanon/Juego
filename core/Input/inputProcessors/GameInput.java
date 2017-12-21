@@ -24,7 +24,7 @@ import eventSystem.EventSystem;
 import factories.ItemFactory;
 import factories.TerrainFactory;
 import main.Tile;
-import menu.EntitySelectMenu;
+import menus.EntitySelectMenu;
 import pathFind.PathFinder;
 import screens.GameScreenASCII;
 import world.Direction;

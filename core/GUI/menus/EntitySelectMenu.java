@@ -1,4 +1,4 @@
-package menu;
+package menus;
 
 import static components.Mappers.descMap;
 import static components.Mappers.attMap;

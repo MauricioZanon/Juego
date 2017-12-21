@@ -26,7 +26,7 @@ import console.Message;
 import eventSystem.ActiveMap;
 import main.Tile;
 import main.Tile.Visibility;
-import menu.EntitySelectMenu;
+import menus.EntitySelectMenu;
 import tools.CustomShapeRenderer;
 import tools.FontLoader;
 import world.Time;
