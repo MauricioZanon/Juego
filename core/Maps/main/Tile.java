@@ -35,7 +35,7 @@ public class Tile {
 	
 	private float lightLevel = 0;
 	
-	private Visibility visibility = Visibility.NOT_VISIBLE;
+	private Visibility visibility = Visibility.VISIBLE;
 	
 	public Tile(PositionComponent p){
 		pos = p;

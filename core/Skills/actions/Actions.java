@@ -28,6 +28,7 @@ import console.MessageFactory;
 import effects.DamageCalculator;
 import effects.Effects;
 import effects.Trigger;
+import entities.QuaffEffects;
 import eventSystem.ActiveMap;
 import eventSystem.EventSystem;
 import features.FeaturesEffects;
@@ -35,7 +36,6 @@ import main.Tile;
 import main.Tile.Visibility;
 import pathFind.Path;
 import pathFind.PathFinder;
-import potions.QuaffEffects;
 import world.Direction;
 import world.Explorer;
 
@@ -144,11 +144,11 @@ public abstract class Actions {
 	 * TODO separar en dos metodos, wear y wield
 	 */
 	public static void equip(Entity actor, Entity equipment) {
-		HashMap<ItemType, Entity> equipmentOnPlayer = equipMap.get(Juego.player).wearedEquipment;
+		HashMap<ItemType, Entity> wearedEquipment = equipMap.get(actor).wearedEquipment;
 		
 		ItemType type = itemTypeMap.get(equipment);
-		if(equipmentOnPlayer.keySet().contains(type)) {
-			String name = descMap.get(equipmentOnPlayer.get(type)).name;
+		if(wearedEquipment.keySet().contains(type)) {
+			String name = descMap.get(wearedEquipment.get(type)).name;
 			MessageFactory.createMessage("You must remove your " + name + " first.");
 		}else {
 			equipMap.get(actor).equip(equipment);
@@ -156,6 +156,16 @@ public abstract class Actions {
 			String name = descMap.get(equipment).name;
 			MessageFactory.createMessage("You put on your " + name + ".");
 		}
+	}
+	
+	public static void takeOff(Entity actor, Entity equipment) {
+		HashMap<ItemType, Entity> wearedEquipment = equipMap.get(actor).wearedEquipment;
+		
+		wearedEquipment.remove(itemTypeMap.get(equipment));
+		inventoryMap.get(actor).add(equipment);
+		
+		String name = Mappers.descMap.get(equipment).name;
+		MessageFactory.createMessage("You remove your " + name + ".");
 	}
 	
 	/**

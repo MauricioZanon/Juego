@@ -43,8 +43,8 @@ public class World {
 		Noise.print(elevation);
 		map = new Chunk[WIDTH][HEIGHT][DEPTH];
 		
-		for(int x = 0; x < WIDTH; x++){
-			for(int y = 0; y < HEIGHT; y++){
+		for(int x = 1; x < WIDTH-1; x++){
+			for(int y = 1; y < HEIGHT-1; y++){
 				int h = (int) (elevation[x][y]*10);
 				switch(h) {
 					case 1:
@@ -55,14 +55,14 @@ public class World {
 					case 4:
 					case 5:
 					case 6: //campo, desierto, planicie, aldea, etc
-						map[x][y][0] = new FieldLevel(x, y);
+						map[x][y][0] = new VillageLevel(x, y);
 						break;
 					case 7:
 					case 8: //bosque, jungla, pantano, etc
-						map[x][y][0] = new ForestLevel(x, y);
+						map[x][y][0] = new VillageLevel(x, y);
 						break;
 					default: //montaña, meseta, volcan, etc
-						map[x][y][0] = new MountainLevel(x, y);
+						map[x][y][0] = new VillageLevel(x, y);
 						break;
 				}
 			}

@@ -8,7 +8,7 @@ public class VisualizadorDeXP {
 	public static void main(String[] args) {
 		XPChar[][] room = null;
 		try {
-			room = REXReader.loadXP("assets/rooms/diamond (3).xp").layers.get(0).data;
+			room = REXReader.loadXP("assets/rooms and Buildings/Dungeon starting rooms/2.xp").layers.get(0).data;
 		} catch (IOException | DataFormatException e) {}
 		
 		mostrar(room);
@@ -29,12 +29,12 @@ public class VisualizadorDeXP {
 	}
 	
 	private static XPChar[][] espejoHorizontal(XPChar[][] room){
-		XPChar[][] invertido = new XPChar[room.length][room[0].length];        
-        for(int col = 0; col < room[0].length;col++){
-            for(int row = 0; row < room.length;row++){
-            	invertido[invertido.length-1-row][col] =  room[row][col];
-            }
-        }
+		XPChar[][] invertido = new XPChar[room.length][room[0].length];
+		for(int col = 0; col < room[0].length;col++){
+			for(int row = 0; row < room.length;row++){
+				invertido[invertido.length-1-row][col] =  room[row][col];
+			}
+		}
         return invertido;
 	}
 	

@@ -35,6 +35,10 @@ public class GameInput implements InputProcessor{
 	public boolean keyDown(int keycode) {
 		if(!Juego.ENGINE.getSystem(EventSystem.class).waitingForPlayerInput) return false;
 		
+		List<Entity> entities; //Lista para usar con el EnttySelectMenu
+		List<String> relevantStats; //Lista para usar con el EnttySelectMenu
+		Consumer<Entity> action;
+		
 		switch(keycode){
 			case Keys.ESCAPE:
 				System.exit(0);
@@ -52,33 +56,39 @@ public class GameInput implements InputProcessor{
 				break;
 			case Keys.E:
 				MessageFactory.createMessage("Use what?");
-				Gdx.input.setInputProcessor(new FeatureInput());
+				Gdx.input.setInputProcessor(new UseInput());
 				break;
 			case Keys.I:
-				List<Entity> items = Mappers.inventoryMap.get(Juego.player).getAll();
-				GameScreenASCII.getInstance().menu = new EntitySelectMenu(items, new LinkedList<String>(), (i) -> {},Color.RED, "Inventory");
+				entities = Mappers.inventoryMap.get(Juego.player).getAll();
+				GameScreenASCII.getInstance().menu = new EntitySelectMenu(entities, new LinkedList<String>(), (i) -> {},Color.RED, "Inventory");
 				break;
 				
 			case Keys.W:
-				List<Entity> equipment = Mappers.inventoryMap.get(Juego.player).getList(ItemType.EQUIPMENT);
-				List<String> quipmentStats = new LinkedList<String>();
-				quipmentStats.add("defense");
-				quipmentStats.add("weigth");
-				Consumer<Entity> equip = i -> Actions.equip(Juego.player, i);
-				GameScreenASCII.getInstance().menu = new EntitySelectMenu(equipment, quipmentStats, equip, Color.BLUE, "Wear");
+				entities = Mappers.inventoryMap.get(Juego.player).getList(ItemType.EQUIPMENT);
+				relevantStats = new LinkedList<String>();
+				relevantStats.add("defense");
+				relevantStats.add("weigth");
+				action = i -> Actions.equip(Juego.player, i);
+				GameScreenASCII.getInstance().menu = new EntitySelectMenu(entities, relevantStats, action, Color.BLUE, "Wear");
+				break;
+				
+			case Keys.T:
+				entities = new LinkedList<>(Mappers.equipMap.get(Juego.player).wearedEquipment.values());
+				relevantStats = new LinkedList<String>();
+				relevantStats.add("defense");
+				relevantStats.add("weigth");
+				action = i -> Actions.takeOff(Juego.player, i);
+				GameScreenASCII.getInstance().menu = new EntitySelectMenu(entities, relevantStats, action, Color.BLUE, "Take off");
 				break;
 				
 			case Keys.Q:
-				List<Entity> potions = Mappers.inventoryMap.get(Juego.player).getList(ItemType.POTION);
-				List<String> potionStats = new LinkedList<String>();
-				potionStats.add("effect");
-				Consumer<Entity> quaff = i -> Actions.quaff(Juego.player, (Entity)i);
-				GameScreenASCII.getInstance().menu = new EntitySelectMenu(potions, potionStats, quaff, Color.GREEN, "Quaff");
+				entities = Mappers.inventoryMap.get(Juego.player).getList(ItemType.POTION);
+				relevantStats = new LinkedList<String>();
+				relevantStats.add("effect");
+				action = i -> Actions.quaff(Juego.player, (Entity)i);
+				GameScreenASCII.getInstance().menu = new EntitySelectMenu(entities, relevantStats, action, Color.GREEN, "Quaff");
 				break;
 				
-			case Keys.S:
-//				RenderSystem.setScreen(SkillsScreen.getInstance());
-				break;
 			case Keys.X:
 				State<Entity> exploreState = Mappers.AIMap.get(Juego.player).states.get("exploring");
 				Mappers.AIMap.get(Juego.player).fsm.changeState(exploreState);

@@ -1,7 +1,8 @@
 package dungeon;
 
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
@@ -29,133 +30,143 @@ public class DungeonLevel {
 	private Set<Tile> doors = new HashSet<>();
 	private PositionComponent upStair = null;
 	private PositionComponent downStair = null;
-	private LinkedList<Tile> tilesForExpantion = new LinkedList<>();
+	private ArrayList<Tile> availableAnchors = new ArrayList<>();
 	
 	private final Entity FLOOR = TerrainFactory.get("concrete floor");
 	private final Entity WALL = TerrainFactory.get("concrete wall");
 	
 	private boolean validLevel = true;
 	
-	
-	public DungeonLevel(PositionComponent startingPos, DungeonType type, DungeonSize size){
-		Blueprint firstRoom = RoomFactory.createDungeonStartingRoomBlueprint();
-		PositionComponent correctedPos = firstRoom.correctPosition(startingPos);
-		createNewRoom(firstRoom, startingPos, correctedPos);
-		
+	public DungeonLevel(PositionComponent exitStairPos, DungeonType type, DungeonSize size) {
 		int requestedRooms = size.roomQuantity;
-		int attempts = 0;
 		
-		while(!tilesForExpantion.isEmpty() && rooms.size() < requestedRooms && attempts++ < 3000){
-			PositionComponent pos = tilesForExpantion.removeFirst().getPos();//RNG.getRandom(tilesForExpantion).getPos();
-			Blueprint bp = RoomFactory.createDungeonRoomBlueprint();
-			
-			Set<Tile> emptyPositions = Explorer.getOrthogonalTiles(pos.getTile(), t -> t.get(Type.TERRAIN) == null);
-			if(emptyPositions.isEmpty()) {
-				attempts++;
-				continue;
-			}
-			PositionComponent emptyPos = RNG.getRandom(emptyPositions).getPos();
-			Direction anchorDir = Direction.get(pos, emptyPos);
-			PositionComponent correctedPos2 = bp.correctPosition(pos, anchorDir);
-			
-			createNewRoom(bp, pos, correctedPos2);
+		createFirstRoom(exitStairPos);
+		
+		while(rooms.size() < requestedRooms) {
+			PositionComponent anchorPos = RNG.getRandom(availableAnchors).getPos();
+			createRoom(anchorPos);
 		}
 		
-		if(attempts >= 3000){
-			validLevel = false;
-			discard();
-			return;
-		}
 		createLoops();
-		putStairs();
 		putDoors();
+		putStairs();
 		putEnemies();
 		putItems();
 	}
+
+	/**
+	 * Crea la primer habitación del nivel
+	 * @param exitStairPos: El lugar en el que debe ir la escalera al nivel superior
+	 */
+	private void createFirstRoom(PositionComponent exitStairPos) {
+		Blueprint bp = RoomFactory.createDungeonStartingRoomBlueprint();
+		int[] startingPosCorrection = bp.getStairsAnchor();
+		PositionComponent startingPos = exitStairPos.clone();
+		startingPos.coord[0] -= startingPosCorrection[0];
+		startingPos.coord[1] -= startingPosCorrection[1];
+		
+		buildRoom(startingPos, null, bp);
+	}
 	
-	private void createNewRoom(Blueprint bp, PositionComponent startingPos, PositionComponent correctedPos) {
+	/**
+	 * Crea una habitación genérica en el nivel
+	 * @param anchorPos: Es la posición en el nivel a la que estará unida la nueva habitación
+	 */
+	private void createRoom(PositionComponent anchorPos) {
+		Blueprint bp = RoomFactory.createDungeonRoomBlueprint();
+		Tile emptyTile = RNG.getRandom(Explorer.getOrthogonalTiles(anchorPos.getTile(), t -> t.get(Type.TERRAIN) == null));
+		if(emptyTile == null) return;
+		Direction bpDirection = Direction.get(anchorPos, emptyTile.getPos());
+		List<Integer[]> posibleAnchors = bp.getAnchors(bpDirection);
+		if(posibleAnchors.isEmpty()) return;
+		Integer[] bpAnchor = RNG.getRandom(posibleAnchors);
+		PositionComponent startingPos = anchorPos.clone();
+		
+		startingPos.coord[0] -= bpAnchor[0];
+		startingPos.coord[1] -= bpAnchor[1];
+		
+		buildRoom(startingPos, anchorPos.getTile(), bp);
+	}
+
+
+	private void buildRoom(PositionComponent startingPos, Tile entranceTile, Blueprint bp) {
 		Set<Tile> roomTiles = new HashSet<>();
 		Set<Tile> doorTiles = new HashSet<>();
 		Tile upStairTile = null;
 		Tile downStairTile = null;
-		Set<Tile> newExpansionTiles = new HashSet<>();
+		Set<Tile> newAnchorTiles = new HashSet<>();
 		
-		String[][] blueprintArray = bp.getArray();
-		for(int x = 0; x < blueprintArray.length; x++){
-			for(int y = 0; y < blueprintArray[0].length; y++){
-				Tile tile = correctedPos.getTile();
-				String ASCII = blueprintArray[x][y];
+		char[][] bpArray = bp.getArray();
+		for(int i = 0; i < bpArray.length; i++) {
+			for(int j = 0; j < bpArray[0].length; j++) {
+				Tile tile = Explorer.getTile(startingPos.coord[0] + i, startingPos.coord[1] + j, startingPos.coord[2]);
+				char symbol = bpArray[i][j];
 				
-				switch(ASCII) {
-				case ".":
-					if(!validTile(tile)) {
-						return;
-					}
+				switch(symbol) {
+				case '.':
 					roomTiles.add(tile);
 					break;
-				case "u":
-					newExpansionTiles.add(tile);
+				case 'u':
+					newAnchorTiles.add(tile);
 					break;
-				case "+":
+				case '+':
 					roomTiles.add(tile);
 					doorTiles.add(tile);
 					break;
-				case ">":
+				case '>':
 					roomTiles.add(tile);
 					downStairTile = tile;
 					break;
-				case "<":
+				case '<':
 					roomTiles.add(tile);
 					upStairTile = tile;
+					break;
 				}
-				
-				correctedPos.coord[1]--;
 			}
-			correctedPos.coord[1] += blueprintArray[0].length;
-			correctedPos.coord[0]++;
 		}
 		
-		roomTiles.add(startingPos.getTile());
-		tilesForExpantion.addAll(newExpansionTiles);
-		tilesForExpantion.remove(startingPos.getTile());
-		buildRoom(roomTiles);
-		rooms.add(new Room(roomTiles));
-		if(!doorTiles.isEmpty()){
+		if(isValidRoom(roomTiles)) {
+			buildRoom(roomTiles);
+			rooms.add(new Room(roomTiles));
 			doors.addAll(doorTiles);
+			if(entranceTile != null) doors.add(entranceTile);
+			upStair = upStairTile == null ? upStair: upStairTile.getPos();
+			downStair = downStairTile == null ? downStair : downStairTile.getPos();
+			availableAnchors.addAll(newAnchorTiles);
+			availableAnchors.remove(entranceTile);
 		}
-		doors.add(startingPos.getTile());
-		if(downStairTile != null && downStair == null){
-			downStair = downStairTile.getPos();
-		}
-		if(upStairTile != null && upStair == null){
-			upStair = startingPos;
-		}
-		
 		
 	}
 	
-	private boolean validTile(Tile tile){
-		return tile.get(Type.TERRAIN) == null || tilesForExpantion.contains(tile);
-	}
-	
-	private void buildRoom(Set<Tile> roomTiles){
-		roomTiles.forEach(t -> t.put(FLOOR));
-		Set<Tile> wallTiles = new HashSet<>();
-		for(Tile tile : roomTiles){
-			wallTiles.addAll(Explorer.getAdjacentTiles(tile, t -> t.get(Type.TERRAIN) == null));
+	private boolean isValidRoom(Set<Tile> roomTiles) {
+		for(Tile tile : roomTiles) {
+			if(tile.get(Type.TERRAIN) != null) return false;
 		}
-		wallTiles.forEach(t -> t.put(WALL));
-		
+		return true;
+	}
+
+	private void buildRoom(Set<Tile> roomTiles) {
+		for(Tile floorTile : roomTiles) {
+			floorTile.put(FLOOR);
+			Explorer.getAdjacentTiles(floorTile, t -> t.get(Type.TERRAIN) == null).forEach(t -> t.put(WALL));
+		}
 	}
 	
-	//FIXME: muy pocos loops y casi siempre se hacen al lado de otra puerta
+	//FIXME: no crea loops
 	private void createLoops() {
-		for(Tile tile : tilesForExpantion) {
+		for(Tile tile : availableAnchors) {
 			Object[] tiles = Explorer.getOrthogonalTiles(tile, t -> FLOOR.equals(t.get(Type.TERRAIN))).toArray();
 			if(tiles.length == 2 && PathFinder.getWalkableDistance((Tile)tiles[0], (Tile)tiles[1]) > 20){
-//				Door door = new Door();
-//				tile.setFeature(door);
+				doors.add(tile);
+			}
+		}
+	}
+	
+	private void putDoors() {
+		for(Tile tile : doors) {
+			if(tile.isEmpty()) {
 				tile.put(FLOOR);
+				tile.put(FeatureFactory.createFeature("door"));
 			}
 		}
 	}
@@ -167,28 +178,12 @@ public class DungeonLevel {
 			Mappers.graphMap.get(stair).ASCII = "<";
 			upStair.getTile().put(stair);
 		}
-		if(downStair != null) {
-			Entity stair = FeatureFactory.createFeature("stair");
-			stair.add(downStair);
-			Mappers.graphMap.get(stair).ASCII = ">";
-			downStair.getTile().put(stair);
-		}
-		else {
-			Room room = RNG.getRandom(rooms);//, r -> r.getDoorTiles().size() == 1);
-			downStair = RNG.getRandom(room.getFloorTiles()).getPos();
-			Entity stair = FeatureFactory.createFeature("stair");
-			stair.add(downStair);
-			Mappers.graphMap.get(stair).ASCII = ">";
-			downStair.getTile().put(stair);
-		}
-	}
-	
-	private void putDoors() {
-		for(Tile tile : doors) {
-			if(tile.isEmpty()) {
-				tile.put(FeatureFactory.createFeature("door"));
-			}
-		}
+		Room room = RNG.getRandom(rooms, r -> r.getDoorTiles().size() == 1);
+		downStair = RNG.getRandom(room.getFloorTiles()).getPos();
+		Entity stair = FeatureFactory.createFeature("stair");
+		stair.add(downStair);
+		Mappers.graphMap.get(stair).ASCII = ">";
+		downStair.getTile().put(stair);
 	}
 	
 	private void putEnemies() {
@@ -216,20 +211,6 @@ public class DungeonLevel {
 		}
 	}
 	
-	private void discard() {
-		for(Room room : rooms) {
-			Set<Tile> tiles = room.getFloorTiles();
-			for(Tile tile : tiles) {
-				tile.remove(Type.TERRAIN);
-				tile.remove(Type.FEATURE);
-			}
-		}
-	}
-
-	public boolean isValidLevel() {
-		return validLevel;
-	}
-
 	public Set<Room> getRooms() {
 		return rooms;
 	}
@@ -245,5 +226,8 @@ public class DungeonLevel {
 	public PositionComponent getDownStair() {
 		return downStair;
 	}
-	
+
+	public boolean isValidLevel() {
+		return validLevel;
+	}
 }

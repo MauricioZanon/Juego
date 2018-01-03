@@ -59,11 +59,9 @@ public class DungeonBuilder {
 		
 		public int roomQuantity;
 		
-		
 		DungeonSize(int rooms) {
 			roomQuantity = RNG.nextGaussian(rooms, rooms/33);
 		}
-
 	}
 }
 

@@ -56,13 +56,6 @@ public enum Direction {
 		int x = dir.movX;
 		int y = dir.movY;
 		
-		if(x == 0 && y == 1) return S;
-		else if(x == 1 && y == 1) return SW;
-		else if(x == 1 && y == 0) return W;
-		else if(x == 1 && y == -1) return NW;
-		else if(x == 0 && y == -1) return N;
-		else if(x == -1 && y == -1) return NE;
-		else if(x == -1 && y == 0) return E;
-		else return SE;
+		return Direction.get(x*-1, y*-1);
 	}
 }

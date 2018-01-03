@@ -6,6 +6,7 @@ import java.util.Set;
 import components.Mappers;
 import components.Type;
 import main.Tile;
+import world.Explorer;
 
 public class Room {
 	
@@ -22,8 +23,10 @@ public class Room {
 	public Set<Tile> getDoorTiles(){
 		Set<Tile> doorTiles = new HashSet<>();
 		for(Tile tile : floorTiles) {
-			if(tile.get(Type.FEATURE) != null && Mappers.descMap.get(tile.get(Type.FEATURE)).name.equals("door")) {
-				doorTiles.add(tile);
+			for(Tile adjacentTile : Explorer.getAdjacentTiles(tile, t -> t.get(Type.FEATURE) != null)) {
+				if(Mappers.descMap.get(adjacentTile.get(Type.FEATURE)).name.equals("door")) {
+					doorTiles.add(adjacentTile);
+				}
 			}
 		}
 		return doorTiles;

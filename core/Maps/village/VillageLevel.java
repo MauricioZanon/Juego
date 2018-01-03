@@ -1,20 +1,24 @@
 package village;
 
+import static com.mygdx.juego.Juego.world;
 import static components.Mappers.descMap;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import com.badlogic.ashley.core.Entity;
-import static com.mygdx.juego.Juego.world;
 
 import RNG.RNG;
+import components.PositionComponent;
 import components.Type;
 import factories.FeatureFactory;
 import factories.TerrainFactory;
+import main.Blueprint;
 import main.Chunk;
+import main.RoomFactory;
 import main.Tile;
 import world.Direction;
 import world.Explorer;
@@ -33,18 +37,17 @@ public class VillageLevel extends Chunk{
 		fillLevel(createGrassFloor);
 		
 		buildLevel();
-		
 	}
 	
 	@Override
 	protected void buildLevel() {
 		buildRoad();
 		
+		Predicate<Tile> isGrassFloor = t -> t.get(Type.TERRAIN) != null && descMap.get(t.get(Type.TERRAIN)).name.equals("grass floor");
+		Predicate<Tile> adjacentToGrassFloor = t -> Explorer.isOrthogonallyAdjacent(t, isGrassFloor);
 		for(int i = 0; i < 10; i++){
-			Predicate<Tile> isGrassFloor = t -> t.get(Type.TERRAIN) != null && descMap.get(t.get(Type.TERRAIN)).name.equals("grass floor");
-			Predicate<Tile> adjacentToGrassFloor = t -> Explorer.isOrthogonallyAdjacent(t, isGrassFloor);
-			Tile startingTile = RNG.getRandom(road, adjacentToGrassFloor);
-			simulateHouse(startingTile);
+			Tile roadAnchor = RNG.getRandom(road, adjacentToGrassFloor);
+			createHouse(roadAnchor);
 		}
 	}
 	
@@ -65,73 +68,64 @@ public class VillageLevel extends Chunk{
 		}
 	}
 	
-	private void simulateHouse(Tile roadTile){
-		
-		Set<Tile> tiles = Explorer.getOrthogonalTiles(roadTile, t -> descMap.get(t.get(Type.TERRAIN)).name.equals("grass floor"));
+	private void createHouse(Tile roadAnchor){
+		Set<Tile> tiles = Explorer.getOrthogonalTiles(roadAnchor, t -> descMap.get(t.get(Type.TERRAIN)).name.equals("grass floor"));
 
 		Tile initialHouseTile = RNG.getRandom(tiles);
 		
-		Direction dir = Direction.get(initialHouseTile, roadTile);
+		Blueprint bp = RoomFactory.createHouseBlueprint();
+		Direction dir = Direction.get(roadAnchor, initialHouseTile);
+		List<Integer[]> posibleAnchors = bp.getAnchors(dir);
+		if(posibleAnchors.isEmpty()) return;
+		Integer[] bpAnchor = RNG.getRandom(posibleAnchors);
+		PositionComponent startingPos = initialHouseTile.getPos().clone();
 		
-		int width = RNG.nextInt(6, 9);
-		int height = RNG.nextInt(6, 9);
+		startingPos.coord[0] -= bpAnchor[0];
+		startingPos.coord[1] -= bpAnchor[1];
 		
-		int x1 = initialHouseTile.getPos().getLx();
-		int y1 = initialHouseTile.getPos().getLy();
-		int x2 = x1 + width;
-		int y2 = y1 + height;
-		if(dir.movY == 1){ //Si es Direction.S
-			y2 = y1 - height;
-			int aux = y1;
-			y1 = y2; 
-			y2 = aux + 1;
-		}
-		
-		Set<Tile> walls = new HashSet<>();
 		Set<Tile> floors = new HashSet<>();
+		Set<Tile> walls = new HashSet<>();
+		Set<Tile> doors = new HashSet<>();
 		
-		for(int i = y1; i < y2; i++){
-			for(int j = x1; j < x2; j++){
-				Tile tile;
-				try{
-					tile = getChunkMap()[j][i];
-				}catch(ArrayIndexOutOfBoundsException e){
-					return;
-				}
-				if(!validHouseTile(tile)) {
-					return;
-				}
-				if(i == y1 || i == y2-1 || j == x1 || j == x2-1){
-					walls.add(tile);
-				}else{
+		char[][] bpArray = bp.getArray();
+		for(int i = 0; i < bpArray.length; i++) {
+			for(int j = 0; j < bpArray[0].length; j++) {
+				Tile tile = Explorer.getTile(startingPos.coord[0] + i, startingPos.coord[1] + j, startingPos.coord[2]);
+				if(!validHouseTile(tile)) return;
+				
+				char symbol = bpArray[i][j];
+				switch(symbol) {
+				case '.':
 					floors.add(tile);
+					break;
+				case 'u':
+				case '+':
+					doors.add(tile);
+					floors.add(tile);
+					break;
+				case '#':
+					walls.add(tile);
+					break;
 				}
 			}
 		}
-		
-		buildHouse(walls, floors);
-
-		Predicate<Tile> isGrassFloor = t -> t.get(Type.TERRAIN) != null && descMap.get(t.get(Type.TERRAIN)).name.equals("grass floor");
-		Predicate<Tile> adjacentToRoad = t -> !Explorer.isOrthogonallyAdjacent(t, isGrassFloor);
-		Tile doorTile = RNG.getRandom(walls, adjacentToRoad);
-		
-		doorTile.put(TerrainFactory.get("wooden floor"));
-		doorTile.put(FeatureFactory.createFeature("door"));
-		
+		buildHouse(walls, floors, doors);
 	}
 	
 	private boolean validHouseTile(Tile tile) {
-		return descMap.get(tile.get(Type.TERRAIN)).name.equals("grass floor");
+		return tile.get(Type.TERRAIN) != null && descMap.get(tile.get(Type.TERRAIN)).name.equals("grass floor");
 	}
 
-	//TODO agregar las puertas y hacer que siempre esten mirando al camino
-	private void buildHouse(Set<Tile> walls, Set<Tile> floors){
+	private void buildHouse(Set<Tile> walls, Set<Tile> floors, Set<Tile> doors){
 		Entity houseWall = TerrainFactory.get("wooden wall");
 		Entity houseFloor = TerrainFactory.get("wooden floor");
 		
 		walls.forEach(t -> t.put(houseWall));
 		floors.forEach(t -> t.put(houseFloor));
-		
+		doors.forEach(t -> {
+			t.put(FeatureFactory.createFeature("door"));
+			t.put(houseFloor);
+		});
 	}
 	
 }

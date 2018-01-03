@@ -1,7 +1,7 @@
 package menus;
 
-import static components.Mappers.descMap;
 import static components.Mappers.attMap;
+import static components.Mappers.descMap;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -11,7 +11,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
@@ -19,29 +18,14 @@ import com.badlogic.gdx.math.MathUtils;
 import inputProcessors.GameInput;
 import screens.GameScreenASCII;
 import tools.CustomShapeRenderer;
-import tools.FontLoader;
 
-public class EntitySelectMenu {
+public class EntitySelectMenu extends Menu{
 	
 	public final InputProcessor INPUT = createInputProcessor();
 	
 	private List<Entity> list;
 	private List<String> relevantStats; //TODO implementar esto
 	private Consumer<Entity> action;
-	private Color color;
-	private String title;
-	
-	private int startingX;
-	private float startingY;
-	
-	private int menuWidth;
-	private float menuHeight;
-	
-	//TODO font para titulos y atributos de la tabla (nombre, peso, etc)
-	protected BitmapFont itemsFont = FontLoader.fonts.get("menu");
-	protected BitmapFont titleFont = FontLoader.fonts.get("title");
-	
-	protected int selectedItem = 0;
 	
 	public EntitySelectMenu(List<Entity> list, List<String> relevantStats, Consumer<Entity> action, Color color, String title) {
 		this.list = list;
@@ -53,7 +37,7 @@ public class EntitySelectMenu {
 		
 		menuWidth = (relevantStats.size() + 1) * 100;
 		menuWidth = MathUtils.clamp(menuWidth, 150, GameScreenASCII.getInstance().gameScreenSize);
-		menuHeight = list.size() * itemsFont.getCapHeight() + 63;
+		menuHeight = (int) (list.size() * itemsFont.getCapHeight() + 63);
 		
 		startingX = GameScreenASCII.getInstance().gameScreenSize / 2 - menuWidth / 2;
 		startingY = GameScreenASCII.getInstance().gameScreenSize / 2 - menuHeight / 2;
@@ -97,12 +81,6 @@ public class EntitySelectMenu {
 		selectedItem += v;
 		if(selectedItem < 0) selectedItem = list.size() - 1;
 		else if(selectedItem >= list.size()) selectedItem = 0;
-	}
-	
-	protected void recalculateSize() {
-		menuHeight = (int) ((list.size() * itemsFont.getCapHeight()) + 50);
-		MathUtils.clamp(menuHeight, 30, Gdx.graphics.getHeight());
-		startingY = (Gdx.graphics.getHeight() - menuHeight) / 2;
 	}
 	
 	private InputProcessor createInputProcessor() {

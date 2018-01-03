@@ -26,7 +26,7 @@ import console.Message;
 import eventSystem.ActiveMap;
 import main.Tile;
 import main.Tile.Visibility;
-import menus.EntitySelectMenu;
+import menus.Menu;
 import tools.CustomShapeRenderer;
 import tools.FontLoader;
 import world.Time;
@@ -41,7 +41,7 @@ public class GameScreenASCII implements Screen{
 	public int gameScreenSize = Gdx.graphics.getHeight(); 
 	private int gameScreenTiles = Gdx.graphics.getHeight()/TILE_SIZE;
 	
-	public EntitySelectMenu menu = null;
+	public Menu menu = null;
 	
 	private GameScreenASCII(){
 		FontLoader.load(TILE_SIZE);
@@ -86,13 +86,13 @@ public class GameScreenASCII implements Screen{
 		for (int x = -gameScreenTiles/2; x <= gameScreenTiles/2; x++){
 			for(int y = -gameScreenTiles/2; y <= gameScreenTiles/2; y++){
 				Tile tile = null;
-				GraphicsComponent gc;
+				GraphicsComponent gc = null;
 				try {
 					tile = map[center+x][center+y];
 					gc = tile.getBackGC();
 				}
 				catch(ArrayIndexOutOfBoundsException | NullPointerException e) {continue;}
-				if(tile.getVisibility() != Visibility.VISIBLE || gc == null) continue;
+				if(tile.getVisibility() != Visibility.VISIBLE || gc == null || gc.backColor == null) continue;
 				int xImg = (x * TILE_SIZE) + mapCenter;
 				int yImg = (y * TILE_SIZE) + mapCenter;
 				
@@ -113,9 +113,7 @@ public class GameScreenASCII implements Screen{
 					tile = map[center+x][center+y];
 				}
 				catch(ArrayIndexOutOfBoundsException | NullPointerException e) {continue;}
-				if(tile == null || tile.getVisibility() != Visibility.VISIBLE) {
-					continue;
-				}
+				if(tile == null || tile.getVisibility() != Visibility.VISIBLE) continue;
 				int xImg = (x * TILE_SIZE) + mapCenter;
 				int yImg = (y * TILE_SIZE) + mapCenter;
 				
@@ -163,7 +161,9 @@ public class GameScreenASCII implements Screen{
 					else if(tile.get(Type.FEATURE) != null) {
 						color = graphMap.get(tile.get(Type.FEATURE)).frontColor;
 					}else {
-						color = graphMap.get(tile.get(Type.TERRAIN)).backColor;
+						try {
+							color = graphMap.get(tile.get(Type.TERRAIN)).backColor;
+						}catch(NullPointerException e) {continue;}
 					}
 					shapeRenderer.setColor(color);
 				}
@@ -331,8 +331,8 @@ public class GameScreenASCII implements Screen{
 //						Juego.ENGINE.getSystem(RenderSystem.class).setScreen(GameScreenASCII.getInstance());
 //						break;
 //					case Keys.ENTER:
-////						PositionComponent pos = getClickedPos();
-////						ActiveSkill skill = SkillsScreen.getInstance().getSelectedSkill();
+//						PositionComponent pos = getClickedTile().getPos();
+////						Skill skill = SkillsMenu.getInstance().getSelectedSkill();
 ////						System.out.println(skill.getName());
 ////						skill.affect(pos);
 ////						setGameInput();
@@ -350,28 +350,28 @@ public class GameScreenASCII implements Screen{
 //				
 //				switch(character){
 //					case '1':
-////						GameScreen.getInstance().moveMarker(-1,  -1);
+//						moveMarker(-1,  -1);
 //						break;
 //					case '2':
-////						GameScreen.getInstance().moveMarker(0, -1);
+//						moveMarker(0, -1);
 //						break;
 //					case '3':
-////						GameScreen.getInstance().moveMarker(1, -1);
+//						moveMarker(1, -1);
 //						break;
 //					case '4':
-////						GameScreen.getInstance().moveMarker(-1, 0);
+//						moveMarker(-1, 0);
 //						break;
 //					case '6':
-////						GameScreen.getInstance().moveMarker(1, 0);
+//						moveMarker(1, 0);
 //						break;
 //					case '7':
-////						GameScreen.getInstance().moveMarker(-1, 1);
+//						moveMarker(-1, 1);
 //						break;
 //					case '8':
-////						GameScreen.getInstance().moveMarker(0, 1);
+//						moveMarker(0, 1);
 //						break;
 //					case '9':
-////						GameScreen.getInstance().moveMarker(1, 1);
+//						moveMarker(1, 1);
 //						break;
 //				}
 //				return false;
@@ -379,11 +379,11 @@ public class GameScreenASCII implements Screen{
 //
 //			public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 //				if(!Juego.ENGINE.getSystem(EventSystem.class).waitingForPlayerInput) return false;
-////				Position pos = GameScreen.getInstance().getClickedPos();
+//				Tile tile = getClickedTile();
 //				switch(button){
 //					case 0:
-////						ActiveSkill skill = SkillsScreen.getInstance().getSelectedSkill();
-////						skill.affect(pos);	
+////						Skill skill = SkillsScreen.getInstance().getSelectedSkill();
+////						skill.cast(Juego.player, tile);
 //						break;
 //				}
 //				return false;
