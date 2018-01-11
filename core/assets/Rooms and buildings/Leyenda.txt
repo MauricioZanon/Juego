@@ -1,5 +1,0 @@
-. Piso
-# Pared
-<> Escaleras
-+ Puerta
-u Punto de unión opcional

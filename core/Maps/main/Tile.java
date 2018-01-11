@@ -20,8 +20,6 @@ import components.PositionComponent;
 import components.TransitableComponent;
 import components.TranslucentComponent;
 import components.Type;
-import world.Time;
-import worldLoader.WorldSaver;
 
 public class Tile {
 	
@@ -33,7 +31,7 @@ public class Tile {
 	private LinkedList<Entity> items = new LinkedList<>();
 	private Entity terrain = null;
 	
-	private float lightLevel = 0;
+	private float lightLevel = 0.15f;
 	
 	private Visibility visibility = Visibility.VISIBLE;
 	
@@ -60,7 +58,6 @@ public class Tile {
 			gas = e;
 			break;
 		}
-		WorldSaver.saveTile(this);
 	}
 	
 	public Entity get(Type type) {
@@ -98,7 +95,6 @@ public class Tile {
 			if(descMap.get(gas).name.equals(descMap.get(e).name)) gas = null;
 			break;
 		}
-		WorldSaver.saveTile(this);
 	}
 	public void remove(Type type) {
 		switch(type) {
@@ -118,7 +114,6 @@ public class Tile {
 			gas = null;
 			break;
 		}
-		WorldSaver.saveTile(this);
 	}
 	
 	public Set<Entity> getEntities(){
@@ -166,7 +161,9 @@ public class Tile {
 	}
 	
 	public float getLightLevel() {
-		return Time.getLightLevel();
+		return 1f;
+//		if(pos.coord[2] == 0) return Math.max(Time.getLightLevel(), lightLevel);
+//		else return lightLevel;
 	}
 
 	public void setLightLevel(float lightLevel) {

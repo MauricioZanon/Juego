@@ -1,18 +1,9 @@
 package main;
 
-import java.util.ArrayList;
-
 import components.PositionComponent;
 
-/**
- * TODO: Cambiar el nombre a algo mas intuitivo
- */
-public class Location {
+public abstract class Location {
 	
-	protected ArrayList<Chunk> levels;
-	protected PositionComponent entrancePos;
-	
-	public PositionComponent getEntrancePos() {
-		return entrancePos;
-	}
+	public abstract void buildLocation(PositionComponent pos);
+
 }

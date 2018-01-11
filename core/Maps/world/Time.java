@@ -14,7 +14,7 @@ public abstract class Time {
 	
 	static {
 		calendar.clear();
-		calendar.set(Calendar.HOUR_OF_DAY, 9);
+		calendar.set(Calendar.HOUR_OF_DAY, 17);
 		calendar.set(Calendar.MINUTE, 45);
 		calendar.set(Calendar.SECOND, 0);
 		calendar.set(Calendar.DAY_OF_MONTH, 0);

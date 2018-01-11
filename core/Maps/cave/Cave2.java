@@ -13,11 +13,11 @@ import components.PositionComponent;
 import components.Type;
 import factories.FeatureFactory;
 import factories.TerrainFactory;
-import main.Location;
+import main.MultiLevelLocation;
 import main.Tile;
 import world.Explorer;
 
-public class Cave2 extends Location{
+public class Cave2 extends MultiLevelLocation{
 	
 	private Set<Tile> floorTiles = new HashSet<>();
 	private Set<Tile> wallTiles = new HashSet<>();

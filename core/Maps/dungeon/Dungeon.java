@@ -1,19 +1,16 @@
 package dungeon;
 
-import java.util.HashSet;
-import java.util.Set;
+import main.MultiLevelLocation;
 
-import main.Location;
-
-public class Dungeon extends Location{
+public class Dungeon extends MultiLevelLocation{
 	
-	private Set<DungeonLevel> levels = new HashSet<>();
+	private DungeonLevel[] levels;
 	
-	public Dungeon(Set<DungeonLevel> levels){
+	public Dungeon(DungeonLevel[] levels){
 		this.levels = levels;
 	}
 
-	public Set<DungeonLevel> getLevels() {
+	public DungeonLevel[] getLevels() {
 		return levels;
 	}
 	

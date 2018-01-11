@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.mygdx.juego.Juego;
@@ -40,7 +39,6 @@ public class RNGTests {
 		}
 	}
 	
-	@Ignore //FIXME se freezea en las pruebas
 	@Test
 	public void randomTile(){
 		Chunk level = Juego.world.getMap()[1][1][0];

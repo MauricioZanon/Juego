@@ -4,7 +4,7 @@ public abstract class Noise {
 	
 	public static void main(String[] args) {
 		
-		print(generatePerlinNoise(50, 250, 5));
+		print(generatePerlinNoise(50, 250, 3));
 		
 	}
 	
@@ -12,26 +12,7 @@ public abstract class Noise {
 		for(int j = 0; j < noise[0].length; j++){
 			for(int i = 0; i < noise.length; i++){
 				int h = (int) (noise[i][j]*10);
-				switch(h) {
-					case 0:
-					case 1:
-					case 2: // lago, oceano, rio, chasm, etc
-						System.out.print("~");
-	            		break;
-					case 3:
-					case 4:
-					case 5:
-					case 6: //campo, desierto, planicie, aldea, etc
-						System.out.print(".");
-						break;
-					case 7:
-					case 8: //bosque, jungla, pantano, etc
-						System.out.print("*");
-	            		break;
-					default: //montaña, meseta, volcan, etc
-						System.out.print("^");
-	            		break;
-				}
+				System.out.print(h);
 			}
 			System.out.println();
 		}
@@ -90,7 +71,7 @@ public abstract class Noise {
 	 * 
 	 * @param width: Ancho del array
 	 * @param height: Alto del array
-	 * @param octaveCount: Mientras mas alto sea este valor mas alto es el cambio de los valores entre celdas (con 5 queda bien)
+	 * @param octaveCount: Mientras mas alto sea este valor menor es el cambio de los valores entre celdas (con 5 queda bien)
 	 * @return
 	 */
 	public static float[][] generatePerlinNoise(int width, int height, int octaveCount){

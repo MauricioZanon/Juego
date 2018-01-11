@@ -35,8 +35,8 @@ public class GameInput implements InputProcessor{
 	public boolean keyDown(int keycode) {
 		if(!Juego.ENGINE.getSystem(EventSystem.class).waitingForPlayerInput) return false;
 		
-		List<Entity> entities; //Lista para usar con el EnttySelectMenu
-		List<String> relevantStats; //Lista para usar con el EnttySelectMenu
+		List<Entity> entities; //Lista para usar con el EntitySelectMenu
+		List<String> relevantStats; //Lista para usar con el EntitySelectMenu
 		Consumer<Entity> action;
 		
 		switch(keycode){

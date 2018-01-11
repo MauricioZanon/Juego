@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import RNG.RNG;
 import world.Direction;
 
 public class Blueprint {
@@ -12,30 +13,17 @@ public class Blueprint {
 	private HashMap<Direction, List<Integer[]>> anchors;
 	
 	public Blueprint(char[][] cs){
-		System.out.println(cs.length);
 		array = cs;
 		resetAnchors();
-	}
-	
-	//TODO mover este método a RoomFactory
-	public void rotate() {
-		int ii = 0;
-		int jj = 0;
-		char[][] rotatedArray = new char[array[0].length][array.length]; 
-		for(int i=0; i<array[0].length; i++){
-			for(int j=array.length-1; j>=0; j--){
-				rotatedArray[ii][jj] = array[j][i];
-				jj++;
-			}
-			jj = 0;
-			ii++;
-		}
-		array = rotatedArray;
-		refreshAnchors();
 	}
 
 	public char[][] getArray() {
 		return array;
+	}
+	
+	public void setArray(char[][] newArray) {
+		array = newArray;
+		resetAnchors();
 	}
 	
 	private void resetAnchors() {
@@ -88,6 +76,34 @@ public class Blueprint {
 		return new int[2];
 	}
 	
+	public void rotate(Direction dir) {
+		while(getAnchors(dir).size() == 0 || RNG.nextBoolean()) {
+			rotate();
+		}
+	}
+	
+	public void rotate(int rotations) {
+		for(int i = 0; i < rotations; i++) {
+			rotate();
+		}
+	}
+	
+	private void rotate() {
+		int ii = 0;
+		int jj = 0;
+		char[][] rotatedArray = new char[array[0].length][array.length];
+		for(int i = 0; i < array[0].length; i++){
+			for(int j = array.length-1; j >= 0; j--){
+				rotatedArray[ii][jj] = array[j][i];
+				jj++;
+			}
+			jj = 0;
+			ii++;
+		}
+		array = rotatedArray;
+		refreshAnchors();
+	}
+	
 	@Override
 	public String toString(){
 		String string = "";
@@ -99,5 +115,4 @@ public class Blueprint {
 		}
 		return string;
 	}
-	
 }

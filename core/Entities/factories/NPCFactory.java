@@ -18,18 +18,19 @@ public abstract class NPCFactory extends Factory{
 	}
 	
 	public static Entity createNPC(String name){
-		if(!NPCStrings.keySet().contains(name)) {
-			return null;
-		}
-		else {
+		if(NPCStrings.keySet().contains(name)) {
 			Entity npc = create(NPCStrings.get(name));
 			Mappers.AIMap.get(npc).fsm.setOwner(npc);
 			return npc;
+		}
+		else {
+			return null;
 		}
 	}
 	
 	public static void main(String[] args) {
 		NPCStrings.keySet().forEach(s -> System.out.println(s));
+		createNPC();
 	}
 	
 }

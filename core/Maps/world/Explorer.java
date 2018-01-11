@@ -1,6 +1,5 @@
 package world;
 
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -38,12 +37,18 @@ public class Explorer {
 	}
 	
 	public static Tile getTile(int gx, int gy, int gz, int lx, int ly){
-		Chunk chunk = world.getMap()[gx][gy][gz];
+		Chunk chunk = null;
+		try{
+			chunk = world.getMap()[gx][gy][gz];
+		}catch(ArrayIndexOutOfBoundsException e) {return null;}
 		if(chunk == null){
 			world.getMap()[gx][gy][gz] = new EmptyMap(gx, gy, gz);
 			chunk = world.getMap()[gx][gy][gz];
 		}
-		Tile tile = chunk.getChunkMap()[lx][ly];
+		Tile tile = null;
+		try{
+			tile = chunk.getChunkMap()[lx][ly];
+		}catch(ArrayIndexOutOfBoundsException e) {return null;}
 		if(tile == null){
 			chunk.getChunkMap()[lx][ly] = new Tile(new PositionComponent(gx*world.CHUNK_SIZE + lx, gy*world.CHUNK_SIZE + ly, gz));
 			tile = chunk.getChunkMap()[lx][ly];
@@ -123,6 +128,7 @@ public class Explorer {
 		return tiles;
 	}
 
+	//TODO estos mismos métodos pero sin pedir condiciones
 	public static Set<Tile> getAdjacentTiles(Tile tile, Predicate<Tile> cond) {
 		Set<Tile> tiles = getOrthogonalTiles(tile, cond);
 		tiles.addAll(getDiagonalTiles(tile, cond));
@@ -223,7 +229,7 @@ public class Explorer {
 	}
 	
 	/**
-	 * Usa flood fill solo en los tiles transitables y develve el primero que encuentra con la condicion dada
+	 * Usa flood fill solo en los tiles transitables y devuelve el primero que encuentra con la condicion dada
 	 * @param origin el origen de la busqueda
 	 * @param cond
 	 * @return
@@ -258,4 +264,29 @@ public class Explorer {
 		return closest;
 		
 	}
+	
+	/**
+	 * Recorre el mapa de izquierda a derecha y de arriba a abajo a partir de la posición dada
+	 * @param origin
+	 * @param ySize
+	 * @param xSize
+	 * @return
+	 */
+	public static Set<Tile> getSquareArea(PositionComponent origin, int ySize, int xSize){
+		int x0 = origin.coord[0];
+		int y0 = origin.coord[1];
+		int z0 = origin.coord[2];
+		
+		Set<Tile> area = new HashSet<>();
+		
+		for(int i = 0; i < xSize; i++) {
+			for(int j = 0; j < ySize; j++) {
+				try {
+					area.add(getTile(x0+i, y0+j, z0));
+				}catch(ArrayIndexOutOfBoundsException e) {}
+			}
+		}
+		return area;
+	}
+	
 }

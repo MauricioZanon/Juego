@@ -162,7 +162,7 @@ public abstract class RNG {
 			return Math.round(result);
 	}
 	
-	public static boolean getBoolean(){
+	public static boolean nextBoolean(){
 		return rng.nextBoolean();
 	}
 	

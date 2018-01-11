@@ -165,6 +165,7 @@ public class GameScreenASCII implements Screen{
 							color = graphMap.get(tile.get(Type.TERRAIN)).backColor;
 						}catch(NullPointerException e) {continue;}
 					}
+					color = new Color(color).lerp(Color.BLACK, 1f - tile.getLightLevel());
 					shapeRenderer.setColor(color);
 				}
 				shapeRenderer.rect(SIDE_BAR_X_POS + x*PIXEL_SIZE, MINI_MAP_Y_POS + y*PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);

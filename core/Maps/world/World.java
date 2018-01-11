@@ -3,26 +3,31 @@ package world;
 import java.util.HashSet;
 
 import RNG.Noise;
+import RNG.RNG;
+import cave.Cave;
+import cave.Cave.CaveSize;
 import components.PositionComponent;
 import dungeon.DungeonBuilder;
+import dungeon.DungeonBuilder.DungeonSize;
+import dungeon.DungeonBuilder.DungeonType;
 import field.FieldLevel;
 import forest.ForestLevel;
 import main.Chunk;
 import main.Location;
 import mountain.MountainLevel;
-import village.VillageLevel;
+import village.Village;
 import worldLoader.WorldSaver;
 
 public class World {
 	
-	private final int WIDTH = 10;
-	private final int HEIGHT = 10;
-	private final int DEPTH = 10;
+	public final int WIDTH = 10;
+	public final int HEIGHT = 10;
+	public final int DEPTH = 10;
 	
 	public final int CHUNK_SIZE = 50;
 	
 	private Chunk[][][] map;
-	private float[][] elevation;
+	private float[][] elevationMap;
 	private HashSet<Location> locations = new HashSet<>();
 	
 	public void initialize(){
@@ -31,53 +36,60 @@ public class World {
 		
 		createOverworld();
 		
-//		new Cave(new PositionComponent(5, 5, 0, 5, 5), RNG.getRandom(CaveSize.values()));
-		createDungeons();
-		map[5][5][0] = new VillageLevel(5, 5);
-
+		createLocations();
+		
 		System.out.println("Tiempo de creación del World Map: " + (System.currentTimeMillis() - time));
 	}
 	
 	private void createOverworld() {
-		elevation = Noise.generatePerlinNoise(WIDTH, HEIGHT, 5);
-		Noise.print(elevation);
+		elevationMap = Noise.generatePerlinNoise(WIDTH, HEIGHT, 3);
+		Noise.print(elevationMap);
 		map = new Chunk[WIDTH][HEIGHT][DEPTH];
 		
-		for(int x = 1; x < WIDTH-1; x++){
-			for(int y = 1; y < HEIGHT-1; y++){
-				int h = (int) (elevation[x][y]*10);
-				switch(h) {
-					case 1:
-					case 2: //lago, oceano, rio, chasm, etc
-						map[x][y][0] = new VillageLevel(x, y);
-						break;
-					case 3:
-					case 4:
-					case 5:
-					case 6: //campo, desierto, planicie, aldea, etc
-						map[x][y][0] = new VillageLevel(x, y);
-						break;
-					case 7:
-					case 8: //bosque, jungla, pantano, etc
-						map[x][y][0] = new VillageLevel(x, y);
-						break;
-					default: //montaña, meseta, volcan, etc
-						map[x][y][0] = new VillageLevel(x, y);
-						break;
+		int villages = 0;
+		int fields = 0;
+		int forests = 0;
+		int mountains = 0;
+		
+		for(int x = 0; x < WIDTH; x++){
+			for(int y = 0; y < HEIGHT; y++){
+				int elevation = (int) (elevationMap[x][y]*10);
+				switch(elevation) {
+				case 1:
+				case 2:
+				case 3:
+				case 4: //campo, desierto, planicie, aldea, etc
+					map[x][y][0] = new FieldLevel(x, y);
+					fields++;
+					break;
+				case 5:
+				case 6: //bosque, jungla, pantano, etc
+					map[x][y][0] = new ForestLevel(x, y);
+					forests++;
+					break;
+				case 7:
+				case 8:
+				default: //montaña, meseta, volcan, etc
+					map[x][y][0] = new MountainLevel(x, y);
+					mountains++;
+					break;
 				}
 			}
 		}
+		
+		System.out.println("villages " + villages + " fields " + fields + " forests " + forests + " mountains " + mountains);
 	}
+	
+	private void createLocations() {
+		new Village(new PositionComponent(200, 200, 0));
+		DungeonBuilder.createDungeon(new PositionComponent(200, 200, 0), RNG.getRandom(DungeonType.values()), DungeonSize.HUGE);
+		new Cave(new PositionComponent(250, 250, 0), RNG.getRandom(CaveSize.values()));
 
-	private void createDungeons() {
-		DungeonBuilder.createDungeon(new PositionComponent(200, 200, 0));
 	}
 
 	public Chunk[][][] getMap() {
 		return map;
 	}
-	
-	
 	
 	public HashSet<Location> getLocations() {
 		return locations;

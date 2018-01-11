@@ -65,8 +65,8 @@ public abstract class Actions {
 		else if(Mappers.transitableMap.get(newTile.get(Type.TERRAIN)).allowedMovementType.contains(MovementType.WALK)){
 			walk(oldPos, newPos);
 		}
-		if(!newTile.isTransitable()) {
-			return;
+		if(!newTile.isTransitable() && Mappers.playerMap.get(actor) == null){
+			endTurn(actor, ActionType.WAIT);
 		}
 	}
 	

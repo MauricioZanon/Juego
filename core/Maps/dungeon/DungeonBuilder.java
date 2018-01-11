@@ -1,13 +1,11 @@
 package dungeon;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.badlogic.ashley.core.Entity;
 
 import RNG.RNG;
 import components.Mappers;
 import components.PositionComponent;
+import components.Type;
 import factories.FeatureFactory;
 
 public class DungeonBuilder {
@@ -18,10 +16,9 @@ public class DungeonBuilder {
 		createDungeon(pos, type, size);
 	}
 	
-	//FIXME: Hay que sacar las escaleras que bajan del último piso
 	public static void createDungeon(PositionComponent entrancePos, DungeonType type, DungeonSize size) {
-		Set<DungeonLevel> levels = new HashSet<>();
 		int depth = RNG.nextGaussian(4, 2);
+		DungeonLevel[] levels = new DungeonLevel[depth];
 		
 		Entity stair = FeatureFactory.createFeature("stair");
 		Mappers.graphMap.get(stair).ASCII = ">";
@@ -31,15 +28,27 @@ public class DungeonBuilder {
 		PositionComponent startingPos = entrancePos.clone();
 		startingPos.coord[2]++;
 		
-		while(levels.size() < depth) {
-			DungeonLevel level = new DungeonLevel(startingPos, type, size);
+		for (int i = 0; i < depth;) {
+			DungeonLevel level = null;
+			switch(type) {
+			case REGULAR:
+				level = new DungeonRegularLevel(startingPos, size);
+				break;
+			case WATER:
+				level = new DungeonWaterLevel(startingPos, size);
+				break;
+			default:
+				level = new DungeonRegularLevel(startingPos, size);
+				break;
+			}
 			if(level.isValidLevel()) {
-				levels.add(level);
+				levels[i] = level;
 				startingPos = level.getDownStair().clone();
 				startingPos.coord[2]++;
+				i++;
 			}
 		}
-		
+		levels[depth-1].getDownStair().getTile().remove(Type.FEATURE);
 		new Dungeon(levels);
 	}
 

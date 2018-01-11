@@ -18,7 +18,6 @@ public abstract class Menu {
 	protected int menuWidth;
 	protected int menuHeight;
 	
-	//TODO font para titulos y atributos de la tabla (nombre, peso, etc)
 	protected BitmapFont itemsFont = FontLoader.fonts.get("menu");
 	protected BitmapFont titleFont = FontLoader.fonts.get("title");
 	
