@@ -151,8 +151,8 @@ public class GameScreenASCII implements Screen{
 		for (int x = 0; x < map.length; x++){
 			for(int y = 0; y < map[0].length; y++){
 				Tile tile = map[x][y];
-				if(tile == null || tile.getVisibility() == Visibility.NOT_VISIBLE)
-					shapeRenderer.setColor(new Color(.2f,.2f,.2f,0));
+				if(tile == null || tile.getVisibility() == Visibility.NOT_VIEWED)
+					shapeRenderer.setColor(Color.BLACK);
 				else{
 					Color color;
 					if(tile.get(Type.ACTOR) != null && playerMap.has(tile.get(Type.ACTOR))) {
@@ -246,7 +246,7 @@ public class GameScreenASCII implements Screen{
 	private void drawMarkedTileInfo(){
 		Tile tile = getClickedTile();
 		
-		if(tile != null && tile.getVisibility() != Visibility.NOT_VISIBLE && !tile.isEmpty()){
+		if(tile != null && tile.getVisibility() != Visibility.NOT_VIEWED && !tile.isEmpty()){
 			String text = "";
 			if(tile.get(Type.ACTOR) != null){
 				text = Mappers.descMap.get(tile.get(Type.ACTOR)).name;

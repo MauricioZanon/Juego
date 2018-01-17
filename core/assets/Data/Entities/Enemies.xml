@@ -93,6 +93,7 @@
 		<components.VisionComponent>
 			<sightRange>50</sightRange>
 			<visionMap/>
+			<enemyTiles/>
 		</components.VisionComponent>
 	</object-array>
 
@@ -193,6 +194,7 @@
 		<components.VisionComponent>
 			<sightRange>50</sightRange>
 			<visionMap/>
+			<enemyTiles/>
 		</components.VisionComponent>
 	</object-array>
 
@@ -289,6 +291,7 @@
 		<components.VisionComponent>
 			<sightRange>50</sightRange>
 			<visionMap/>
+			<enemyTiles/>
 		</components.VisionComponent>
 	</object-array>
 

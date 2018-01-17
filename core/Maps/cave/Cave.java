@@ -54,10 +54,15 @@ public class Cave extends MultiLevelLocation{
 					for(Tile tile : floorTiles) {
 						if(Explorer.isOrthogonallyAdjacent(tile, t -> t.get(Type.TERRAIN) == null)) {
 							newMinerPos = tile.getPos();
+							if(newMinerPos == null) { 
+								continue;
+							}
 							break;
 						}
 					}
-					newMiners.add(new Miner(newMinerPos, floorTiles));
+					if(newMinerPos != null) {
+						newMiners.add(new Miner(newMinerPos, floorTiles));
+					}
 				}
 			}
 			miners.removeAll(inactiveMiners);

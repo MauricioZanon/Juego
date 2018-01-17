@@ -22,6 +22,9 @@ public enum Faction implements Component{
 	}
 	
 	public boolean isEnemy(Entity actor) {
+		if(actor == null) {
+			return false;
+		}
 		Faction faction = Mappers.factionMap.get(actor);
 		return friends.contains(faction) || faction == null || faction == this ? false : true;
 	}

@@ -25,27 +25,23 @@ public abstract class VisionCalculator {
 	}
 
 	private static void calculatePlayerVision(Entity player) {
-		HashSet<Tile> visibleTiles = visionMap.get(player).visionMap;
-		
+		HashSet<Tile> previoslyVisibleTiles = visionMap.get(player).visionMap;
 		HashSet<Tile> newVisibleTiles = new HashSet<>();
-
 		HashSet<Tile> enemyTiles = visionMap.get(player).enemyTiles;
 		enemyTiles.clear();
-		
 		Tile originTile = Mappers.posMap.get(player).getTile();
-		
 		Set<Tile> area = Explorer.getCircundatingArea(visionMap.get(player).sightRange, originTile, true);
-		
 		Faction faction = factionMap.get(player);
+		
 		for(Tile t : area) {
 			if(!newVisibleTiles.contains(t)){
 				calculateLOS(originTile, t, newVisibleTiles, enemyTiles, faction);
 			}
 		}
-		visibleTiles.forEach(t -> t.setVisibiliy(Visibility.VISIBLE));
+		newVisibleTiles.forEach(t -> t.setVisibiliy(Visibility.VISIBLE));
 		
-		visibleTiles.removeAll(newVisibleTiles);
-		visibleTiles.forEach(t -> t.setVisibiliy(Visibility.VIEWED));
+		previoslyVisibleTiles.removeAll(newVisibleTiles);
+		previoslyVisibleTiles.forEach(t -> t.setVisibiliy(Visibility.VIEWED));
 		
 		visionMap.get(player).visionMap = newVisibleTiles;
 		visionMap.get(player).enemyTiles = enemyTiles;
@@ -56,11 +52,10 @@ public abstract class VisionCalculator {
 		Tile originTile = Mappers.posMap.get(npc).getTile();
 		HashSet<Tile> visibleTiles = visionMap.get(npc).visionMap;
 		visibleTiles.clear();
-		
-		HashSet<Tile> enemyTiles = new HashSet<>();
-		visionMap.get(npc).enemyTiles = enemyTiles;
-
+		HashSet<Tile> enemyTiles = visionMap.get(npc).enemyTiles;
+		enemyTiles.clear();
 		Faction faction = factionMap.get(npc);
+		
 		for(Tile tile : Explorer.getCircundatingArea(visionMap.get(npc).sightRange, originTile, true)){
 			if(!tile.isEmpty()){
 				calculateLOS(originTile, tile, visibleTiles, enemyTiles, faction);
@@ -73,7 +68,9 @@ public abstract class VisionCalculator {
 	private static void calculateLOS(Tile start, Tile end, HashSet<Tile> visibleTiles, HashSet<Tile> enemyTiles, Faction faction){
 		for(Tile tile : Explorer.getStraigthLine(start.getPos(), end.getPos())){
 			visibleTiles.add(tile);
-			if(tile.get(Type.ACTOR) != null && faction.isEnemy(tile.get(Type.ACTOR))) enemyTiles.add(tile);
+			if(faction.isEnemy(tile.get(Type.ACTOR))) {
+				enemyTiles.add(tile);
+			}
 			if(tile.get(Type.TERRAIN) == null || !tile.isTranslucent()){
 				return;
 			}

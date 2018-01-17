@@ -193,6 +193,8 @@ public class Explorer {
 		return Math.sqrt(dx*dx + dy*dy);
 	}
 	
+	// Bresenham's line algorithm
+	// https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
 	public static ArrayList<Tile> getStraigthLine(PositionComponent start, PositionComponent end){
 		int dx = getDistanceInX(start, end);
 		int dy = getDistanceInY(start, end);

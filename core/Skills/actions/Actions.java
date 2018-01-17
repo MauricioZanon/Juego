@@ -174,7 +174,7 @@ public abstract class Actions {
 	 */
 	public static void explore(Entity actor){
 		Tile origin = posMap.get(actor).getTile();
-		Tile destination = Explorer.getClosestTile(origin, t -> t.getVisibility() == Visibility.NOT_VISIBLE);
+		Tile destination = Explorer.getClosestTile(origin, t -> t.getVisibility() == Visibility.NOT_VIEWED);
 		if(destination != null) {
 			movMap.get(actor).path = PathFinder.findPath(origin.getPos(), destination.getPos(), actor);
 			followPath(actor);

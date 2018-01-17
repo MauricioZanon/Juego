@@ -33,10 +33,7 @@ public class AttackState implements State<Entity> {
 
 	@Override
 	public void update(Entity entity) {
-		if(targetEnemy == null) {  // si no hay enemigo, wander
-			AIMap.get(entity).setState("wandering");
-		}else if(targetEnemy.getComponents().size() == 0) { // si el enemigo se está removiendo del juego
-			targetEnemy = null;
+		if(targetEnemy == null || targetEnemy.getComponents().size() == 0) {  // si se lo está removiendo del juego, wander
 			AIMap.get(entity).setState("wandering");
 		}else {
 			if(visionMap.get(entity).enemyTiles.contains(posMap.get(targetEnemy).getTile())) { // si el enemigo esta a la vista se actualiza el path

@@ -33,7 +33,7 @@ public class Tile {
 	
 	private float lightLevel = 0.15f;
 	
-	private Visibility visibility = Visibility.VISIBLE;
+	private Visibility visibility = Visibility.NOT_VIEWED;
 	
 	public Tile(PositionComponent p){
 		pos = p;
@@ -216,7 +216,7 @@ public class Tile {
 	}
 	
 	public enum Visibility{
-		NOT_VISIBLE,
+		NOT_VIEWED,
 		VISIBLE,
 		VIEWED;
 	}

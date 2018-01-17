@@ -45,7 +45,7 @@ public class PlayerExploreState implements State<Entity>{
 	
 	private void getNewExploringPath(Entity entity) {
 		PositionComponent pos = posMap.get(entity);
-		Tile destination = Explorer.getClosestTile(pos.getTile(), t -> t.getVisibility() == Visibility.NOT_VISIBLE);
+		Tile destination = Explorer.getClosestTile(pos.getTile(), t -> t.getVisibility() == Visibility.NOT_VIEWED);
 		if(destination == null) {
 			MessageFactory.createMessage("There is nowhere else to explore");
 			AIMap.get(entity).setState("wandering");
