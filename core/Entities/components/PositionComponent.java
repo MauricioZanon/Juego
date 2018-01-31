@@ -1,12 +1,11 @@
 package components;
 
 import com.badlogic.ashley.core.Component;
-import static com.mygdx.juego.Juego.world;
 import com.mygdx.juego.Juego;
 
 import main.Tile;
-import world.Direction;
 import world.Explorer;
+import world.World;
 
 public class PositionComponent implements Cloneable, Component{
 	
@@ -19,21 +18,25 @@ public class PositionComponent implements Cloneable, Component{
 		coord[2] = z;
 	}
 	
+	public PositionComponent(int[] c) {
+		coord = c;
+	}
+	
 	public PositionComponent() {
 		//Constructor vacío para que el engine pueda instanciar esta clase
 	
 	}
 	public int getGx() {
-		return coord[0] / world.CHUNK_SIZE;
+		return coord[0] / World.CHUNK_SIZE;
 	}
 	public int getLx() {
-		return coord[0] % world.CHUNK_SIZE;
+		return coord[0] % World.CHUNK_SIZE;
 	}
 	public int getGy() {
-		return coord[1] / world.CHUNK_SIZE;
+		return coord[1] / World.CHUNK_SIZE;
 	}
 	public int getLy() {
-		return coord[1] % world.CHUNK_SIZE;
+		return coord[1] % World.CHUNK_SIZE;
 	}
 	public int getGz() {
 		return coord[2];
@@ -45,20 +48,23 @@ public class PositionComponent implements Cloneable, Component{
 	
 	@Override
 	public String toString(){
-		return "GX: " + getGx() + " GY: " + getGy() + " GZ: " + coord[2] + " LX: " + getLx() + " LY: " + getLy();
+		return coord[0] + ":" + coord[1] + ":" + coord[2];
 	}
 	
 	@Override
-	public boolean equals(Object p){
+	public int hashCode() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(coord[0]);
+		sb.append(coord[1]);
+		sb.append(coord[2]);
+		return Integer.parseInt(sb.toString());
+	}
+	
+	@Override
+	public boolean equals(Object p) {
 		if(p == null) return false;
 		int[] pos = ((PositionComponent) p).coord;
 		return coord[0] == pos[0] && coord[1] == pos[1] && coord[2] == pos[2];
-	}
-
-	public void move(Direction dir) {
-		coord[0] += dir.movX;
-		coord[1] += dir.movY;
-		
 	}
 	
 	@Override

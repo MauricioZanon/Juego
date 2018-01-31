@@ -165,7 +165,7 @@ public class Village extends Location{
 			t.put(houseFloor);
 		});
 		doorTiles.forEach(t -> {
-			t.put(FeatureFactory.createFeature("door"));
+			t.put(FeatureFactory.createFeature("closed door"));
 			t.put(houseFloor);
 		});
 		houses.add(new Room(floorTiles));

@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Potions>
 
-	<object-array>
-		<components.Type>ITEM</components.Type>
+	<object-array id="5000">
 		<components.ItemType>POTION</components.ItemType>
-		<components.PickupableComponent/>
 		<components.DescriptionComponent>
 			<name>healing potion</name>
 		</components.DescriptionComponent>
@@ -29,10 +27,8 @@
 		</components.AttributeComponent>
 	</object-array>
 	
-	<object-array>
-		<components.Type>ITEM</components.Type>
+	<object-array id="5001">
 		<components.ItemType>POTION</components.ItemType>
-		<components.PickupableComponent/>
 		<components.DescriptionComponent>
 			<name>teleportation potion</name>
 		</components.DescriptionComponent>

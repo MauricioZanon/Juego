@@ -50,7 +50,6 @@ public abstract class Effects {
 		Tile newTile = newPos.getTile();
 		oldTile.remove(entity);
 		newTile.put(entity);
-		entity.add(newPos);
 		
 		if(playerMap.has(entity) && newTile.get(Type.ITEM) != null) {
 			String[] extraText = {newTile.get(Type.ITEM).getComponent(DescriptionComponent.class).name}; 

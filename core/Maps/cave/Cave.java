@@ -6,7 +6,6 @@ import java.util.Set;
 import com.badlogic.ashley.core.Entity;
 
 import RNG.RNG;
-import components.Mappers;
 import components.PositionComponent;
 import components.Type;
 import factories.FeatureFactory;
@@ -22,15 +21,15 @@ public class Cave extends MultiLevelLocation{
 	
 	/**Hecho con random walks*/
 	public Cave(PositionComponent startingPos, CaveSize size) {
-		Entity stair = FeatureFactory.createFeature("stair");
-		Mappers.graphMap.get(stair).ASCII = ">";
+		PositionComponent firstPos = startingPos.clone();
+		firstPos.coord[2] += 1;
+		if(firstPos.getTile().get(Type.TERRAIN) != null) return;
+		
+		Entity stair = FeatureFactory.createFeature("down stair");
 		stair.add(startingPos);
 		startingPos.getTile().put(stair);
 		
-		PositionComponent firstPos = startingPos.clone();
-		firstPos.coord[2] += 1;
-		Entity stair2 = FeatureFactory.createFeature("stair");
-		Mappers.graphMap.get(stair2).ASCII = "<";
+		Entity stair2 = FeatureFactory.createFeature("up stair");
 		stair2.add(firstPos);
 		firstPos.getTile().put(stair2);
 		
@@ -45,7 +44,6 @@ public class Cave extends MultiLevelLocation{
 		
 		while(floorTiles.size() < floorTilesAmount) {
 			Set<Miner> newMiners = new HashSet<>();
-			Set<Miner> inactiveMiners = new HashSet<>();
 			
 			for(Miner miner : miners) {
 				miner.dig();
@@ -65,7 +63,6 @@ public class Cave extends MultiLevelLocation{
 					}
 				}
 			}
-			miners.removeAll(inactiveMiners);
 			miners.addAll(newMiners);
 		}
 	}

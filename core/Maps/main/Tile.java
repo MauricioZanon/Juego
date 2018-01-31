@@ -44,6 +44,7 @@ public class Tile {
 		switch(type) {
 		case ACTOR:
 			actor = e;
+			e.add(pos);
 			break;
 		case FEATURE:
 			feature = e;
@@ -209,6 +210,21 @@ public class Tile {
 		message += "\n= = = = = = = = = = = = = = = = = = = = = = = = \n";
 		
 		return message; 
+	}
+	
+	public String getSaveString() {
+		String string = pos.toString();
+		try {string += "." + terrain.flags;
+		}catch(NullPointerException e) {}
+		try {string += "." + actor.flags;
+		}catch(NullPointerException e) {}
+//		try {items.forEach(i -> string += "-I:" + descMap.get(i).name);
+//		}catch(NullPointerException e) {}
+		try {string += "." + feature.flags;
+		}catch(NullPointerException e) {}
+		string += "-";
+		
+		return string;
 	}
 	
 	public boolean isEmpty() {

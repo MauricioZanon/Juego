@@ -26,9 +26,15 @@ public class DungeonWaterLevel extends DungeonLevel{
 	public DungeonWaterLevel(PositionComponent exitStairPos, DungeonSize size) {
 		int requestedRooms = size.roomQuantity;
 		
-		createFirstRoom(exitStairPos);
+		while(rooms.isEmpty()) {
+			createFirstRoom(exitStairPos);
+		}
 		
 		while(rooms.size() < requestedRooms) {
+			if(availableAnchors.isEmpty()) {
+				validLevel = false;
+				return;
+			}
 			PositionComponent anchorPos = RNG.getRandom(availableAnchors).getPos();
 			createRoom(anchorPos);
 		}
@@ -42,7 +48,6 @@ public class DungeonWaterLevel extends DungeonLevel{
 	}
 	
 	private void createFirstRoom(PositionComponent exitStairPos) {
-		
 		Blueprint bp = RoomFactory.createRoom("Dungeon starting rooms");
 		int[] startingPosCorrection = bp.getStairsAnchor();
 		PositionComponent startingPos = exitStairPos.clone();
@@ -85,14 +90,15 @@ public class DungeonWaterLevel extends DungeonLevel{
 		for(int i = 0; i < bpArray.length; i++) {
 			for(int j = 0; j < bpArray[0].length; j++) {
 				Tile tile = Explorer.getTile(startingPos.coord[0] + i, startingPos.coord[1] + j, startingPos.coord[2]);
-				if(tile == null) return;
 				
 				char symbol = bpArray[i][j];
 				switch(symbol) {
 				case '.':
+					if(!isValidTile(tile)) return;
 					roomTiles.add(tile);
 					break;
 				case '÷':
+					if(!isValidTile(tile)) return;
 					waterTiles.add(tile);
 					break;
 				case 'u':
@@ -103,10 +109,12 @@ public class DungeonWaterLevel extends DungeonLevel{
 					doorTiles.add(tile);
 					break;
 				case '>':
+					if(!isValidTile(tile)) return;
 					roomTiles.add(tile);
 					downStairTile = tile;
 					break;
 				case '<':
+					if(!isValidTile(tile)) return;
 					roomTiles.add(tile);
 					upStairTile = tile;
 					break;
@@ -114,30 +122,21 @@ public class DungeonWaterLevel extends DungeonLevel{
 			}
 		}
 		
-		if(isValidRoom(roomTiles)) {
-			if(entranceTile != null) {
-				roomTiles.add(entranceTile);
-				doors.add(entranceTile);
-			}
-			buildRoom(roomTiles);
-			roomTiles.addAll(waterTiles);
-			rooms.add(new Room(roomTiles));
-			doors.addAll(doorTiles);
-			upStair = upStairTile == null ? upStair: upStairTile.getPos();
-			downStair = downStairTile == null ? downStair : downStairTile.getPos();
-			availableAnchors.addAll(newAnchorTiles);
-			availableAnchors.remove(entranceTile);
-			putDeepWater(waterTiles);
+		if(entranceTile != null) {
+			roomTiles.add(entranceTile);
+			doors.add(entranceTile);
 		}
+		buildRoom(roomTiles);
+		roomTiles.addAll(waterTiles);
+		rooms.add(new Room(roomTiles));
+		doors.addAll(doorTiles);
+		upStair = upStairTile == null ? upStair: upStairTile.getPos();
+		downStair = downStairTile == null ? downStair : downStairTile.getPos();
+		availableAnchors.addAll(newAnchorTiles);
+		availableAnchors.remove(entranceTile);
+		putDeepWater(waterTiles);
 	}
 	
-	private boolean isValidRoom(Set<Tile> roomTiles) {
-		for(Tile tile : roomTiles) {
-			if(tile.get(Type.TERRAIN) != null) return false;
-		}
-		return true;
-	}
-
 	private void buildRoom(Set<Tile> roomTiles) {
 		for(Tile floorTile : roomTiles) {
 			floorTile.put(FLOOR);

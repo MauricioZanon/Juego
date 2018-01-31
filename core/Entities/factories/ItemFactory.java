@@ -3,20 +3,35 @@ package factories;
 import java.util.HashMap;
 
 import com.badlogic.ashley.core.Entity;
+import com.mygdx.juego.Juego;
 
 import RNG.RNG;
+import components.PickupableComponent;
+import components.Type;
 
 public abstract class ItemFactory extends Factory{
 	
-	private final static String PATH_WEAPONS = "../core/assets/Data/Entities/Weapons.xml";
-	private final static String PATH_ARMORS = "../core/assets/Data/Entities/Armors.xml";
-	private final static String PATH_POTIONS = "../core/assets/Data/Entities/Potions.xml";
-	private final static String PATH_SPECIAL_ITEMS = "../core/assets/Data/Entities/Special items.xml";
+	//TODO: buscar una mejor forma de separar los tipos de items
 	
-	private static HashMap<String, String> weaponStrings = loadEntities(PATH_WEAPONS);
-	private static HashMap<String, String> armorStrings = loadEntities(PATH_ARMORS);
-	private static HashMap<String, String> potionStrings = loadEntities(PATH_POTIONS);
-	private static HashMap<String, String> specialItemStrings = loadEntities(PATH_SPECIAL_ITEMS);
+	private static HashMap<Integer, String> weaponsId;
+	private static HashMap<String, String> weaponsName;
+	private static HashMap<Integer, String> armorsId;
+	private static HashMap<String, String> armorsName;
+	private static HashMap<Integer, String> potionsId;
+	private static HashMap<String, String> potionsName;
+	private static HashMap<Integer, String> specialItemsId;
+	private static HashMap<String, String> specialItemsName;
+	
+	public static void initialize() {
+		weaponsId = loadEntities("../core/assets/Data/Entities/Weapons.xml");
+		weaponsName = makeMapWithNames(weaponsId);
+		armorsId = loadEntities("../core/assets/Data/Entities/Armors.xml");
+		armorsName = makeMapWithNames(armorsId);
+		potionsId = loadEntities("../core/assets/Data/Entities/Potions.xml");
+		potionsName = makeMapWithNames(potionsId);
+		specialItemsId = loadEntities("../core/assets/Data/Entities/Special items.xml");
+		specialItemsName = makeMapWithNames(specialItemsId);
+	}
 	
 	public static Entity createRandomItem(){
 		int rarity = RNG.nextInt(100) + 1;
@@ -32,34 +47,65 @@ public abstract class ItemFactory extends Factory{
 	}
 	
 	public static Entity createItem(String itemName) {
-		if(weaponStrings.keySet().contains(itemName)) {
-			return create(weaponStrings.get(itemName)); 
+		String itemString;
+		if(weaponsName.keySet().contains(itemName)) {
+			itemString = weaponsName.get(itemName); 
 		}
-		else if(armorStrings.keySet().contains(itemName)) {
-			return create(armorStrings.get(itemName)); 
+		else if(armorsName.keySet().contains(itemName)) {
+			itemString = armorsName.get(itemName); 
 		}
-		else if(potionStrings.keySet().contains(itemName)){
-			return create(potionStrings.get(itemName)); 
+		else if(potionsName.keySet().contains(itemName)){
+			itemString = potionsName.get(itemName); 
 		}
-		else if(specialItemStrings.keySet().contains(itemName)){
-			return create(specialItemStrings.get(itemName)); 
+		else if(specialItemsName.keySet().contains(itemName)){
+			itemString = specialItemsName.get(itemName); 
 		}
 		else {
 			return null;
 		}
-		
+		Entity item = create(itemString);
+		item.add(Type.ITEM);
+		item.add(Juego.ENGINE.createComponent(PickupableComponent.class));
+		return item;
+	}
+	
+	public static Entity createItem(int id) {
+		String itemString;
+		if(id >= 6000 && specialItemsId.keySet().contains(id)) {
+			itemString = specialItemsId.get(id);
+		}
+		else if(id >= 5000 && potionsId.keySet().contains(id)) {
+			itemString = potionsId.get(id);
+		}
+		else if(id >= 4000 && weaponsId.keySet().contains(id)) {
+			itemString = weaponsId.get(id);
+		}
+		else if(id >= 3000 && armorsId.keySet().contains(id)) {
+			itemString = armorsId.get(id);
+		}
+		else {
+			return null;
+		}
+		Entity item = create(itemString);
+		item.add(Type.ITEM);
+		item.add(Juego.ENGINE.createComponent(PickupableComponent.class));
+		return item;
 	}
 	
 	/**===============================================================
 	 * ============================EQUIPMENT==========================
 	 * ===============================================================*/
 	public static Entity createWeapon(){
-		Entity weapon = create(RNG.getRandom(weaponStrings.values()));
+		Entity weapon = create(RNG.getRandom(weaponsName.values()));
+		weapon.add(Type.ITEM);
+		weapon.add(Juego.ENGINE.createComponent(PickupableComponent.class));
 		return weapon;
 	}
 	
 	public static Entity createArmor() {
-		Entity armor = create(RNG.getRandom(armorStrings.values()));
+		Entity armor = create(RNG.getRandom(armorsName.values()));
+		armor.add(Type.ITEM);
+		armor.add(Juego.ENGINE.createComponent(PickupableComponent.class));
 		return armor;
 	}
 
@@ -67,7 +113,9 @@ public abstract class ItemFactory extends Factory{
 	 * ============================POTIONS============================
 	 * ===============================================================*/
 	public static Entity createPotion(){
-		Entity potion = create(RNG.getRandom(potionStrings.values()));
+		Entity potion = create(RNG.getRandom(potionsName.values()));
+		potion.add(Type.ITEM);
+		potion.add(Juego.ENGINE.createComponent(PickupableComponent.class));
 		return potion;
 	}
 	
@@ -83,8 +131,15 @@ public abstract class ItemFactory extends Factory{
 //	}
 	
 	public static void main(String[] args) {
-		weaponStrings.keySet().forEach(s -> System.out.println(s));
-		potionStrings.keySet().forEach(s -> System.out.println(s));
+		initialize();
+		weaponsName.keySet().forEach(s -> create(weaponsName.get(s)));
+		weaponsId.keySet().forEach(s -> create(weaponsId.get(s)));
+		armorsName.keySet().forEach(s -> create(armorsName.get(s)));
+		armorsId.keySet().forEach(s -> create(armorsId.get(s)));
+		potionsName.keySet().forEach(s -> create(potionsName.get(s)));
+		potionsId.keySet().forEach(s -> create(potionsId.get(s)));
+		specialItemsName.keySet().forEach(s -> create(specialItemsName.get(s)));
+		specialItemsId.keySet().forEach(s -> create(specialItemsId.get(s)));
 		
 	}
 	

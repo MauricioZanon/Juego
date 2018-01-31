@@ -2,9 +2,9 @@ package factories;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -17,12 +17,10 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
@@ -33,8 +31,6 @@ import com.badlogic.ashley.core.Entity;
 import com.mygdx.juego.Juego;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
-
-import components.Mappers;
 
 public abstract class Factory {
 	
@@ -51,6 +47,10 @@ public abstract class Factory {
 		T[] p = (T[]) xstream.fromXML(XMLString);
 		
 		Entity e = Juego.ENGINE.createEntity();
+		Pattern pattern = Pattern.compile("(?<=id=\")(\\s*.*)(?=\")");
+		Matcher matcher = pattern.matcher(XMLString);
+		matcher.find();
+		e.flags = Integer.parseInt(matcher.group(0));
 		for(int i = 0; i < p.length; i++) {
 			e.add((Component) p[i]);
 		}
@@ -59,15 +59,28 @@ public abstract class Factory {
 	
 	/**
 	 * @param path: path del archivo XML con la data
-	 * @return un map con <nombre de la entidad, string xml de la entidad>
+	 * @return un map con <id, string xml de la entidad>
 	 */
-	protected static HashMap<String, String> loadEntities(String path){
-		HashMap<String, String> entities = new HashMap<>();
+	protected static HashMap<Integer, String> loadEntities(String path){
+		HashMap<Integer, String> entities = new HashMap<>();
 		Document doc = loadDocument(path);
-		List<String> list = findEntitiesXMLStrings(doc);
-		for(String entityString : list){
-			Entity e = create(entityString);
-			entities.put(Mappers.descMap.get(e).name, entityString);
+		NodeList nl = doc.getElementsByTagName("object-array");
+		for(int i = 0; i < nl.getLength(); i++){
+			Integer id = Integer.parseInt(((Element)nl.item(i)).getAttributes().getNamedItem("id").getTextContent());
+			String entityString = nodeToString(nl.item(i));
+			entities.put(id, entityString);
+		}
+		return entities;
+	}
+	
+	protected static HashMap<String, String> makeMapWithNames(HashMap<Integer, String> entitiesMap){
+		HashMap<String, String> entities = new HashMap<>();
+		Pattern pattern = Pattern.compile("(?<=\\<name\\>)(\\s*.*)(?=\\<\\/name\\>)");
+		for(String s : entitiesMap.values()) {
+			Matcher matcher = pattern.matcher(s);
+			matcher.find();
+			String name = matcher.group(0);
+			entities.put(name, s);
 		}
 		return entities;
 	}
@@ -112,21 +125,21 @@ public abstract class Factory {
 		return sw.toString();
 	}
 	
-	/**
-	 * @param doc: el archivo XML en el que se busca
-	 * @return una lista con todos los Strings que representan los nodos de las entidades en el archivo
-	 */
-	private static List<String> findEntitiesXMLStrings(Document doc){
-		ArrayList<String> stringList = new ArrayList<>();
-		XPathExpression expr = null;
-		try {
-			expr = XPath.compile("//object-array");
-			NodeList list = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
-			
-			for(int i = 0; i < list.getLength(); i++) {
-				stringList.add(nodeToString(list.item(i)));
-			}
-		} catch (XPathExpressionException e) {}
-		return stringList;
-	}
+//	/**
+//	 * @param doc: el archivo XML en el que se busca
+//	 * @return una lista con todos los Strings que representan los nodos de las entidades en el archivo
+//	 */
+//	private static List<String> findEntitiesXMLStrings(Document doc){
+//		ArrayList<String> stringList = new ArrayList<>();
+//		XPathExpression expr = null;
+//		try {
+//			expr = XPath.compile("//object-array");
+//			NodeList list = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
+//			
+//			for(int i = 0; i < list.getLength(); i++) {
+//				stringList.add(nodeToString(list.item(i)));
+//			}
+//		} catch (XPathExpressionException e) {}
+//		return stringList;
+//	}
 }

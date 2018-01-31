@@ -25,7 +25,10 @@ import components.Type;
 import components.VisionComponent;
 import eventSystem.ActiveMap;
 import eventSystem.EventSystem;
+import factories.FeatureFactory;
 import factories.ItemFactory;
+import factories.NPCFactory;
+import factories.TerrainFactory;
 import inputProcessors.GameInput;
 import screens.GameScreenASCII;
 import screens.MainScreen;
@@ -39,12 +42,13 @@ public class Juego extends Game {
 	
 	public static final PooledEngine ENGINE = new PooledEngine();
 	public volatile static Entity player = ENGINE.createEntity();
-	public static World world = new World();
+	public static World world = null;
 	
 	public static Thread gameThread;
 	public static Engine GRAPHICS_ENGINE = new Engine();
 	
     public void create() {
+    	initializeFactories();
     	RenderSystem render = new RenderSystem();
     	render.setScreen(MainScreen.getInstance());
     	GRAPHICS_ENGINE.addSystem(render);
@@ -63,7 +67,10 @@ public class Juego extends Game {
     
     public static void startGame() {
     	System.out.println(RNG.getSeed());
-    	world.initialize();
+    	if(world == null) {
+    		world = new World();
+    		world.initialize();
+    	}
     	
     	ENGINE.addSystem(new EventSystem());
     	spawnPlayer();
@@ -72,6 +79,13 @@ public class Juego extends Game {
     	Gdx.input.setInputProcessor(new GameInput());
     	gameThread.start();
 	}
+    
+    public static void initializeFactories() {
+    	TerrainFactory.initialize();
+    	FeatureFactory.initialize();
+    	ItemFactory.initialize();
+    	NPCFactory.initialize();
+    }
 
     
     private static void spawnPlayer(){

@@ -1,3 +1,4 @@
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.mygdx.juego.Juego;
@@ -16,10 +17,11 @@ public class WorldTests {
 		}
 	}
 	
+	@Ignore
 	@Test
 	public void dungeonCreation() {
-		Juego.world.initialize();
 		for(int i = 0; i < 50; i++) {
+			Juego.world.initialize();
 			int x = RNG.nextInt(Juego.world.WIDTH * Juego.world.CHUNK_SIZE);
 			int y = RNG.nextInt(Juego.world.HEIGHT * Juego.world.CHUNK_SIZE);
 			Tile tile = Explorer.getTile(x, y, 0);

@@ -12,6 +12,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.graphics.Color;
 import com.mygdx.juego.Juego;
+import com.mygdx.juego.StateSaver;
 
 import actions.ActionType;
 import actions.Actions;
@@ -53,6 +54,9 @@ public class GameInput implements InputProcessor{
 				break;
 			case Keys.COMMA:
 				Actions.pickUp(Explorer.getTile(Juego.player.getComponent(PositionComponent.class)));
+				break;
+			case Keys.L:
+				StateSaver.save();
 				break;
 			case Keys.E:
 				MessageFactory.createMessage("Use what?");

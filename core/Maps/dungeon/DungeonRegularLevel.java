@@ -23,9 +23,15 @@ public class DungeonRegularLevel extends DungeonLevel{
 	public DungeonRegularLevel(PositionComponent exitStairPos, DungeonSize size) {
 		int requestedRooms = size.roomQuantity;
 		
-		createFirstRoom(exitStairPos);
+		while(rooms.isEmpty()) {
+			createFirstRoom(exitStairPos);
+		}
 		
 		while(rooms.size() < requestedRooms) {
+			if(availableAnchors.isEmpty()) {
+				validLevel = false;
+				return;
+			}
 			PositionComponent anchorPos = RNG.getRandom(availableAnchors).getPos();
 			createRoom(anchorPos);
 		}
@@ -82,11 +88,10 @@ public class DungeonRegularLevel extends DungeonLevel{
 		for(int i = 0; i < bpArray.length; i++) {
 			for(int j = 0; j < bpArray[0].length; j++) {
 				Tile tile = Explorer.getTile(startingPos.coord[0] + i, startingPos.coord[1] + j, startingPos.coord[2]);
-				if(tile == null) return;
-				
 				char symbol = bpArray[i][j];
 				switch(symbol) {
 				case '.':
+					if(!isValidTile(tile)) return;
 					roomTiles.add(tile);
 					break;
 				case 'u':
@@ -97,10 +102,12 @@ public class DungeonRegularLevel extends DungeonLevel{
 					doorTiles.add(tile);
 					break;
 				case '>':
+					if(!isValidTile(tile)) return;
 					roomTiles.add(tile);
 					downStairTile = tile;
 					break;
 				case '<':
+					if(!isValidTile(tile)) return;
 					roomTiles.add(tile);
 					upStairTile = tile;
 					break;
@@ -108,26 +115,17 @@ public class DungeonRegularLevel extends DungeonLevel{
 			}
 		}
 		
-		if(isValidRoom(roomTiles)) {
-			if(entranceTile != null) {
-				roomTiles.add(entranceTile);
-				doors.add(entranceTile);
-			}
-			buildRoom(roomTiles);
-			rooms.add(new Room(roomTiles));
-			doors.addAll(doorTiles);
-			upStair = upStairTile == null ? upStair: upStairTile.getPos();
-			downStair = downStairTile == null ? downStair : downStairTile.getPos();
-			availableAnchors.addAll(newAnchorTiles);
-			availableAnchors.remove(entranceTile);
+		if(entranceTile != null) {
+			roomTiles.add(entranceTile);
+			doors.add(entranceTile);
 		}
-	}
-	
-	private boolean isValidRoom(Set<Tile> roomTiles) {
-		for(Tile tile : roomTiles) {
-			if(tile.get(Type.TERRAIN) != null) return false;
-		}
-		return true;
+		buildRoom(roomTiles);
+		rooms.add(new Room(roomTiles));
+		doors.addAll(doorTiles);
+		upStair = upStairTile == null ? upStair: upStairTile.getPos();
+		downStair = downStairTile == null ? downStair : downStairTile.getPos();
+		availableAnchors.addAll(newAnchorTiles);
+		availableAnchors.remove(entranceTile);
 	}
 
 	private void buildRoom(Set<Tile> roomTiles) {

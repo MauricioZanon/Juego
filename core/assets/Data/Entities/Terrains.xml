@@ -1,7 +1,6 @@
 <Terrains>
 
-	<object-array>
-		<components.Type>TERRAIN</components.Type>
+	<object-array id="1000">
 		<components.DescriptionComponent>
 			<name>concrete wall</name>
 		</components.DescriptionComponent>
@@ -31,8 +30,7 @@
 		</components.TransitableComponent>
 	</object-array>
 
-	<object-array>
-		<components.Type>TERRAIN</components.Type>
+	<object-array id="1001">
 		<components.DescriptionComponent>
 			<name>concrete floor</name>
 		</components.DescriptionComponent>
@@ -64,8 +62,7 @@
 		</components.TransitableComponent>
 	</object-array>
 
-	<object-array>
-		<components.Type>TERRAIN</components.Type>
+	<object-array id="1002">
 		<components.DescriptionComponent>
 			<name>wooden wall</name>
 		</components.DescriptionComponent>
@@ -95,8 +92,7 @@
 		</components.TransitableComponent>
 	</object-array>
 
-	<object-array>
-		<components.Type>TERRAIN</components.Type>
+	<object-array id="1003">
 		<components.DescriptionComponent>
 			<name>wooden floor</name>
 		</components.DescriptionComponent>
@@ -128,8 +124,7 @@
 		</components.TransitableComponent>
 	</object-array>
 
-	<object-array>
-		<components.Type>TERRAIN</components.Type>
+	<object-array id="1004">
 		<components.DescriptionComponent>
 			<name>grass floor</name>
 		</components.DescriptionComponent>
@@ -161,8 +156,7 @@
 		</components.TransitableComponent>
 	</object-array>
 
-	<object-array>
-		<components.Type>TERRAIN</components.Type>
+	<object-array id="1005">
 		<components.DescriptionComponent>
 			<name>dirt wall</name>
 		</components.DescriptionComponent>
@@ -192,8 +186,7 @@
 		</components.TransitableComponent>
 	</object-array>
 
-	<object-array>
-		<components.Type>TERRAIN</components.Type>
+	<object-array id="1006">
 		<components.DescriptionComponent>
 			<name>dirt floor</name>
 		</components.DescriptionComponent>
@@ -225,8 +218,7 @@
 		</components.TransitableComponent>
 	</object-array>
 
-	<object-array>
-		<components.Type>TERRAIN</components.Type>
+	<object-array id="1007">
 		<components.DescriptionComponent>
 			<name>stone wall</name>
 		</components.DescriptionComponent>
@@ -256,8 +248,7 @@
 		</components.TransitableComponent>
 	</object-array>
 
-	<object-array>
-		<components.Type>TERRAIN</components.Type>
+	<object-array id="1008">
 		<components.DescriptionComponent>
 			<name>stone floor</name>
 		</components.DescriptionComponent>
@@ -289,8 +280,7 @@
 		</components.TransitableComponent>
 	</object-array>
 	
-	<object-array>
-		<components.Type>TERRAIN</components.Type>
+	<object-array id="1009">
 		<components.DescriptionComponent>
 			<name>shallow water</name>
 		</components.DescriptionComponent>
@@ -322,8 +312,7 @@
 		</components.TransitableComponent>
 	</object-array>
 	
-		<object-array>
-		<components.Type>TERRAIN</components.Type>
+	<object-array id="1010">
 		<components.DescriptionComponent>
 			<name>deep water</name>
 		</components.DescriptionComponent>

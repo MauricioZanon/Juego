@@ -16,22 +16,21 @@ import main.Chunk;
 import main.Location;
 import mountain.MountainLevel;
 import village.Village;
-import worldLoader.WorldSaver;
 
 public class World {
 	
-	public final int WIDTH = 10;
-	public final int HEIGHT = 10;
+	public final int WIDTH = 15;
+	public final int HEIGHT = 15;
 	public final int DEPTH = 10;
 	
-	public final int CHUNK_SIZE = 50;
+	public static final int CHUNK_SIZE = 25;
 	
-	private Chunk[][][] map;
+	private Chunk[][][] map = new Chunk[WIDTH][HEIGHT][DEPTH];;
 	private float[][] elevationMap;
 	private HashSet<Location> locations = new HashSet<>();
 	
 	public void initialize(){
-		WorldSaver.createSaveFile();
+//		WorldSaver.createSaveFile();
 		long time = System.currentTimeMillis();
 		
 		createOverworld();
@@ -44,7 +43,6 @@ public class World {
 	private void createOverworld() {
 		elevationMap = Noise.generatePerlinNoise(WIDTH, HEIGHT, 3);
 		Noise.print(elevationMap);
-		map = new Chunk[WIDTH][HEIGHT][DEPTH];
 		
 		int villages = 0;
 		int fields = 0;
@@ -82,7 +80,7 @@ public class World {
 	
 	private void createLocations() {
 		new Village(new PositionComponent(200, 200, 0));
-		DungeonBuilder.createDungeon(new PositionComponent(200, 200, 0), RNG.getRandom(DungeonType.values()), DungeonSize.HUGE);
+//		DungeonBuilder.createDungeon(new PositionComponent(200, 200, 0), DungeonType.REGULAR, DungeonSize.TINY);
 		new Cave(new PositionComponent(250, 250, 0), RNG.getRandom(CaveSize.values()));
 
 	}

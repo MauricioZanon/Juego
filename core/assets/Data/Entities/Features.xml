@@ -1,9 +1,34 @@
 <Features>
 
-	<object-array>
-		<components.Type>FEATURE</components.Type>
+	<object-array id="2000">
 		<components.DescriptionComponent>
-			<name>stair</name>
+			<name>up stair</name>
+		</components.DescriptionComponent>
+		<components.GraphicsComponent>
+			<ASCII>&#x003C;</ASCII>
+			<font>general</font>
+			<frontColor>
+				<r>1.0</r>
+				<g>0.0</g>
+				<b>0.0</b>
+				<a>1.0</a>
+			</frontColor>
+			<renderPriority>2</renderPriority>
+		</components.GraphicsComponent>
+		<components.TranslucentComponent>
+			<translucent>true</translucent>
+		</components.TranslucentComponent>
+		<components.TransitableComponent>
+			<allowedMovementType>
+				<components.MovementComponent_-MovementType>WALK</components.MovementComponent_-MovementType>
+				<components.MovementComponent_-MovementType>FLY</components.MovementComponent_-MovementType>
+			</allowedMovementType>
+		</components.TransitableComponent>
+	</object-array>
+	
+	<object-array id="2001">
+		<components.DescriptionComponent>
+			<name>down stair</name>
 		</components.DescriptionComponent>
 		<components.GraphicsComponent>
 			<ASCII>></ASCII>
@@ -27,8 +52,7 @@
 		</components.TransitableComponent>
 	</object-array>
 	
-		<object-array>
-		<components.Type>FEATURE</components.Type>
+	<object-array id="2002">
 		<components.DescriptionComponent>
 			<name>tree</name>
 		</components.DescriptionComponent>
@@ -52,10 +76,9 @@
 		</components.TransitableComponent>
 	</object-array>
 
-	<object-array>
-		<components.Type>FEATURE</components.Type>
+	<object-array id="2003">
 		<components.DescriptionComponent>
-			<name>door</name>
+			<name>closed door</name>
 		</components.DescriptionComponent>
 		<components.GraphicsComponent>
 			<ASCII>+</ASCII>
@@ -78,6 +101,36 @@
 		</components.TransitableComponent>
 		<components.TranslucentComponent>
 			<translucent>false</translucent>
+		</components.TranslucentComponent>
+	</object-array>
+	
+	<object-array id="2004">
+		<components.DescriptionComponent>
+			<name>open door</name>
+		</components.DescriptionComponent>
+		<components.GraphicsComponent>
+			<ASCII>/</ASCII>
+			<font>general</font>
+			<frontColor>
+				<r>0.54509807</r>
+				<g>0.27058825</g>
+				<b>0.07450981</b>
+				<a>1.0</a>
+			</frontColor>
+			<renderPriority>2</renderPriority>
+		</components.GraphicsComponent>
+		<components.LockComponent>
+			<isClosed>false</isClosed>
+			<isLocked>false</isLocked>
+		</components.LockComponent>
+		<components.TransitableComponent>
+			<allowedMovementType>
+				<components.MovementComponent_-MovementType>WALK</components.MovementComponent_-MovementType>
+				<components.MovementComponent_-MovementType>FLY</components.MovementComponent_-MovementType>
+			</allowedMovementType>
+		</components.TransitableComponent>
+		<components.TranslucentComponent>
+			<translucent>true</translucent>
 		</components.TranslucentComponent>
 	</object-array>
 

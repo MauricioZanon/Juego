@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Weapons>
 
-	<object-array>
-		<components.Type>ITEM</components.Type>
+	<object-array id="4000">
 		<components.ItemType>SWORD</components.ItemType>
 		<components.DescriptionComponent>
 			<name>sword</name>
@@ -18,7 +17,6 @@
 			</frontColor>
 			<renderPriority>1</renderPriority>
 		</components.GraphicsComponent>
-		<components.PickupableComponent/>
 		<components.AttributeComponent>
 			<att>
 				<entry>
@@ -33,8 +31,7 @@
 		</components.AttributeComponent>
 	</object-array>
 
-	<object-array>
-		<components.Type>ITEM</components.Type>
+	<object-array id="4001">
 		<components.ItemType>WEAPON</components.ItemType>
 		<components.DescriptionComponent>
 			<name>Item template2</name>
@@ -50,7 +47,6 @@
 			</frontColor>
 			<renderPriority>1</renderPriority>
 		</components.GraphicsComponent>
-		<components.PickupableComponent/>
 		<components.AttributeComponent>
 			<att>
 				<entry>

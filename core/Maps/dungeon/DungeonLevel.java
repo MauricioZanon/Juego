@@ -7,8 +7,8 @@ import java.util.Set;
 import com.badlogic.ashley.core.Entity;
 
 import RNG.RNG;
-import components.Mappers;
 import components.PositionComponent;
+import components.Type;
 import factories.FeatureFactory;
 import factories.TerrainFactory;
 import main.Tile;
@@ -29,24 +29,30 @@ public abstract class DungeonLevel {
 	protected void putDoors() {
 		for(Tile tile : doors) {
 			if(tile.isEmpty()) {
-				tile.put(FeatureFactory.createFeature("door"));
+				tile.put(FeatureFactory.createFeature("closed door"));
 			}
 		}
 	}
 	
 	protected void putStairs() {
 		if(upStair != null) {
-			Entity stair = FeatureFactory.createFeature("stair");
+			Entity stair = FeatureFactory.createFeature("up stair");
 			stair.add(upStair);
-			Mappers.graphMap.get(stair).ASCII = "<";
 			upStair.getTile().put(stair);
 		}
 		Room room = RNG.getRandom(rooms, r -> r.getDoorTiles().size() == 1);
 		downStair = RNG.getRandom(room.getFloorTiles()).getPos();
-		Entity stair = FeatureFactory.createFeature("stair");
+		Entity stair = FeatureFactory.createFeature("down stair");
 		stair.add(downStair);
-		Mappers.graphMap.get(stair).ASCII = ">";
 		downStair.getTile().put(stair);
+	}
+	
+	protected boolean isValidTile(Tile tile) {
+		try{
+			return tile.get(Type.TERRAIN) == null;
+		}catch(NullPointerException e) {
+			return false;
+		}
 	}
 	
 	public Set<Room> getRooms() {

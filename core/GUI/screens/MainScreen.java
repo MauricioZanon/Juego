@@ -8,9 +8,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.juego.Juego;
+import com.mygdx.juego.StateLoader;
 
 import tools.FontLoader;
-import worldLoader.WorldLoader;
 
 public class MainScreen implements Screen{
 	
@@ -80,7 +80,7 @@ public class MainScreen implements Screen{
 					Juego.startGame();
 					break;
 				case Keys.L:
-					WorldLoader.loadWorld();
+					StateLoader.load();
 					Juego.startGame();
 					break;
 				case Keys.O:

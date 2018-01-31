@@ -1,9 +1,9 @@
 package dungeon;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.MathUtils;
 
 import RNG.RNG;
-import components.Mappers;
 import components.PositionComponent;
 import components.Type;
 import factories.FeatureFactory;
@@ -17,11 +17,11 @@ public class DungeonBuilder {
 	}
 	
 	public static void createDungeon(PositionComponent entrancePos, DungeonType type, DungeonSize size) {
-		int depth = RNG.nextGaussian(4, 2);
+		int depth = RNG.nextGaussian(5, 3);
+		depth = MathUtils.clamp(depth, 2, 4);
 		DungeonLevel[] levels = new DungeonLevel[depth];
 		
-		Entity stair = FeatureFactory.createFeature("stair");
-		Mappers.graphMap.get(stair).ASCII = ">";
+		Entity stair = FeatureFactory.createFeature("down stair");
 		stair.add(entrancePos);
 		entrancePos.getTile().put(stair);
 		

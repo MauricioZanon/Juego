@@ -9,7 +9,7 @@ import static com.mygdx.juego.Juego.world;
 
 import components.PositionComponent;
 import main.Chunk;
-import main.EmptyMap;
+import main.EmptyChunk;
 import main.Tile;
 
 //TODO cambiar nombre
@@ -33,7 +33,7 @@ public class Explorer {
 	}
 	
 	public static Tile getTile(int x, int y, int z) {
-		return getTile(x/world.CHUNK_SIZE, y/world.CHUNK_SIZE, z, x%world.CHUNK_SIZE, y%world.CHUNK_SIZE);
+		return getTile(x/World.CHUNK_SIZE, y/World.CHUNK_SIZE, z, x%World.CHUNK_SIZE, y%World.CHUNK_SIZE);
 	}
 	
 	public static Tile getTile(int gx, int gy, int gz, int lx, int ly){
@@ -42,7 +42,7 @@ public class Explorer {
 			chunk = world.getMap()[gx][gy][gz];
 		}catch(ArrayIndexOutOfBoundsException e) {return null;}
 		if(chunk == null){
-			world.getMap()[gx][gy][gz] = new EmptyMap(gx, gy, gz);
+			world.getMap()[gx][gy][gz] = new EmptyChunk(gx, gy, gz);
 			chunk = world.getMap()[gx][gy][gz];
 		}
 		Tile tile = null;
@@ -50,7 +50,7 @@ public class Explorer {
 			tile = chunk.getChunkMap()[lx][ly];
 		}catch(ArrayIndexOutOfBoundsException e) {return null;}
 		if(tile == null){
-			chunk.getChunkMap()[lx][ly] = new Tile(new PositionComponent(gx*world.CHUNK_SIZE + lx, gy*world.CHUNK_SIZE + ly, gz));
+			chunk.getChunkMap()[lx][ly] = new Tile(new PositionComponent(gx*World.CHUNK_SIZE + lx, gy*World.CHUNK_SIZE + ly, gz));
 			tile = chunk.getChunkMap()[lx][ly];
 		}
 		return tile;
@@ -61,9 +61,8 @@ public class Explorer {
 	}
 	
 	public static PositionComponent getPosition(PositionComponent oldPos, Direction dir) {
-		PositionComponent newPos = oldPos.clone();
-		newPos.move(dir);
-		return newPos;
+		int[] coord = oldPos.coord;
+		return getTile(coord[0] + dir.movX, coord[1] + dir.movY, coord[2]).getPos();
 	}
 	
 	public static Set<Tile> getOrthogonalTiles(Tile tile, Predicate<Tile> cond) {
@@ -238,7 +237,7 @@ public class Explorer {
 	 */
 	public static Tile getClosestTile(Tile origin, Predicate<Tile> cond){
 		Set<Tile> possibleTiles = getAdjacentTiles(origin, t -> t.isTransitable());
-		for(int i = 0; i < world.CHUNK_SIZE; i++){
+		for(int i = 0; i < World.CHUNK_SIZE; i++){
 			Set<Tile> newSet = new HashSet<>();
 			for(Tile tile : possibleTiles){
 				if(cond.test(tile)){

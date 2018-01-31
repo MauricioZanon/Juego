@@ -1,7 +1,6 @@
 <Enemies>    
 
-	<object-array>
-		<components.Type>ACTOR</components.Type>
+	<object-array id="0">
 		<components.DescriptionComponent>
 			<name>slime</name>
 		</components.DescriptionComponent>
@@ -64,15 +63,10 @@
 		<components.MovementComponent>
 			<movementType>WALK</movementType>
 		</components.MovementComponent>
-		<components.TimedComponent>
-			<nextTurn>0</nextTurn>
-			<isActive>true</isActive>
-		</components.TimedComponent>
 		<components.InventoryComponent>
 			<inv/>
 		</components.InventoryComponent>
 		<components.Faction>SLIMES</components.Faction>
-		<components.InventoryComponent/>
 		<components.StatusEffectsComponent/>
 		<components.SkillsComponent/>
 		<components.AIComponent>
@@ -97,8 +91,7 @@
 		</components.VisionComponent>
 	</object-array>
 
-	<object-array>
-		<components.Type>ACTOR</components.Type>
+	<object-array id="1">
 		<components.DescriptionComponent>
 			<name>goblin</name>
 		</components.DescriptionComponent>
@@ -161,10 +154,6 @@
 		<components.MovementComponent>
 			<movementType>WALK</movementType>
 		</components.MovementComponent>
-		<components.TimedComponent>
-			<nextTurn>0</nextTurn>
-			<isActive>true</isActive>
-		</components.TimedComponent>>
 		<components.InventoryComponent>
 			<inv/>
 		</components.InventoryComponent>
@@ -173,7 +162,6 @@
 			<wearedEquipment>
 			</wearedEquipment>
 		</components.EquipmentComponent>
-		<components.InventoryComponent/>
 		<components.StatusEffectsComponent/>
 		<components.SkillsComponent/>
 		<components.AIComponent>
@@ -198,8 +186,7 @@
 		</components.VisionComponent>
 	</object-array>
 
-	<object-array>
-		<components.Type>ACTOR</components.Type>
+	<object-array id="2">
 		<components.DescriptionComponent>
 			<name>rat</name>
 		</components.DescriptionComponent>
@@ -262,15 +249,10 @@
 		<components.MovementComponent>
 			<movementType>WALK</movementType>
 		</components.MovementComponent>
-		<components.TimedComponent>
-			<nextTurn>0</nextTurn>
-			<isActive>true</isActive>
-		</components.TimedComponent>>
 		<components.InventoryComponent>
 			<inv/>
 		</components.InventoryComponent>
 		<components.Faction>ANIMALS</components.Faction>
-		<components.InventoryComponent/>
 		<components.StatusEffectsComponent/>
 		<components.SkillsComponent/>
 		<components.AIComponent>

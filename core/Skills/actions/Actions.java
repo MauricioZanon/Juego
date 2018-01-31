@@ -217,9 +217,8 @@ public abstract class Actions {
 	 * @param featurePos la posición del feature usado
 	 */
 	public static void useFeature(Entity actor, PositionComponent featurePos) {
-		Entity feature = featurePos.getTile().get(Type.FEATURE);
-		if(feature != null) {
-			FeaturesEffects.use(feature, actor);
+		if(featurePos.getTile().get(Type.FEATURE) != null) {
+			FeaturesEffects.use(featurePos, actor);
 		}
 		endTurn(actor, ActionType.USE_ITEM);
 	}
