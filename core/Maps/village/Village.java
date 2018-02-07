@@ -13,6 +13,7 @@ import RNG.RNG;
 import components.PositionComponent;
 import components.Type;
 import dungeon.Room;
+import eventSystem.Map;
 import factories.FeatureFactory;
 import factories.TerrainFactory;
 import main.Blueprint;
@@ -20,7 +21,6 @@ import main.Location;
 import main.RoomFactory;
 import main.Tile;
 import world.Direction;
-import world.Explorer;
 
 public class Village extends Location{
 	
@@ -33,13 +33,13 @@ public class Village extends Location{
 
 	@Override
 	public void buildLocation(PositionComponent pos) {
-		Set<Tile> villageArea = Explorer.getCircundatingArea(100, pos.getTile(), true);
+		Set<Tile> villageArea = Map.getCircundatingAreaAsSet(100, pos.getTile(), true);
 		clearArea(villageArea);
 		createRoads(pos);
 		refillArea(villageArea);
 		
 		Predicate<Tile> isGrassFloor = t -> t.get(Type.TERRAIN) != null && descMap.get(t.get(Type.TERRAIN)).name.equals("grass floor");
-		Predicate<Tile> adjacentToGrassFloor = t -> Explorer.isOrthogonallyAdjacent(t, isGrassFloor);
+		Predicate<Tile> adjacentToGrassFloor = t -> Map.isOrthogonallyAdjacent(t, isGrassFloor);
 		while(houses.size() < 10) {
 			Tile roadAnchor = RNG.getRandom(road, adjacentToGrassFloor);
 			createHouse(roadAnchor);
@@ -69,23 +69,23 @@ public class Village extends Location{
 		PositionComponent auxPos = pos.clone();
 		
 		//Camino al este
-		roadTiles.addAll(Explorer.getSquareArea(auxPos, roadsWidth, roadLength));
+		roadTiles.addAll(Map.getSquareAreaAsSet(auxPos, roadsWidth, roadLength));
 		
 		//Camino al norte
 		roadLength = RNG.nextGaussian(40, 20);
-		roadTiles.addAll(Explorer.getSquareArea(auxPos, roadLength, roadsWidth));
+		roadTiles.addAll(Map.getSquareAreaAsSet(auxPos, roadLength, roadsWidth));
 		
 		//Camino al oeste
 		auxPos = pos.clone();
 		roadLength = RNG.nextGaussian(40, 20);
 		auxPos.coord[0] -= roadLength;
-		roadTiles.addAll(Explorer.getSquareArea(auxPos, roadsWidth, roadLength));
+		roadTiles.addAll(Map.getSquareAreaAsSet(auxPos, roadsWidth, roadLength));
 		
 		//Camino al sur
 		auxPos = pos.clone();
 		roadLength = RNG.nextGaussian(40, 20);
 		auxPos.coord[1] -= roadLength;
-		roadTiles.addAll(Explorer.getSquareArea(auxPos, roadLength, roadsWidth));
+		roadTiles.addAll(Map.getSquareAreaAsSet(auxPos, roadLength, roadsWidth));
 		
 		if(validRoad(roadTiles)) {
 			roadTiles.forEach(t -> {
@@ -106,7 +106,7 @@ public class Village extends Location{
 	}
 	
 	private void createHouse(Tile roadAnchor) {
-		Set<Tile> tiles = Explorer.getOrthogonalTiles(roadAnchor, t -> descMap.get(t.get(Type.TERRAIN)).name.equals("grass floor"));
+		Set<Tile> tiles = Map.getOrthogonalTiles(roadAnchor, t -> descMap.get(t.get(Type.TERRAIN)).name.equals("grass floor"));
 
 		Tile initialHouseTile = RNG.getRandom(tiles);
 		
@@ -126,7 +126,7 @@ public class Village extends Location{
 		char[][] bpArray = bp.getArray();
 		for(int i = 0; i < bpArray.length; i++) {
 			for(int j = 0; j < bpArray[0].length; j++) {
-				Tile tile = Explorer.getTile(startingPos.coord[0] + i, startingPos.coord[1] + j, startingPos.coord[2]);
+				Tile tile = Map.getTile(startingPos.coord[0] + i, startingPos.coord[1] + j, startingPos.coord[2]);
 				if(tile == null || !validHouseTile(tile)) return;
 				
 				char symbol = bpArray[i][j];

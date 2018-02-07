@@ -1,6 +1,6 @@
 package world;
 
-import java.util.HashSet;
+import com.mygdx.juego.StateSaver;
 
 import RNG.Noise;
 import RNG.RNG;
@@ -10,27 +10,18 @@ import components.PositionComponent;
 import dungeon.DungeonBuilder;
 import dungeon.DungeonBuilder.DungeonSize;
 import dungeon.DungeonBuilder.DungeonType;
-import field.FieldLevel;
-import forest.ForestLevel;
-import main.Chunk;
-import main.Location;
-import mountain.MountainLevel;
 import village.Village;
 
 public class World {
 	
-	public final int WIDTH = 15;
-	public final int HEIGHT = 15;
-	public final int DEPTH = 10;
-	
 	public static final int CHUNK_SIZE = 25;
+	private static String name = "world";
 	
-	private Chunk[][][] map = new Chunk[WIDTH][HEIGHT][DEPTH];;
-	private float[][] elevationMap;
-	private HashSet<Location> locations = new HashSet<>();
+	public static void main(String[] args) {
+		createOverworld();
+	}
 	
 	public void initialize(){
-//		WorldSaver.createSaveFile();
 		long time = System.currentTimeMillis();
 		
 		createOverworld();
@@ -40,42 +31,29 @@ public class World {
 		System.out.println("Tiempo de creación del World Map: " + (System.currentTimeMillis() - time));
 	}
 	
-	private void createOverworld() {
-		elevationMap = Noise.generatePerlinNoise(WIDTH, HEIGHT, 3);
-		Noise.print(elevationMap);
+	private static void createOverworld() {
+		float[][] elevationMap = Noise.generatePerlinNoise(1000, 1000, 3);
+//		float[][] temperatureMap = Noise.generatePerlinNoise(1000, 1000, 3);
 		
-		int villages = 0;
-		int fields = 0;
-		int forests = 0;
-		int mountains = 0;
+		int[][] initialMap = new int[1000][1000];
 		
-		for(int x = 0; x < WIDTH; x++){
-			for(int y = 0; y < HEIGHT; y++){
-				int elevation = (int) (elevationMap[x][y]*10);
-				switch(elevation) {
-				case 1:
-				case 2:
-				case 3:
-				case 4: //campo, desierto, planicie, aldea, etc
-					map[x][y][0] = new FieldLevel(x, y);
-					fields++;
-					break;
-				case 5:
-				case 6: //bosque, jungla, pantano, etc
-					map[x][y][0] = new ForestLevel(x, y);
-					forests++;
-					break;
-				case 7:
-				case 8:
-				default: //montaña, meseta, volcan, etc
-					map[x][y][0] = new MountainLevel(x, y);
-					mountains++;
-					break;
+		for(int x = 0; x < 5; x++){
+			for(int y = 0; y < 5; y++){
+				float elevation = elevationMap[x][y];
+				if(elevation <= 0.4f) {
+					initialMap[x][y] = 1; // fields
+				}
+				else if(elevation <= 0.7f) {
+					initialMap[x][y] = 2; // forests
+				}
+				else{
+					initialMap[x][y] = 3; // mountains
 				}
 			}
 		}
 		
-		System.out.println("villages " + villages + " fields " + fields + " forests " + forests + " mountains " + mountains);
+		StateSaver.createInitialSave(initialMap);
+		
 	}
 	
 	private void createLocations() {
@@ -85,12 +63,8 @@ public class World {
 
 	}
 
-	public Chunk[][][] getMap() {
-		return map;
-	}
-	
-	public HashSet<Location> getLocations() {
-		return locations;
+	public static String getName() {
+		return name;
 	}
 	
 }

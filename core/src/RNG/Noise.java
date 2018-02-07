@@ -3,18 +3,17 @@ package RNG;
 public abstract class Noise {
 	
 	public static void main(String[] args) {
-		
-		print(generatePerlinNoise(50, 250, 3));
-		
+		print(generatePerlinNoise(1000, 1000, 3));
 	}
 	
 	public static void print(float[][] noise) {
 		for(int j = 0; j < noise[0].length; j++){
 			for(int i = 0; i < noise.length; i++){
-				int h = (int) (noise[i][j]*10);
-				System.out.print(h);
+//				int h = (int) (noise[i][j]*10);
+				if(noise[i][j] <= 0)
+				System.out.print(noise[i][j]);
 			}
-			System.out.println();
+//			System.out.println();
 		}
 	}
 	

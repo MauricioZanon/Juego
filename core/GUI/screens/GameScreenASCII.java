@@ -1,7 +1,6 @@
 package screens;
 
 import static components.Mappers.graphMap;
-import static components.Mappers.playerMap;
 import static tools.FontLoader.fonts;
 
 import java.util.ArrayList;
@@ -20,10 +19,11 @@ import com.mygdx.juego.Juego;
 import components.GraphicsComponent;
 import components.HealthComponent;
 import components.Mappers;
+import components.PositionComponent;
 import components.Type;
 import console.Console;
 import console.Message;
-import eventSystem.ActiveMap;
+import eventSystem.Map;
 import main.Tile;
 import main.Tile.Visibility;
 import menus.Menu;
@@ -64,7 +64,7 @@ public class GameScreenASCII implements Screen{
 		drawMiniMap();
 		drawStats();
 		drawTime();
-		drawFrame();
+		drawSideBar();
 		if(menu == null) {
 			drawMarker();
 			drawMarkedTileInfo();
@@ -78,7 +78,11 @@ public class GameScreenASCII implements Screen{
 	private int mapCenter = (gameScreenSize / 2) - 8;
 	
 	private void drawMap(){
-		Tile[][] map = ActiveMap.getMap();
+		PositionComponent pos = Mappers.posMap.get(Juego.player).clone();
+		pos.coord[0] -= 50;
+		pos.coord[1] -= 50;
+		
+		Tile[][] map = Map.getSquareAreaAsArray(pos, 100, 100);
 		int center = map.length/2;
 		
 		//Dibujar fondo
@@ -141,10 +145,14 @@ public class GameScreenASCII implements Screen{
 	private final int MINI_MAP_SIZE = Gdx.graphics.getWidth() - gameScreenSize;
 	private final int SIDE_BAR_X_POS = gameScreenSize + 8;
 	private final int MINI_MAP_Y_POS = 0;
-	private final float PIXEL_SIZE = (float)MINI_MAP_SIZE / (float) ActiveMap.MAP_SIZE_IN_TILES;
+	private final float PIXEL_SIZE = (float)MINI_MAP_SIZE / 100;
 	
 	private void drawMiniMap(){
-		Tile[][] map = ActiveMap.getMap();
+		PositionComponent pos = Mappers.posMap.get(Juego.player).clone();
+		pos.coord[0] -= 50;
+		pos.coord[1] -= 50;
+		
+		Tile[][] map = Map.getSquareAreaAsArray(pos, 100, 100);
 		
 		shapeRenderer.begin(ShapeType.Filled);
 		
@@ -153,9 +161,11 @@ public class GameScreenASCII implements Screen{
 				Tile tile = map[x][y];
 				if(tile == null || tile.getVisibility() == Visibility.NOT_VIEWED)
 					shapeRenderer.setColor(Color.BLACK);
+				else if(tile.getVisibility() == Visibility.VIEWED)
+					shapeRenderer.setColor(Color.DARK_GRAY);
 				else{
 					Color color;
-					if(tile.get(Type.ACTOR) != null && playerMap.has(tile.get(Type.ACTOR))) {
+					if(tile.get(Type.ACTOR) != null) {
 						color = graphMap.get(tile.get(Type.ACTOR)).frontColor;
 					}
 					else if(tile.get(Type.FEATURE) != null) {
@@ -174,7 +184,7 @@ public class GameScreenASCII implements Screen{
 		shapeRenderer.end();
 	}
 	
-	private void drawFrame(){
+	private void drawSideBar(){
 		shapeRenderer.begin(ShapeType.Line);
 
 		int y = MINI_MAP_Y_POS + MINI_MAP_SIZE;
@@ -226,6 +236,7 @@ public class GameScreenASCII implements Screen{
 		
 		batch.begin();
 		font.draw(batch, Time.getHour(), HEALTH_BAR_X_POS, HEALTH_BAR_Y_POS - 50);
+		font.draw(batch, Mappers.posMap.get(Juego.player).toString(), HEALTH_BAR_X_POS, HEALTH_BAR_Y_POS - 100);
 		batch.end();
 	}
 	
@@ -293,11 +304,12 @@ public class GameScreenASCII implements Screen{
 	}
 
 	public Tile getClickedTile(){
-		int X0 = ActiveMap.getMap().length / 2;
-		int Y0 = ActiveMap.getMap().length / 2;
+		int X0 = Mappers.posMap.get(Juego.player).coord[0];
+		int Y0 = Mappers.posMap.get(Juego.player).coord[1];
+		int Z0 = Mappers.posMap.get(Juego.player).coord[2];
 		int clickX = X0 + (markerX / TILE_SIZE) - gameScreenSize / (2 * TILE_SIZE);
 		int clickY = Y0 + (markerY / TILE_SIZE) - gameScreenSize / (2 * TILE_SIZE);
-		try {return ActiveMap.getMap()[clickX][clickY];}
+		try {return Map.getTile(clickX, clickY, Z0);}
 		catch(ArrayIndexOutOfBoundsException e) {return null;}
 	}
 	

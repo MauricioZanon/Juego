@@ -7,6 +7,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 
+import FOV.VisionCalculator;
 import RNG.RNG;
 import components.AIComponent;
 import components.AttributeComponent;
@@ -23,7 +24,7 @@ import components.StatusEffectsComponent;
 import components.TimedComponent;
 import components.Type;
 import components.VisionComponent;
-import eventSystem.ActiveMap;
+import eventSystem.Map;
 import eventSystem.EventSystem;
 import factories.FeatureFactory;
 import factories.ItemFactory;
@@ -56,10 +57,7 @@ public class Juego extends Game {
     	gameThread = new Thread(() -> {
     		while(true) {
     			long tiempo = System.currentTimeMillis();
-    			ENGINE.update(0);
-    			try {
-					Thread.sleep((1000/30) - (System.currentTimeMillis() - tiempo));
-				} catch (InterruptedException | IllegalArgumentException e) {}
+    			ENGINE.update((1000/60) - (System.currentTimeMillis() - tiempo));
     		}
     	});
     	gameThread.setName("game thread");
@@ -87,7 +85,6 @@ public class Juego extends Game {
     	NPCFactory.initialize();
     }
 
-    
     private static void spawnPlayer(){
     	player.add(ENGINE.createComponent(PlayerComponent.class));
     	
@@ -145,24 +142,23 @@ public class Juego extends Game {
 		player.add(ENGINE.createComponent(MovementComponent.class));
 		
 		PositionComponent playerPos = new PositionComponent(200, 200, 0);
-		playerPos.getTile().put(player);
 		player.add(playerPos);
 		
-		ActiveMap.refresh();
+		Map.refresh();
+		playerPos.getTile().put(player);
+		
+		VisionCalculator.calculateVision(player);
     }
 
 	@Override
     public void dispose() {
-		
     }
 
     @Override
     public void render() {
     	long tiempo = System.currentTimeMillis();
     	GRAPHICS_ENGINE.update((1000/60) - (System.currentTimeMillis() - tiempo));
-    	try {
-			Thread.sleep((1000/60) - (System.currentTimeMillis() - tiempo));
-		} catch (InterruptedException | IllegalArgumentException e) {}
+//    	ENGINE.update((1000/60) - (System.currentTimeMillis() - tiempo));
     }
 
     @Override

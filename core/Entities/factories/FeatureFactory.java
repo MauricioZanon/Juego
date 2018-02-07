@@ -6,7 +6,7 @@ import com.badlogic.ashley.core.Entity;
 
 import components.Type;
 
-public abstract class FeatureFactory extends Factory{
+public abstract class FeatureFactory extends EntityFactory{
 	
 	private static HashMap<Integer, String> featuresId;
 	private static HashMap<String, String> featuresName;

@@ -7,9 +7,9 @@ import com.badlogic.ashley.core.Entity;
 import RNG.RNG;
 import components.PositionComponent;
 import components.Type;
+import eventSystem.Map;
 import factories.TerrainFactory;
 import main.Tile;
-import world.Explorer;
 
 public class Miner {
 	
@@ -27,11 +27,11 @@ public class Miner {
 	}
 	
 	public void dig() {
-		Set<Tile> validTiles = Explorer.getOrthogonalTiles(position.getTile(), t -> t.get(Type.TERRAIN) == null);
+		Set<Tile> validTiles = Map.getOrthogonalTiles(position.getTile(), t -> t.get(Type.TERRAIN) == null);
 		Tile tile = null;
 		if(validTiles.isEmpty()) {
 			for(Tile floor : floorTiles) {
-				if(Explorer.isAdjacent(floor, t -> !t.isTransitable())){
+				if(Map.isAdjacent(floor, t -> !t.isTransitable())){
 					tile = floor;
 					break;
 				}

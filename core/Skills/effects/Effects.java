@@ -5,7 +5,7 @@ import static components.Mappers.posMap;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.MathUtils;
 
-import RNG.RNG;
+import FOV.VisionCalculator;
 import actions.Actions;
 import components.DescriptionComponent;
 import components.HealthComponent;
@@ -14,7 +14,7 @@ import components.PositionComponent;
 import components.StatusEffectsComponent;
 import components.Type;
 import console.MessageFactory;
-import eventSystem.ActiveMap;
+import eventSystem.Map;
 import main.Tile;
 
 public abstract class Effects {
@@ -29,10 +29,10 @@ public abstract class Effects {
 	}
 	
 	//TODO Debería buscar un tile en las cercanías del actor, no del active map
-	public static void randomTeleport(Entity actor){
-		PositionComponent newPos = RNG.getRandom(ActiveMap.getMap(), t -> t.isTransitable() && t.get(Type.ACTOR) == null).getPos();
-		teleport(actor, newPos);
-	}
+//	public static void randomTeleport(Entity actor){
+//		PositionComponent newPos = RNG.getRandom(ActiveMap.getMap(), t -> t.isTransitable() && t.get(Type.ACTOR) == null).getPos();
+//		teleport(actor, newPos);
+//	}
 	
 	public static void teleport(Entity actor, PositionComponent newPos){
 		move(actor, newPos);
@@ -49,12 +49,16 @@ public abstract class Effects {
 		Tile oldTile = posMap.get(entity).getTile();
 		Tile newTile = newPos.getTile();
 		oldTile.remove(entity);
-		newTile.put(entity);
 		
-		if(playerMap.has(entity) && newTile.get(Type.ITEM) != null) {
-			String[] extraText = {newTile.get(Type.ITEM).getComponent(DescriptionComponent.class).name}; 
-			MessageFactory.loadMessage("StandingOnItem", extraText);
+		if(playerMap.has(entity)) {
+			Map.refresh();
+			if(newTile.get(Type.ITEM) != null) {
+				String[] extraText = {newTile.get(Type.ITEM).getComponent(DescriptionComponent.class).name}; 
+				MessageFactory.loadMessage("StandingOnItem", extraText);
+			}
 		}
+		newTile.put(entity);
+		VisionCalculator.calculateVision(entity);
 	}
 	
 	/**

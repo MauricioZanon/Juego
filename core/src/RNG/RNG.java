@@ -1,9 +1,7 @@
 package RNG;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Random;
-import java.util.Set;
 import java.util.function.Predicate;
 
 import com.badlogic.gdx.graphics.Color;
@@ -26,6 +24,7 @@ public abstract class RNG {
 		return array[nextInt(array.length)][nextInt(array[0].length)];
 	}
 	
+	//TODO quitar el loop infinito
 	public static <T> T getRandom(T[][] array, Predicate<T> cond){
 		while(true){
 			T t = getRandom(array);
@@ -36,48 +35,20 @@ public abstract class RNG {
 	@SuppressWarnings("unchecked")
 	public static <T> T getRandom(Collection<T> collection){
 		if(collection.isEmpty()) return null;
-		T[] array = (T[]) collection.toArray();
-		return array[nextInt(array.length)];
+		int index = nextInt(collection.size());
+		return (T) collection.toArray()[index];
 	}
 	
 	public static <T> T getRandom(Collection<T> collection, Predicate<T> cond){
-		if(collection.isEmpty()) return null;
-		while(true){
+		while(!collection.isEmpty()){
 			T t = getRandom(collection);
 			if(cond.test(t)){
 				return t;
+			}else {
+				collection.remove(t);
 			}
 		}
-	}
-	
-	@SuppressWarnings("unchecked")
-	public static <T> T getRandom(Set<T> set){
-		if(set.isEmpty()) return null;
-		T[] array = (T[]) set.toArray();
-		return array[nextInt(array.length)];
-	}
-
-	public static <T> T getRandom(Set<T> set, Predicate<T> cond){
-		if(set.isEmpty()) return null;
-		while(true){
-			T t = getRandom(set);
-			if(cond.test(t)){
-				return t;
-			}
-		}
-	}
-	
-	public static <T> T getRandom(List<T> list){
-		if(list.isEmpty()) return null;
-		return list.get(nextInt(list.size()));
-	}
-	
-	public static <T> T getRandom(List<T> list, Predicate<T> cond){
-		if(list.isEmpty()) return null;
-		while(true){
-			T t = getRandom(list);
-			if(cond.test(t)) return t;
-		}
+		return null;
 	}
 	
 	/**========================================================================

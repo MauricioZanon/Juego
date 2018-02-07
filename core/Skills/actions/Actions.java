@@ -29,7 +29,7 @@ import effects.DamageCalculator;
 import effects.Effects;
 import effects.Trigger;
 import entities.QuaffEffects;
-import eventSystem.ActiveMap;
+import eventSystem.Map;
 import eventSystem.EventSystem;
 import features.FeaturesEffects;
 import main.Tile;
@@ -37,7 +37,6 @@ import main.Tile.Visibility;
 import pathFind.Path;
 import pathFind.PathFinder;
 import world.Direction;
-import world.Explorer;
 
 /*TODO hacer que los actores tengan una lista de enums con las acciones que pueden realizar y crear un método en esta clase
  * que les permita usarlas según el parámetro que manden
@@ -52,7 +51,7 @@ public abstract class Actions {
 	 */
 	public static void bump(PositionComponent oldPos, Direction dir){
 		Tile oldTile = oldPos.getTile();
-		PositionComponent newPos = new PositionComponent(oldPos.coord[0] + dir.movX, oldPos.coord[1] + dir.movY, oldPos.getGz());
+		PositionComponent newPos = Map.getPosition(oldPos, dir);
 		Tile newTile = newPos.getTile();
 		Entity actor = oldTile.get(Type.ACTOR);
 		
@@ -65,7 +64,7 @@ public abstract class Actions {
 		else if(Mappers.transitableMap.get(newTile.get(Type.TERRAIN)).allowedMovementType.contains(MovementType.WALK)){
 			walk(oldPos, newPos);
 		}
-		if(!newTile.isTransitable() && Mappers.playerMap.get(actor) == null){
+		if(!newTile.isTransitable() && !Mappers.playerMap.has(actor)){
 			endTurn(actor, ActionType.WAIT);
 		}
 	}
@@ -174,7 +173,7 @@ public abstract class Actions {
 	 */
 	public static void explore(Entity actor){
 		Tile origin = posMap.get(actor).getTile();
-		Tile destination = Explorer.getClosestTile(origin, t -> t.getVisibility() == Visibility.NOT_VIEWED);
+		Tile destination = Map.getClosestTile(origin, t -> t.getVisibility() == Visibility.NOT_VIEWED);
 		if(destination != null) {
 			movMap.get(actor).path = PathFinder.findPath(origin.getPos(), destination.getPos(), actor);
 			followPath(actor);
@@ -232,7 +231,6 @@ public abstract class Actions {
 		timedMap.get(entity).nextTurn += (int) attMap.get(entity).get(action.asociatedStat);
 		Mappers.statusEffectsMap.get(entity).affect(Trigger.END_TURN);
 		if(playerMap.has(entity)) {
-			ActiveMap.refresh();
 			Juego.ENGINE.getSystem(EventSystem.class).waitingForPlayerInput = false;
 		}
 	}

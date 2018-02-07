@@ -5,8 +5,8 @@ import java.util.Set;
 
 import components.Mappers;
 import components.Type;
+import eventSystem.Map;
 import main.Tile;
-import world.Explorer;
 
 public class Room {
 	
@@ -23,8 +23,8 @@ public class Room {
 	public Set<Tile> getDoorTiles(){
 		Set<Tile> doorTiles = new HashSet<>();
 		for(Tile tile : floorTiles) {
-			for(Tile adjacentTile : Explorer.getAdjacentTiles(tile, t -> t.get(Type.FEATURE) != null)) {
-				if(Mappers.descMap.get(adjacentTile.get(Type.FEATURE)).name.equals("door")) {
+			for(Tile adjacentTile : Map.getAdjacentTiles(tile, t -> t.get(Type.FEATURE) != null)) {
+				if(Mappers.descMap.get(adjacentTile.get(Type.FEATURE)).name.contains("door")) {
 					doorTiles.add(adjacentTile);
 				}
 			}

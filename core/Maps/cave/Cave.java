@@ -8,11 +8,11 @@ import com.badlogic.ashley.core.Entity;
 import RNG.RNG;
 import components.PositionComponent;
 import components.Type;
+import eventSystem.Map;
 import factories.FeatureFactory;
 import factories.TerrainFactory;
 import main.MultiLevelLocation;
 import main.Tile;
-import world.Explorer;
 
 
 public class Cave extends MultiLevelLocation{
@@ -50,7 +50,7 @@ public class Cave extends MultiLevelLocation{
 				if(RNG.nextInt(500) == 1) {
 					PositionComponent newMinerPos = null;
 					for(Tile tile : floorTiles) {
-						if(Explorer.isOrthogonallyAdjacent(tile, t -> t.get(Type.TERRAIN) == null)) {
+						if(Map.isOrthogonallyAdjacent(tile, t -> t.get(Type.TERRAIN) == null)) {
 							newMinerPos = tile.getPos();
 							if(newMinerPos == null) { 
 								continue;
@@ -71,8 +71,8 @@ public class Cave extends MultiLevelLocation{
 		Entity dirtWall = TerrainFactory.get("dirt wall");
 		Entity dirtFloor = TerrainFactory.get("dirt floor");
 		for(Tile tile : floorTiles) {
-			for(Tile emptyTile : Explorer.getAdjacentTiles(tile, t -> t.get(Type.TERRAIN) == null)) {
-				if(Explorer.countOrthogonalAdjacency(emptyTile, t -> !t.isTransitable()) != 0) {
+			for(Tile emptyTile : Map.getAdjacentTiles(tile, t -> t.get(Type.TERRAIN) == null)) {
+				if(Map.countOrthogonalAdjacency(emptyTile, t -> !t.isTransitable()) != 0) {
 					emptyTile.put(dirtWall);
 				}else {
 					emptyTile.put(dirtFloor);

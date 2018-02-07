@@ -10,7 +10,7 @@ import components.Mappers;
 import components.TimedComponent;
 import components.Type;
 
-public abstract class NPCFactory extends Factory{
+public abstract class NPCFactory extends EntityFactory{
 	
 	private static HashMap<Integer, String> NPCsId;
 	private static HashMap<String, String> NPCsName;

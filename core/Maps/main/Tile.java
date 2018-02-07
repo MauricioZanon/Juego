@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.function.Predicate;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.ComponentMapper;
@@ -131,6 +132,12 @@ public class Tile {
 	public <T extends Component> Set<Entity> getEntities(ComponentMapper<T> componentMapper){
 		Set<Entity> entities = getEntities();
 		entities.removeIf(e -> !componentMapper.has(e));
+		return entities;
+	}
+	
+	public Set<Entity> getEntities(Predicate<Entity> cond){
+		Set<Entity> entities = getEntities();
+		entities.removeIf(e -> !cond.test(e));
 		return entities;
 	}
 	

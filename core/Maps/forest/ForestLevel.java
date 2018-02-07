@@ -1,7 +1,6 @@
 package forest;
 
 import java.util.function.Consumer;
-import static com.mygdx.juego.Juego.world;
 
 import com.badlogic.ashley.core.Entity;
 
@@ -11,12 +10,13 @@ import factories.FeatureFactory;
 import factories.TerrainFactory;
 import main.Chunk;
 import main.Tile;
+import world.World;
 
 public class ForestLevel extends Chunk{
 	
 	public ForestLevel(int posX, int posY){
-		globalPosX = posX;
-		globalPosY = posY;
+		gx = posX;
+		gy = posY;
 		
 		Entity grassFloor = TerrainFactory.get("grass floor");
 		Consumer<Tile> createGrassFloor = t -> t.put(grassFloor);
@@ -27,7 +27,7 @@ public class ForestLevel extends Chunk{
 	
 	@Override
 	protected void buildLevel() {
-		for(int i = 0; i < RNG.nextGaussian(world.CHUNK_SIZE / 2, world.CHUNK_SIZE / 10); i++){
+		for(int i = 0; i < RNG.nextGaussian(World.CHUNK_SIZE / 2, World.CHUNK_SIZE / 10); i++){
 			Tile tile = RNG.getRandom(chunkMap, t -> t.isTransitable() && t.get(Type.FEATURE) == null);
 			
 			Entity feature = FeatureFactory.createFeature("tree");

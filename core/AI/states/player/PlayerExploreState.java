@@ -12,10 +12,10 @@ import com.badlogic.gdx.ai.msg.Telegram;
 import actions.Actions;
 import components.PositionComponent;
 import console.MessageFactory;
+import eventSystem.Map;
 import main.Tile;
 import main.Tile.Visibility;
 import pathFind.PathFinder;
-import world.Explorer;
 
 public class PlayerExploreState implements State<Entity>{
 	
@@ -45,7 +45,7 @@ public class PlayerExploreState implements State<Entity>{
 	
 	private void getNewExploringPath(Entity entity) {
 		PositionComponent pos = posMap.get(entity);
-		Tile destination = Explorer.getClosestTile(pos.getTile(), t -> t.getVisibility() == Visibility.NOT_VIEWED);
+		Tile destination = Map.getClosestTile(pos.getTile(), t -> t.getVisibility() == Visibility.NOT_VIEWED);
 		if(destination == null) {
 			MessageFactory.createMessage("There is nowhere else to explore");
 			AIMap.get(entity).setState("wandering");

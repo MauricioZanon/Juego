@@ -6,7 +6,7 @@ import com.badlogic.ashley.core.Entity;
 
 import components.Type;
 
-public abstract class TerrainFactory extends Factory {
+public abstract class TerrainFactory extends EntityFactory {
 	
 	private static HashMap<Integer, String> terrainsId;
 	private static HashMap<String, String> terrainsName;

@@ -12,6 +12,7 @@ import components.Mappers;
 import components.PositionComponent;
 import components.Type;
 import dungeon.DungeonBuilder.DungeonSize;
+import eventSystem.Map;
 import factories.ItemFactory;
 import factories.NPCFactory;
 import factories.TerrainFactory;
@@ -19,7 +20,6 @@ import main.Blueprint;
 import main.RoomFactory;
 import main.Tile;
 import world.Direction;
-import world.Explorer;
 
 public class DungeonWaterLevel extends DungeonLevel{
 	
@@ -58,7 +58,7 @@ public class DungeonWaterLevel extends DungeonLevel{
 	}
 	
 	private void createRoom(PositionComponent anchorPos) {
-		Tile emptyTile = RNG.getRandom(Explorer.getOrthogonalTiles(anchorPos.getTile(), t -> t.get(Type.TERRAIN) == null));
+		Tile emptyTile = RNG.getRandom(Map.getOrthogonalTiles(anchorPos.getTile(), t -> t.get(Type.TERRAIN) == null));
 		if(emptyTile == null) return;
 		Direction bpDirection = Direction.get(anchorPos, emptyTile.getPos());
 		Blueprint bp;
@@ -89,7 +89,7 @@ public class DungeonWaterLevel extends DungeonLevel{
 		char[][] bpArray = bp.getArray();
 		for(int i = 0; i < bpArray.length; i++) {
 			for(int j = 0; j < bpArray[0].length; j++) {
-				Tile tile = Explorer.getTile(startingPos.coord[0] + i, startingPos.coord[1] + j, startingPos.coord[2]);
+				Tile tile = Map.getTile(startingPos.coord[0] + i, startingPos.coord[1] + j, startingPos.coord[2]);
 				
 				char symbol = bpArray[i][j];
 				switch(symbol) {
@@ -140,14 +140,14 @@ public class DungeonWaterLevel extends DungeonLevel{
 	private void buildRoom(Set<Tile> roomTiles) {
 		for(Tile floorTile : roomTiles) {
 			floorTile.put(FLOOR);
-			Explorer.getAdjacentTiles(floorTile, t -> t.get(Type.TERRAIN) == null).forEach(t -> t.put(WALL));
+			Map.getAdjacentTiles(floorTile, t -> t.get(Type.TERRAIN) == null).forEach(t -> t.put(WALL));
 		}
 	}
 	
 	private void putDeepWater(Set<Tile> waterTiles) {
 		for(Tile floorTile : waterTiles) {
 			floorTile.put(TerrainFactory.get("deep water"));
-			Explorer.getAdjacentTiles(floorTile, t -> t.get(Type.TERRAIN) == null).forEach(t -> t.put(WALL));
+			Map.getAdjacentTiles(floorTile, t -> t.get(Type.TERRAIN) == null).forEach(t -> t.put(WALL));
 		}
 	}
 	
@@ -185,7 +185,7 @@ public class DungeonWaterLevel extends DungeonLevel{
 			initialTile.put(shallowWater);
 			int spreadChance = 90;
 			while(RNG.nextInt(100) < spreadChance) {
-				initialTile = RNG.getRandom(Explorer.getOrthogonalTiles(initialTile, isConcreteFloor));
+				initialTile = RNG.getRandom(Map.getOrthogonalTiles(initialTile, isConcreteFloor));
 				if(initialTile == null) break;
 				initialTile.put(shallowWater);
 				spreadChance -= 5;
@@ -201,7 +201,7 @@ public class DungeonWaterLevel extends DungeonLevel{
 			initialTile.put(shallowWater);
 			int spreadChance = 90;
 			while(RNG.nextInt(100) < spreadChance) {
-				initialTile = RNG.getRandom(Explorer.getOrthogonalTiles(initialTile, isConcreteFloor));
+				initialTile = RNG.getRandom(Map.getOrthogonalTiles(initialTile, isConcreteFloor));
 				if(initialTile == null) break;
 				initialTile.put(shallowWater);
 				spreadChance -= 3;

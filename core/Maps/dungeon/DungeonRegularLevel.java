@@ -10,13 +10,13 @@ import RNG.RNG;
 import components.PositionComponent;
 import components.Type;
 import dungeon.DungeonBuilder.DungeonSize;
+import eventSystem.Map;
 import factories.ItemFactory;
 import factories.NPCFactory;
 import main.Blueprint;
 import main.RoomFactory;
 import main.Tile;
 import world.Direction;
-import world.Explorer;
 
 public class DungeonRegularLevel extends DungeonLevel{
 	
@@ -35,7 +35,6 @@ public class DungeonRegularLevel extends DungeonLevel{
 			PositionComponent anchorPos = RNG.getRandom(availableAnchors).getPos();
 			createRoom(anchorPos);
 		}
-		
 		putDoors();
 		putStairs();
 		putEnemies();
@@ -62,7 +61,7 @@ public class DungeonRegularLevel extends DungeonLevel{
 	 * @param anchorPos: Es la posición en el nivel a la que estará unida la nueva habitación
 	 */
 	private void createRoom(PositionComponent anchorPos) {
-		Tile emptyTile = RNG.getRandom(Explorer.getOrthogonalTiles(anchorPos.getTile(), t -> t.get(Type.TERRAIN) == null));
+		Tile emptyTile = RNG.getRandom(Map.getOrthogonalTiles(anchorPos.getTile(), t -> t.get(Type.TERRAIN) == null));
 		if(emptyTile == null) return;
 		Direction bpDirection = Direction.get(anchorPos, emptyTile.getPos());
 		Blueprint bp = RoomFactory.createRoom("Dungeon rooms", bpDirection);
@@ -87,7 +86,7 @@ public class DungeonRegularLevel extends DungeonLevel{
 		char[][] bpArray = bp.getArray();
 		for(int i = 0; i < bpArray.length; i++) {
 			for(int j = 0; j < bpArray[0].length; j++) {
-				Tile tile = Explorer.getTile(startingPos.coord[0] + i, startingPos.coord[1] + j, startingPos.coord[2]);
+				Tile tile = Map.getTile(startingPos.coord[0] + i, startingPos.coord[1] + j, startingPos.coord[2]);
 				char symbol = bpArray[i][j];
 				switch(symbol) {
 				case '.':
@@ -131,7 +130,7 @@ public class DungeonRegularLevel extends DungeonLevel{
 	private void buildRoom(Set<Tile> roomTiles) {
 		for(Tile floorTile : roomTiles) {
 			floorTile.put(FLOOR);
-			Explorer.getAdjacentTiles(floorTile, t -> t.get(Type.TERRAIN) == null).forEach(t -> t.put(WALL));
+			Map.getAdjacentTiles(floorTile, t -> t.get(Type.TERRAIN) == null).forEach(t -> t.put(WALL));
 		}
 	}
 	

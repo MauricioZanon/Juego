@@ -11,11 +11,11 @@ import RNG.RNG;
 import components.Mappers;
 import components.PositionComponent;
 import components.Type;
+import eventSystem.Map;
 import factories.FeatureFactory;
 import factories.TerrainFactory;
 import main.MultiLevelLocation;
 import main.Tile;
-import world.Explorer;
 
 public class Cave2 extends MultiLevelLocation{
 	
@@ -40,7 +40,7 @@ public class Cave2 extends MultiLevelLocation{
 		PositionComponent firstPos = startingPos.clone();
 		firstPos.coord[2]++;
 		
-		Set<Tile> area = Explorer.getCircundatingArea(40, firstPos.getTile(), true);
+		Set<Tile> area = Map.getCircundatingAreaAsSet(40, firstPos.getTile(), true);
 		for(Tile tile : area) {
 			if(RNG.nextInt(100) < 55) {
 				tile.put(DIRT_WALL);
@@ -65,11 +65,11 @@ public class Cave2 extends MultiLevelLocation{
 		
 		for(Tile tile : tiles) {
 			if(descMap.get(tile.get(Type.TERRAIN)).name.equals("dirt wall") &&
-					Explorer.countAdjacency(tile, t -> descMap.get(t.get(Type.TERRAIN)).name.equals("dirt wall")) < 4) {
+					Map.countAdjacency(tile, t -> descMap.get(t.get(Type.TERRAIN)).name.equals("dirt wall")) < 4) {
 				newFloorTiles.add(tile);
 			}
 			else if(descMap.get(tile.get(Type.TERRAIN)).name.equals("dirt floor") && 
-					Explorer.countAdjacency(tile, t -> descMap.get(t.get(Type.TERRAIN)).name.equals("dirt wall")) >= 6) {
+					Map.countAdjacency(tile, t -> descMap.get(t.get(Type.TERRAIN)).name.equals("dirt wall")) >= 6) {
 				newWallTiles.add(tile);
 			}
 		}
@@ -89,7 +89,7 @@ public class Cave2 extends MultiLevelLocation{
 	private void putWalls() {
 		Entity wall = TerrainFactory.get("dirt wall");
 		for(Tile tile : floorTiles) {
-			for(Tile emptyTile : Explorer.getAdjacentTiles(tile, t -> t.get(Type.TERRAIN) == null)) {
+			for(Tile emptyTile : Map.getAdjacentTiles(tile, t -> t.get(Type.TERRAIN) == null)) {
 				emptyTile.put(wall);
 			}
 		}

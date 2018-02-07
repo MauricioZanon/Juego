@@ -13,8 +13,8 @@ public class MountainLevel extends Chunk{
 	private final float BOULDER_DENSITY = 0.3f;
 	
 	public MountainLevel(int posX, int posY){
-		globalPosX = posX;
-		globalPosY = posY;
+		gx = posX;
+		gy = posY;
 		Entity floor = TerrainFactory.get("dirt floor");
 		Consumer<Tile> createDirtFloor = t -> t.put(floor);
 		fillLevel(createDirtFloor);

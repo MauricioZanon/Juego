@@ -8,7 +8,7 @@ import main.Tile;
 
 public class VisionComponent implements Component{
 	
-	public int sightRange = 50;
+	public int sightRange = 49;
 	
 	public HashSet<Tile> visionMap = new HashSet<>();
 	public HashSet<Tile> enemyTiles = new HashSet<>();

@@ -7,9 +7,9 @@ import com.mygdx.juego.Juego;
 
 import actions.Actions;
 import components.PositionComponent;
+import eventSystem.Map;
 import eventSystem.EventSystem;
 import world.Direction;
-import world.Explorer;
 
 public class UseInput implements InputProcessor{
 	
@@ -18,7 +18,7 @@ public class UseInput implements InputProcessor{
 		switch(keycode){
 			case Keys.ESCAPE:
 				Gdx.input.setInputProcessor(new GameInput());
-				break;
+				return true;
 		}
 		return false;
 	}
@@ -35,34 +35,32 @@ public class UseInput implements InputProcessor{
 		
 		switch(character){
 			case '1':
-				usedEntityPos = Explorer.getPosition(playerPos, Direction.SW);
-				break;
+				usedEntityPos = Map.getPosition(playerPos, Direction.SW);
+				return true;
 			case '2':
-				usedEntityPos = Explorer.getPosition(playerPos, Direction.S);
-				break;
+				usedEntityPos = Map.getPosition(playerPos, Direction.S);
+				return true;
 			case '3':
-				usedEntityPos = Explorer.getPosition(playerPos, Direction.SE);
-				break;
+				usedEntityPos = Map.getPosition(playerPos, Direction.SE);
+				return true;
 			case '4':
-				usedEntityPos = Explorer.getPosition(playerPos, Direction.W);
-				break;
+				usedEntityPos = Map.getPosition(playerPos, Direction.W);
+				return true;
 			case '5':
 				usedEntityPos = playerPos;
-				break;
+				return true;
 			case '6':
-				usedEntityPos = Explorer.getPosition(playerPos, Direction.E);
-				break;
+				usedEntityPos = Map.getPosition(playerPos, Direction.E);
+				return true;
 			case '7':
-				usedEntityPos = Explorer.getPosition(playerPos, Direction.NW);
-				break;
+				usedEntityPos = Map.getPosition(playerPos, Direction.NW);
+				return true;
 			case '8':
-				usedEntityPos = Explorer.getPosition(playerPos, Direction.N);
+				usedEntityPos = Map.getPosition(playerPos, Direction.N);
 				break;
 			case '9':
-				usedEntityPos = Explorer.getPosition(playerPos, Direction.NE);
-				break;
-			default:
-				break;
+				usedEntityPos = Map.getPosition(playerPos, Direction.NE);
+				return true;
 		}
 		if(usedEntityPos != null) {
 			Actions.useFeature(Juego.player, usedEntityPos);

@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.Comparator;
 
 import com.badlogic.ashley.core.Entity;
-import com.mygdx.juego.Juego;
 
 import components.PositionComponent;
+import eventSystem.Map;
 import main.Tile;
-import world.Explorer;
+import world.World;
 
 public abstract class PathFinder {
 
-	private static final int MAX_DISTANCE = Juego.world.CHUNK_SIZE;
+	private static final int MAX_DISTANCE = World.CHUNK_SIZE;
 	private static Comparator<Node> comparador = new Comparator<Node>(){
 		@Override
 		public int compare(Node n1, Node n2) {
@@ -34,7 +34,7 @@ public abstract class PathFinder {
 		}
 		ArrayList<Node> open = new ArrayList<Node>();
 		ArrayList<Node> closed = new ArrayList<Node>();
-		Node currentNode = new Node(start, null, 0, Explorer.getDistance(start, end));
+		Node currentNode = new Node(start, null, 0, Map.getDistance(start, end));
 		open.add(currentNode);
 		
 		while(!open.isEmpty()){
@@ -47,26 +47,26 @@ public abstract class PathFinder {
 			}
 			
 			// Evaluando tiles adyacentes
-			for(Tile tile : Explorer.getOrthogonalTiles(currentNode.pos.getTile(), t -> t.isTransitable())){
+			for(Tile tile : Map.getOrthogonalTiles(currentNode.pos.getTile(), t -> t.isTransitable())){
 				PositionComponent neighborPos = tile.getPos();
-				double g = Explorer.getDistance(start, neighborPos);
+				double g = Map.getDistance(start, neighborPos);
 				if(g > MAX_DISTANCE){
 					continue;
 				}
-				double h = currentNode.h + Explorer.getDistance(currentNode.pos, end);
+				double h = currentNode.h + Map.getDistance(currentNode.pos, end);
 				Node neighborNode = new Node(neighborPos, currentNode, g, h);
 				
 				if(!nodePresent(closed, neighborNode) && (!nodePresent(open, neighborNode) || h < getNode(open, neighborNode).h)){
 					open.add(neighborNode);
 				}
 			}
-			for(Tile tile : Explorer.getDiagonalTiles(currentNode.pos.getTile(), t -> t.isTransitable())){
+			for(Tile tile : Map.getDiagonalTiles(currentNode.pos.getTile(), t -> t.isTransitable())){
 				PositionComponent neighborPos = tile.getPos();
-				double g = Explorer.getDistance(start, neighborPos);
+				double g = Map.getDistance(start, neighborPos);
 				if(g > MAX_DISTANCE){
 					continue;
 				}
-				double h = currentNode.h + Explorer.getDistance(currentNode.pos, end);
+				double h = currentNode.h + Map.getDistance(currentNode.pos, end);
 				Node neighborNode = new Node(neighborPos, currentNode, g, h);
 				
 				if(!nodePresent(closed, neighborNode) && (!nodePresent(open, neighborNode) || h < getNode(open, neighborNode).h)){

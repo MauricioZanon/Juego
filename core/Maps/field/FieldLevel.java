@@ -11,8 +11,9 @@ import main.Tile;
 public class FieldLevel extends Chunk{
 	
 	public FieldLevel(int posX, int posY){
-		globalPosX = posX;
-		globalPosY = posY;
+		super();
+		gx = posX;
+		gy = posY;
 		Entity grassFloor = TerrainFactory.get("grass floor");
 		Consumer<Tile> createGrassFloor = t -> t.put(grassFloor);
 		fillLevel(createGrassFloor);

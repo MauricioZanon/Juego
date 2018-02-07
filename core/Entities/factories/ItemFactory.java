@@ -9,7 +9,7 @@ import RNG.RNG;
 import components.PickupableComponent;
 import components.Type;
 
-public abstract class ItemFactory extends Factory{
+public abstract class ItemFactory extends EntityFactory{
 	
 	//TODO: buscar una mejor forma de separar los tipos de items
 	

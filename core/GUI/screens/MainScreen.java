@@ -80,7 +80,7 @@ public class MainScreen implements Screen{
 					Juego.startGame();
 					break;
 				case Keys.L:
-					StateLoader.load();
+//					StateLoader.load();
 					Juego.startGame();
 					break;
 				case Keys.O:

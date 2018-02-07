@@ -3,8 +3,8 @@ package components;
 import com.badlogic.ashley.core.Component;
 import com.mygdx.juego.Juego;
 
+import eventSystem.Map;
 import main.Tile;
-import world.Explorer;
 import world.World;
 
 public class PositionComponent implements Cloneable, Component{
@@ -43,7 +43,7 @@ public class PositionComponent implements Cloneable, Component{
 	}
 	
 	public Tile getTile(){
-		return Explorer.getTile(this);
+		return Map.getTile(coord[0], coord[1], coord[2]);
 	}
 	
 	@Override
