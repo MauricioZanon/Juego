@@ -8,6 +8,10 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import com.badlogic.ashley.core.Entity;
+
+import components.Mappers;
+import eventSystem.Map;
 import main.Chunk;
 import main.Tile;
 
@@ -38,15 +42,23 @@ public class StateSaver {
 																	"ChunkCoord TEXT PRIMARY KEY UNIQUE NOT NULL, " + 
 																	"Entities  TEXT NOT NULL);");
 			createWorldTable.execute();
+			PreparedStatement createPlayerTable = con.prepareStatement("CREATE TABLE Player( " +
+																		"Position TEXT NOT NULL, " +
+																		"HP TEXT, " +
+																		"Stats TEXT NOT NULL, " +
+																		"Equipment TEXT, " +
+																		"Effects TEXT, " +
+																		"Items TEXT);");
+			createPlayerTable.execute();
 			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static void save(Chunk chunk) {
+	public static void save(Chunk chunk, Connection con) {
 		long tiempo = System.currentTimeMillis();
-		Connection con = connect();
+		
 		boolean failed = false;
 		do {
 			try{
@@ -55,7 +67,7 @@ public class StateSaver {
 				String entities = "";
 				for(int x = 0; x < map.length; x++) {
 					for(int y = 0; y < map[0].length; y++) {
-						entities += map[x][y].getSaveString();
+						entities += map[x][y].serialize();
 					}
 				}
 				failed = insert(chunkCoord, entities, con);
@@ -63,10 +75,48 @@ public class StateSaver {
 				continue;
 			}
 		}while(failed);
+	
+		System.out.println("Time to save " + (System.currentTimeMillis() - tiempo) / 1000 + " segundos");
+	}
+	
+	public static void save(Chunk chunk) {
+		Connection con = connect();
+		save(chunk, con);
 		try {
 			con.close();
 		} catch (SQLException e) {}
-		System.out.println("Time to save " + (System.currentTimeMillis() - tiempo) / 1000 + " segundos");
+	}
+	
+	public static void saveState() {
+		Connection con = connect();
+		for(Chunk chunk : Map.getChunksInMemory().values()) {
+			save(chunk, con);
+		}
+		
+		Entity player = Juego.player;
+		
+		String playerPos = Mappers.posMap.get(player).serialize();
+		String playerHP = Mappers.healthMap.get(player).serialize();
+		String playerStats = Mappers.attMap.get(player).serialize();
+		String playerEquipment = Mappers.equipMap.get(player).serialize();
+		String playerEffects = Mappers.statusEffectsMap.get(player).serialize();
+		String playerItems = Mappers.inventoryMap.get(player).serialize();
+		
+		try {
+        	PreparedStatement pstmt = con.prepareStatement("REPLACE INTO Player(Position, HP, Stats, Equipment, Effects, Items) VALUES(?, ?, ?, ?, ?, ?)");
+        	pstmt.setString(1, playerPos);
+        	pstmt.setString(2, playerHP);
+        	pstmt.setString(3, playerStats);
+        	pstmt.setString(4, playerEquipment);
+        	pstmt.setString(5, playerEffects);
+        	pstmt.setString(6, playerItems);
+        	pstmt.executeUpdate();
+        	con.close();
+		} catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+		
+		
 	}
 	
 	public static boolean insert(String chunkCoord, String entities, Connection con) {

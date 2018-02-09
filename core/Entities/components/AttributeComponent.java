@@ -26,4 +26,12 @@ public class AttributeComponent implements Component{
 		return att.keySet().contains(a) ? att.get(a) : 0;
 	}
 	
+	public String serialize() {
+		String result = "";
+		for(String key : att.keySet()) {
+			result += key + "-" + Float.toString(att.get(key)) + "/";
+		}
+		return result;
+	}
+	
 }

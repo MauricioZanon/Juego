@@ -367,4 +367,7 @@ public abstract class Map {
 		return mapInTiles;
 	}
 
+	public static LinkedHashMap<String, Chunk> getChunksInMemory() {
+		return chunksInMemory;
+	}
 }

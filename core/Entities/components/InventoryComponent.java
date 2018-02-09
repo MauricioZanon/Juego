@@ -76,5 +76,18 @@ public class InventoryComponent implements Component{
 	public Entity removeAll(Entity item) {
 		return removeAll(descMap.get(item).name);
 	}
+
+	public String serialize() {
+		String result = "";
+		for(Entity item : inv.values()) {
+			result += item.flags;
+			int quantity = (int) Mappers.attMap.get(item).get("quantity");
+			if(quantity > 1) {
+				result += "-" + quantity;
+			}
+			result += "/";
+		}
+		return result;
+	}
 	
 }

@@ -12,6 +12,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.graphics.Color;
 import com.mygdx.juego.Juego;
+import com.mygdx.juego.StateSaver;
 
 import actions.ActionType;
 import actions.Actions;
@@ -20,8 +21,8 @@ import components.Mappers;
 import components.PositionComponent;
 import components.Type;
 import console.MessageFactory;
-import eventSystem.Map;
 import eventSystem.EventSystem;
+import eventSystem.Map;
 import factories.ItemFactory;
 import factories.TerrainFactory;
 import main.Tile;
@@ -60,7 +61,7 @@ public class GameInput implements InputProcessor{
 				Actions.pickUp(Map.getTile(playerCoord[0], playerCoord[1], playerCoord[2]));
 				return true;
 			case Keys.L:
-//				StateSaver.save();
+				StateSaver.saveState();
 				return true;
 			case Keys.E:
 				MessageFactory.createMessage("Use what?");

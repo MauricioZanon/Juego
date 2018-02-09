@@ -7,9 +7,6 @@ import RNG.RNG;
 import cave.Cave;
 import cave.Cave.CaveSize;
 import components.PositionComponent;
-import dungeon.DungeonBuilder;
-import dungeon.DungeonBuilder.DungeonSize;
-import dungeon.DungeonBuilder.DungeonType;
 import village.Village;
 
 public class World {
@@ -51,9 +48,7 @@ public class World {
 				}
 			}
 		}
-		
 		StateSaver.createInitialSave(initialMap);
-		
 	}
 	
 	private void createLocations() {

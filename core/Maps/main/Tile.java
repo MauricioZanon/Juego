@@ -219,17 +219,17 @@ public class Tile {
 		return message; 
 	}
 	
-	public String getSaveString() {
+	public String serialize() {
 		String string = pos.toString();
-		try {string += "." + terrain.flags;
+		try {string += "-" + terrain.flags;
 		}catch(NullPointerException e) {}
-		try {string += "." + actor.flags;
+		try {string += "-" + actor.flags;
 		}catch(NullPointerException e) {}
 //		try {items.forEach(i -> string += "-I:" + descMap.get(i).name);
 //		}catch(NullPointerException e) {}
-		try {string += "." + feature.flags;
+		try {string += "-" + feature.flags;
 		}catch(NullPointerException e) {}
-		string += "-";
+		string += "/";
 		
 		return string;
 	}

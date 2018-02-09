@@ -36,5 +36,13 @@ public class EquipmentComponent implements Component{
 		}
 		return value;
 	}
+	
+	public String serialize() {
+		String result = "";
+		for(Entity equipment : wearedEquipment.values()) {
+			result += equipment.flags + "/";
+		}
+		return result;
+	}
 
 }

@@ -29,6 +29,7 @@ import org.xml.sax.SAXException;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.mygdx.juego.Juego;
+import com.mygdx.juego.StateLoader;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
@@ -67,8 +68,11 @@ public abstract class EntityFactory {
 		else if(id >= 1000) {
 			return TerrainFactory.get(id);
 		}
-		else {
+		else if(id > 0){
 			return NPCFactory.createNPC(id);
+		}
+		else {
+			return StateLoader.loadPlayer();
 		}
 	}
 	

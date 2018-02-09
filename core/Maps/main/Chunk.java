@@ -32,14 +32,15 @@ public class Chunk{
     	gx = coords[0];
     	gy = coords[1];
     	gz = coords[2];
-    	String[] tileStrings = chunkString.split("-");
+    	String[] tileStrings = chunkString.split("/");
     	for(int i = 0; i < tileStrings.length; i++) {
-    		String[] entitiesStrings = tileStrings[i].split(".");
+    		String[] entitiesStrings = tileStrings[i].split("-");
     		int[] pos = Arrays.stream(entitiesStrings[0].split(":")).mapToInt(Integer::parseInt).toArray();
     		Tile t = new Tile(new PositionComponent(pos));
     		for(int j = 1; j < entitiesStrings.length; j++) {
-				t.put(EntityFactory.create(Integer.parseInt(entitiesStrings[j])));
+    			t.put(EntityFactory.create(Integer.parseInt(entitiesStrings[j])));
     		}
+    		chunkMap[pos[0]%chunkMap.length][pos[1]%chunkMap[0].length] = t;
     	}
     }
 	

@@ -10,7 +10,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.juego.Juego;
 import com.mygdx.juego.StateLoader;
 
+import components.Mappers;
 import tools.FontLoader;
+import world.World;
 
 public class MainScreen implements Screen{
 	
@@ -77,14 +79,14 @@ public class MainScreen implements Screen{
 			public boolean keyDown(int keycode) {
 				switch(keycode){
 				case Keys.N:
+					new World().initialize();
 					Juego.startGame();
 					break;
 				case Keys.L:
-//					StateLoader.load();
+					StateLoader.loadPlayer();
 					Juego.startGame();
 					break;
 				case Keys.O:
-//					showOptions();
 					break;
 				case Keys.ESCAPE:
 				case Keys.E:

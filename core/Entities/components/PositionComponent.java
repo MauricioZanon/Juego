@@ -75,5 +75,9 @@ public class PositionComponent implements Cloneable, Component{
 		newComp.coord[2] = coord[2];
 		return newComp;
 	}
+
+	public String serialize() {
+		return coord[0] + ":" + coord[1] + ":" + coord[2];
+	}
 	
 }

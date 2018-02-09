@@ -1,4 +1,4 @@
-package features;
+package entities;
 
 import static components.Mappers.descMap;
 import static components.Mappers.inventoryMap;

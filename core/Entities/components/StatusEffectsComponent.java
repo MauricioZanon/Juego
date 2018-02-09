@@ -33,4 +33,14 @@ public class StatusEffectsComponent implements Component{
 		}
 	}
 
+	public String serialize() {
+		String result = "";
+		for(HashSet<StatusEffect> effects : effects.values()) {
+			for(StatusEffect e : effects) {
+				result += e.getName() + "/";
+			}
+		}
+		return result;
+	}
+
 }

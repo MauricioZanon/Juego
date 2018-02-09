@@ -7,6 +7,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
 
+import com.badlogic.ashley.core.Entity;
+
+import components.AttributeComponent;
+import components.Mappers;
+import components.PositionComponent;
 import forest.ForestLevel;
 import main.Chunk;
 
@@ -36,6 +41,39 @@ public class StateLoader {
 	    	chunk = new ForestLevel(gx, gy);
 		}
 		return chunk;
+	}
+	
+	
+
+	public static Entity loadPlayer() {
+		Entity player = PlayerBuilder.createBasePlayer();
+		
+		Connection con = connect();
+		try {
+			PreparedStatement pstmt = con.prepareStatement("SELECT * FROM Player");
+			ResultSet rs = pstmt.executeQuery();
+			
+			String position = rs.getString("Position");
+			PositionComponent pos = Juego.ENGINE.createComponent(PositionComponent.class);
+			pos.coord = Arrays.stream(position.split(":")).mapToInt(Integer::parseInt).toArray();
+			player.add(pos);
+			
+			String[] hp = rs.getString("HP").split("-");
+			Mappers.healthMap.get(player).maxHP = Float.parseFloat(hp[0]);
+			Mappers.healthMap.get(player).curHP = Float.parseFloat(hp[1]);
+			
+			AttributeComponent att = Mappers.attMap.get(player);
+			String[] stats = rs.getString("Stats").split("/");
+			for(int i = 0; i < stats.length; i++) {
+				String stat[] = stats[i].split("-");
+				att.set(stat[0], Float.parseFloat(stat[1]));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		Juego.player = player;
+		
+		return player;
 	}
 	
 }
