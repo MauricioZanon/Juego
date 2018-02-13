@@ -78,7 +78,6 @@ public abstract class Actions {
 		Tile oldTile = oldPos.getTile();
 		Entity actor = oldTile.get(Type.ACTOR);
 		Effects.move(actor, newPos);
-		Mappers.statusEffectsMap.get(actor).affect(Trigger.MOVES);
 		endTurn(actor, ActionType.WALK);
 	}
 	

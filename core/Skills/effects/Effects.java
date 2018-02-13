@@ -51,14 +51,16 @@ public abstract class Effects {
 		oldTile.remove(entity);
 		
 		if(playerMap.has(entity)) {
+			entity.add(newPos);
 			Map.refresh();
 			if(newTile.get(Type.ITEM) != null) {
 				String[] extraText = {newTile.get(Type.ITEM).getComponent(DescriptionComponent.class).name}; 
 				MessageFactory.loadMessage("StandingOnItem", extraText);
 			}
 		}
-		newTile.put(entity);
 		VisionCalculator.calculateVision(entity);
+		newTile.put(entity);
+		Mappers.statusEffectsMap.get(entity).affect(Trigger.MOVES);
 	}
 	
 	/**

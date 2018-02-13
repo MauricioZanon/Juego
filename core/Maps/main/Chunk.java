@@ -19,8 +19,6 @@ public class Chunk{
 	protected int gx = 0;
 	protected int gy = 0;
 	protected int gz = 0;
-	protected float elevation = 0;
-	protected float temperature = 0;
 	
 	protected Set<Entity> npcList = new HashSet<>();
 	protected Set<Entity> featureList = new HashSet<>();

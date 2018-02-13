@@ -1,5 +1,6 @@
 package cave;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
@@ -13,37 +14,38 @@ import main.Tile;
 
 public class Miner {
 	
-	private static int diggedTiles = 0;
 	private PositionComponent position;
 	private static final Entity DIRT_FLOOR = TerrainFactory.get("dirt floor");
+	protected static Set<Tile> floorTiles = new HashSet<>();
 	
-	private Set<Tile> floorTiles;
+	protected boolean activated = true;
 	
-	public Miner(PositionComponent pos, Set<Tile> floorTiles) {
-		position = pos;
-		this.floorTiles = floorTiles;
-		pos.getTile().put(DIRT_FLOOR);
-		floorTiles.add(pos.getTile());
+	public Miner(Tile startingTile, Tile[][] caveArea) {
+		position = startingTile.getPos();
+		startingTile.put(DIRT_FLOOR);
+		floorTiles.add(startingTile);
 	}
 	
 	public void dig() {
 		Set<Tile> validTiles = Map.getOrthogonalTiles(position.getTile(), t -> t.get(Type.TERRAIN) == null);
-		Tile tile = null;
-		if(validTiles.isEmpty()) {
-			for(Tile floor : floorTiles) {
-				if(Map.isAdjacent(floor, t -> !t.isTransitable())){
-					tile = floor;
-					break;
-				}
-			}
+		if(!validTiles.isEmpty()) {
+			Tile tile = RNG.getRandom(validTiles);
+			tile.put(DIRT_FLOOR);
+			position = tile.getPos();
+			floorTiles.add(tile);
+		}else {
+			activated = false;
 		}
-		else {
-			tile = RNG.getRandom(validTiles);
+	}
+	
+	public Miner reproduce(Tile[][] caveArea) {
+		
+		Tile tile = RNG.getRandom(floorTiles, t -> Map.isOrthogonallyAdjacent(t, ti -> ti.get(Type.TERRAIN) == null));
+		if(tile == null) {
+			return null;
+		}else {
+			return new Miner(tile, caveArea);
 		}
-		tile.put(DIRT_FLOOR);
-		floorTiles.add(tile);
-		position = tile.getPos();
-		diggedTiles++;
 	}
 
 	public PositionComponent getPosition() {
@@ -51,7 +53,7 @@ public class Miner {
 	}
 
 	public static int getDiggedTiles() {
-		return diggedTiles;
+		return floorTiles.size();
 	}
 
 }

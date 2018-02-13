@@ -34,7 +34,11 @@ import world.Direction;
 public class GameInput implements InputProcessor{
 	
 	public static Direction playerDir = null;
-	public static boolean firstPress= false;
+	
+	/**
+	 * El tiempo que paso desde que se empezo a mantener una tecla
+	 */
+	public static int pressTime = 0;
 	
 	public boolean keyDown(int keycode) {
 		if(!Juego.ENGINE.getSystem(EventSystem.class).waitingForPlayerInput) return false;
@@ -42,7 +46,6 @@ public class GameInput implements InputProcessor{
 		List<Entity> entities; //Lista para usar con el EntitySelectMenu
 		List<String> relevantStats; //Lista para usar con el EntitySelectMenu
 		Consumer<Entity> action;
-		PositionComponent playerPos = Mappers.posMap.get(Juego.player);
 		
 		switch(keycode){
 			case Keys.ESCAPE:
@@ -106,47 +109,30 @@ public class GameInput implements InputProcessor{
 				
 			case Keys.NUMPAD_1:
 				playerDir = Direction.SW;
-//				Actions.bump(playerPos, playerDir);
-				firstPress = true;
 				return true;
 			case Keys.NUMPAD_2:
 				playerDir = Direction.S;
-//				Actions.bump(playerPos, playerDir);
-				firstPress = true;
 				return true;
 			case Keys.NUMPAD_3:
 				playerDir = Direction.SE;
-//				Actions.bump(playerPos, playerDir);
-				firstPress = true;
 				return true;
 			case Keys.NUMPAD_4:
 				playerDir = Direction.W;
-//				Actions.bump(playerPos, playerDir);
-				firstPress = true;
 				return true;
 			case Keys.NUMPAD_5:
-				firstPress = true;
 				Actions.endTurn(Juego.player, ActionType.WAIT);
 				return true;
 			case Keys.NUMPAD_6:
 				playerDir = Direction.E;
-//				Actions.bump(playerPos, playerDir);
-				firstPress = true;
 				return true;
 			case Keys.NUMPAD_7:
 				playerDir = Direction.NW;
-//				Actions.bump(playerPos, playerDir);
-				firstPress = true;
 				return true;
 			case Keys.NUMPAD_8:
 				playerDir = Direction.N;
-//				Actions.bump(playerPos, playerDir);
-				firstPress = true;
 				return true;
 			case Keys.NUMPAD_9:
 				playerDir = Direction.NE;
-//				Actions.bump(playerPos, playerDir);
-				firstPress = true;
 				return true;
 		}
 		return false;
@@ -154,11 +140,50 @@ public class GameInput implements InputProcessor{
 
 	public boolean keyUp(int keycode) {
 		playerDir = null;
-		firstPress = false;
+		pressTime = 0;
 		return false;
 	}
 
 	public boolean keyTyped(char character) {
+//		if(playerDir != null) return false;
+//		PositionComponent playerPos = Mappers.posMap.get(Juego.player);
+//		switch(character) {
+//		case '1':
+//			playerDir = Direction.SW;
+//			Actions.bump(playerPos, playerDir);
+//			break;
+//		case '2':
+//			playerDir = Direction.S;
+//			Actions.bump(playerPos, playerDir);
+//			break;
+//		case '3':
+//			playerDir = Direction.SE;
+//			Actions.bump(playerPos, playerDir);
+//			break;
+//		case '4':
+//			playerDir = Direction.W;
+//			Actions.bump(playerPos, playerDir);
+//			break;
+//		case '5':
+//			Actions.endTurn(Juego.player, ActionType.WAIT);
+//			return true;
+//		case '6':
+//			playerDir = Direction.E;
+//			Actions.bump(playerPos, playerDir);
+//			break;
+//		case '7':
+//			playerDir = Direction.NW;
+//			Actions.bump(playerPos, playerDir);
+//			break;
+//		case '8':
+//			playerDir = Direction.N;
+//			Actions.bump(playerPos, playerDir);
+//			break;
+//		case '9':
+//			playerDir = Direction.NE;
+//			Actions.bump(playerPos, playerDir);
+//			break;
+//		}
 		return false;
 	}
 

@@ -41,14 +41,13 @@ public class EventSystem extends EntitySystem {
 			long entityTurn = timedMap.get(entity).nextTurn;
 			if(playerMap.has(entity)) { // Si es el turno del player
 				waitingForPlayerInput = true;
-				if(GameInput.firstPress) {
-					try {
-						Thread.sleep(250);
-					} catch (InterruptedException e) {}
-					GameInput.firstPress = false;
-				}
-				if(GameInput.playerDir != null) {
-					Actions.bump(Mappers.posMap.get(Juego.player), GameInput.playerDir);
+				if((GameInput.pressTime == 0 || GameInput.pressTime >= 10)) {
+					if(GameInput.playerDir != null) {
+						Actions.bump(Mappers.posMap.get(Juego.player), GameInput.playerDir);
+						GameInput.pressTime++;
+					}
+				}else {
+					GameInput.pressTime++;
 				}
 				Time.advanceTime((int) (entityTurn - turn));
 			}
@@ -57,7 +56,6 @@ public class EventSystem extends EntitySystem {
 				timedMap.get(entity).nextTurn = turn + 6;
 			}else {
 				turn = entityTurn;
-//				VisionCalculator.calculateVision(entity);
 				AIMap.get(entity).fsm.update();
 			}
 			timedEntities.add(entity);

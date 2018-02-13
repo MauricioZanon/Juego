@@ -23,10 +23,11 @@ public abstract class Map {
 	
 	private static Chunk[][] mapInChunks = new Chunk[5][5];
 	private static Tile[][] mapInTiles = new Tile[World.CHUNK_SIZE*5][World.CHUNK_SIZE*5];
+	private static int zLevel = 0;
 	
 	public static void refresh(){
 		PositionComponent playerPos = Mappers.posMap.get(Juego.player);
-		Chunk center = mapInChunks[3][3];
+		Chunk center = mapInChunks[2][2];
 		if(center == null || playerPos.getGx() != center.getGx() || playerPos.getGy() != center.getGy() || playerPos.getGz() != center.getGz()) {
 			refreshMap();
 			
@@ -47,14 +48,16 @@ public abstract class Map {
 		int gy0 = playerPos.getGy();
 		int gz0 = playerPos.getGz();
 		
+		zLevel = gz0;
+		
 		int chunkSize = World.CHUNK_SIZE;
 		for(int gx = 0; gx < mapInChunks.length; gx++) {
 			for(int gy = 0; gy < mapInChunks[0].length; gy++) {
 				Chunk chunk;
 				String posString = (gx0 - 2 + gx) + ":" + (gy0 - 2 + gy) + ":" + gz0;
-				if(chunksInMemory.keySet().contains(posString))
+				if(chunksInMemory.keySet().contains(posString)) {
 					chunk = chunksInMemory.get(posString);
-				else {
+				}else {
 					chunk = StateLoader.load(posString);
 					chunksInMemory.put(posString, chunk);
 				}
@@ -79,21 +82,39 @@ public abstract class Map {
 		return chunk;
 	}
 	
-	public static Tile getTile(int x, int y, int z) {
-		try {
-		int x0 = mapInTiles[0][0].getPos().coord[0];
-		int y0 = mapInTiles[0][0].getPos().coord[1];
-			return mapInTiles[x - x0][y - y0];
-		}catch(ArrayIndexOutOfBoundsException | NullPointerException e) {
-			Chunk chunk = getChunk(x/World.CHUNK_SIZE, y/World.CHUNK_SIZE, z);
-			return chunk.getChunkMap()[x%World.CHUNK_SIZE][y%World.CHUNK_SIZE];
-		}
+	public static Chunk getChunk(Tile tile) {
+		int[] coord = tile.getPos().coord;
+		return getChunk(coord[0], coord[1], coord[2]);
 	}
 	
-	public static Tile getTile(int gx, int gy, int gz, int lx, int ly){
-		return getTile(gx+lx, gy+ly, gz);
-//		Chunk chunk = getChunk(gx, gy, gz);
-//		return chunk.getChunkMap()[lx][ly];
+	public static Tile getTile(int x, int y, int z) {
+		if(z == zLevel) {
+			try {
+				int x0 = mapInTiles[0][0].getPos().coord[0];
+				int y0 = mapInTiles[0][0].getPos().coord[1];
+				return mapInTiles[x - x0][y - y0];
+			}catch(ArrayIndexOutOfBoundsException | NullPointerException e) {}
+		}
+		int gx;
+		int gy;
+		int lx;
+		int ly;
+		if(x >= 0) {
+			gx = x/World.CHUNK_SIZE;
+			lx = x%World.CHUNK_SIZE;
+		}else {
+			gx = x/World.CHUNK_SIZE - 1;
+			lx = World.CHUNK_SIZE -1 - Math.abs(x%World.CHUNK_SIZE);
+		}
+		if(y >= 0) {
+			gy = y/World.CHUNK_SIZE;
+			ly = y%World.CHUNK_SIZE;
+		}else {
+			gy = y/World.CHUNK_SIZE - 1;
+			ly = World.CHUNK_SIZE-1 - Math.abs(y%World.CHUNK_SIZE);
+		}
+		Chunk chunk = getChunk(gx, gy, z);
+		return chunk.getChunkMap()[lx][ly];
 	}
 	
 	public static PositionComponent getPosition(PositionComponent oldPos, Direction dir) {
@@ -225,7 +246,9 @@ public abstract class Map {
 					if(!isRound || getDistance(tile.getPos(), evalPos) <= radius){
 						area[i+radius][j+radius] = getTile(x+i, y+j, z);
 					}
-				} catch (ArrayIndexOutOfBoundsException e) {System.out.println("error");continue;}
+				} catch (ArrayIndexOutOfBoundsException e) {
+					continue;
+				}
 			}
 		}
 		return area;
@@ -282,8 +305,8 @@ public abstract class Map {
 		int dx = end.coord[0] - start.coord[0];
 		int dy = start.coord[1] - end.coord[1];
 
-		int sx = dx > 0 ? 1 : -1;
-		int sy = dy < 0 ? 1 : -1;
+		int sx = dx > 0 ? 1 : -1; // slope X
+		int sy = dy < 0 ? 1 : -1; // slope Y
 		
 		dx = Math.abs(dx);
 		dy = Math.abs(dy);
@@ -291,7 +314,7 @@ public abstract class Map {
 		int err = dx - dy;
 		
 		ArrayList<Tile> line = new ArrayList<Tile>();
-		PositionComponent linePos = start.clone();
+		PositionComponent posInLine = start.clone();
 		
 		int[] startCoord = start.coord;
 		int startXinArea;
@@ -305,8 +328,8 @@ public abstract class Map {
 		}
 		double lineLength = getDistance(start, end);
 		do {
-			int[] coord = linePos.coord;
-			line.add(area[startXinArea - startCoord[0] + linePos.coord[0]][startYinArea - startCoord[1] + linePos.coord[1]]);
+			int[] coord = posInLine.coord;
+			line.add(area[Math.abs(startXinArea - startCoord[0] + posInLine.coord[0])][Math.abs(startYinArea - startCoord[1] + posInLine.coord[1])]);
 			 
 			int e2 = 2 * err;
 			
@@ -318,7 +341,7 @@ public abstract class Map {
 				err += dx;
 				coord[1] += sy;
 			}
-		} while (cond.test(linePos.getTile()) && lineLength >= getDistance(start, linePos));
+		} while (cond.test(posInLine.getTile()) && lineLength >= getDistance(start, posInLine));
 		return line;
 	}
 	

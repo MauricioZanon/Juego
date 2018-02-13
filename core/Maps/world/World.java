@@ -1,9 +1,6 @@
 package world;
 
-import com.mygdx.juego.StateSaver;
-
 import RNG.Noise;
-import RNG.RNG;
 import cave.Cave;
 import cave.Cave.CaveSize;
 import components.PositionComponent;
@@ -13,6 +10,7 @@ public class World {
 	
 	public static final int CHUNK_SIZE = 25;
 	private static String name = "world";
+	private static int[][] initialMap = new int[1000][1000];
 	
 	public static void main(String[] args) {
 		createOverworld();
@@ -22,7 +20,6 @@ public class World {
 		long time = System.currentTimeMillis();
 		
 		createOverworld();
-		
 		createLocations();
 		
 		System.out.println("Tiempo de creación del World Map: " + (System.currentTimeMillis() - time));
@@ -31,8 +28,6 @@ public class World {
 	private static void createOverworld() {
 		float[][] elevationMap = Noise.generatePerlinNoise(1000, 1000, 3);
 //		float[][] temperatureMap = Noise.generatePerlinNoise(1000, 1000, 3);
-		
-		int[][] initialMap = new int[1000][1000];
 		
 		for(int x = 0; x < 5; x++){
 			for(int y = 0; y < 5; y++){
@@ -48,14 +43,12 @@ public class World {
 				}
 			}
 		}
-		StateSaver.createInitialSave(initialMap);
 	}
 	
 	private void createLocations() {
 		new Village(new PositionComponent(200, 200, 0));
 //		DungeonBuilder.createDungeon(new PositionComponent(200, 200, 0), DungeonType.REGULAR, DungeonSize.TINY);
-		new Cave(new PositionComponent(250, 250, 0), RNG.getRandom(CaveSize.values()));
-
+		new Cave(new PositionComponent(200, 200, 0), CaveSize.BIG);
 	}
 
 	public static String getName() {

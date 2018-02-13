@@ -156,13 +156,15 @@ public class GameScreenASCII implements Screen{
 		
 		shapeRenderer.begin(ShapeType.Filled);
 		
+		Color viewedColor = new Color(0.05f, 0.05f, 0.05f, 1f);
+		
 		for (int x = 0; x < map.length; x++){
 			for(int y = 0; y < map[0].length; y++){
 				Tile tile = map[x][y];
 				if(tile == null || tile.getVisibility() == Visibility.NOT_VIEWED)
 					shapeRenderer.setColor(Color.BLACK);
 				else if(tile.getVisibility() == Visibility.VIEWED)
-					shapeRenderer.setColor(Color.DARK_GRAY);
+					shapeRenderer.setColor(viewedColor);
 				else{
 					Color color;
 					if(tile.get(Type.ACTOR) != null) {

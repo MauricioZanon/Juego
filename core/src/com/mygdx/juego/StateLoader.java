@@ -14,6 +14,7 @@ import components.Mappers;
 import components.PositionComponent;
 import forest.ForestLevel;
 import main.Chunk;
+import main.EmptyChunk;
 
 public class StateLoader {
 	
@@ -34,17 +35,16 @@ public class StateLoader {
 			PreparedStatement pstmt = con.prepareStatement("SELECT Entities FROM Chunks WHERE ChunkCoord='" + chunkPos + "'");
 			ResultSet rs = pstmt.executeQuery();
 			chunk = new Chunk(chunkPos, rs.getString("Entities"));
-		} catch (SQLException e) {
-			int[] coords = Arrays.stream(chunkPos.split(":")).mapToInt(Integer::parseInt).toArray();
-	    	int gx = coords[0];
-	    	int gy = coords[1];
-	    	chunk = new ForestLevel(gx, gy);
+			return chunk;
+		} catch (SQLException e) {}
+		int[] coord = Arrays.stream(chunkPos.split(":")).mapToInt(Integer::parseInt).toArray();
+		if(coord[2] == 0) {
+			return new ForestLevel(coord[0], coord[1]);
+		}else {
+			return new EmptyChunk(coord[0], coord[1], coord[2]);
 		}
-		return chunk;
 	}
 	
-	
-
 	public static Entity loadPlayer() {
 		Entity player = PlayerBuilder.createBasePlayer();
 		

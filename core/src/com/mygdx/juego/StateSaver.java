@@ -16,7 +16,7 @@ import main.Chunk;
 import main.Tile;
 
 /**
- * TODO: guardar el personaje y el heightMap del World
+ * TODO: guardar el heightMap del World y los lugares de las locations
  *
  */
 public class StateSaver {
@@ -32,7 +32,7 @@ public class StateSaver {
         return conn;
     }
 	
-	public static void createInitialSave(int[][] initialMap) {
+	public static void createInitialSave() {
 		try {
 			Files.deleteIfExists(Paths.get("../core/assets/Saves/world.db"));
 		} catch (IOException e1) {}
@@ -50,33 +50,14 @@ public class StateSaver {
 																		"Effects TEXT, " +
 																		"Items TEXT);");
 			createPlayerTable.execute();
+			PreparedStatement createWorldInfoTable = con.prepareStatement("CREATE TABLE WorldInfo( " +
+																		"Seed INTEGER NOT NULL, " +
+																		"Items TEXT);");
+			createWorldInfoTable.execute();
 			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	public static void save(Chunk chunk, Connection con) {
-		long tiempo = System.currentTimeMillis();
-		
-		boolean failed = false;
-		do {
-			try{
-				Tile[][] map = chunk.getChunkMap();
-				String chunkCoord = Integer.toString(chunk.getGx()) + ":" + Integer.toString(chunk.getGy()) + ":" + Integer.toString(chunk.getGz());
-				String entities = "";
-				for(int x = 0; x < map.length; x++) {
-					for(int y = 0; y < map[0].length; y++) {
-						entities += map[x][y].serialize();
-					}
-				}
-				failed = insert(chunkCoord, entities, con);
-			}catch(NullPointerException e) {
-				continue;
-			}
-		}while(failed);
-	
-		System.out.println("Time to save " + (System.currentTimeMillis() - tiempo) / 1000 + " segundos");
 	}
 	
 	public static void save(Chunk chunk) {
@@ -85,6 +66,25 @@ public class StateSaver {
 		try {
 			con.close();
 		} catch (SQLException e) {}
+	}
+	
+	public static void save(Chunk chunk, Connection con) {
+		boolean failed = false;
+		do {
+				Tile[][] map = chunk.getChunkMap();
+				String chunkCoord = Integer.toString(chunk.getGx()) + ":" + Integer.toString(chunk.getGy()) + ":" + Integer.toString(chunk.getGz());
+				String entities = "";
+				for(int x = 0; x < map.length; x++) {
+					for(int y = 0; y < map[0].length; y++) {
+						try{
+						entities += map[x][y].serialize();
+						}catch(NullPointerException e) {
+							continue;
+						}
+					}
+				}
+				failed = insert(chunkCoord, entities, con);
+		}while(failed);
 	}
 	
 	public static void saveState() {

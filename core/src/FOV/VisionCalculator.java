@@ -24,7 +24,7 @@ public abstract class VisionCalculator {
 	}
 
 	private static void calculatePlayerVision(Entity player) {
-		long tiempo = System.currentTimeMillis();
+//		long tiempo = System.currentTimeMillis();
 		HashSet<Tile> previouslyVisibleTiles = visionMap.get(player).visionMap;
 		HashSet<Tile> newVisibleTiles = new HashSet<>();
 		HashSet<Tile> enemyTiles = visionMap.get(player).enemyTiles;
@@ -51,7 +51,7 @@ public abstract class VisionCalculator {
 		visionMap.get(player).visionMap = newVisibleTiles;
 		visionMap.get(player).enemyTiles = enemyTiles;
 		
-		System.out.println("vision calculator refresh time: " + (System.currentTimeMillis() - tiempo));
+//		System.out.println("vision calculator refresh time: " + (System.currentTimeMillis() - tiempo));
 	}
 	
 
@@ -78,6 +78,7 @@ public abstract class VisionCalculator {
 	
 	private static void calculateLOS(Tile start, Tile end, HashSet<Tile> visibleTiles, HashSet<Tile> enemyTiles, Faction faction, Tile[][] area){
 		for(Tile tile : Map.getStraigthLine(start.getPos(), end.getPos(), area)){
+			if(tile == null) return;
 			visibleTiles.add(tile);
 			if(faction.isEnemy(tile.get(Type.ACTOR))) {
 				enemyTiles.add(tile);

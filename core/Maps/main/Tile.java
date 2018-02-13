@@ -225,8 +225,9 @@ public class Tile {
 		}catch(NullPointerException e) {}
 		try {string += "-" + actor.flags;
 		}catch(NullPointerException e) {}
-//		try {items.forEach(i -> string += "-I:" + descMap.get(i).name);
-//		}catch(NullPointerException e) {}
+		for(Entity item : items) {
+			string += "-" + item.flags;
+		}
 		try {string += "-" + feature.flags;
 		}catch(NullPointerException e) {}
 		string += "/";

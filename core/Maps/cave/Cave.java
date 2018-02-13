@@ -14,63 +14,67 @@ import factories.TerrainFactory;
 import main.MultiLevelLocation;
 import main.Tile;
 
-
 public class Cave extends MultiLevelLocation{
 	
-	private Set<Tile> floorTiles = new HashSet<>();
+	private Tile[][] caveArea;
 	
 	/**Hecho con random walks*/
-	public Cave(PositionComponent startingPos, CaveSize size) {
-		PositionComponent firstPos = startingPos.clone();
-		firstPos.coord[2] += 1;
-		if(firstPos.getTile().get(Type.TERRAIN) != null) return;
+	public Cave(PositionComponent entranceStairPos, CaveSize size) {
+		PositionComponent exitStairPos = entranceStairPos.clone();
+		exitStairPos.coord[2] += 1;
 		
-		Entity stair = FeatureFactory.createFeature("down stair");
-		stair.add(startingPos);
-		startingPos.getTile().put(stair);
+		caveArea = Map.getCircundatingAreaAsArray(size.floorTiles/10, exitStairPos.getTile(), false);
 		
-		Entity stair2 = FeatureFactory.createFeature("up stair");
-		stair2.add(firstPos);
-		firstPos.getTile().put(stair2);
+		dig(caveArea[caveArea.length/2][caveArea[0].length/2], size.floorTiles);
 		
-		dig(firstPos, size.floorTiles);
+		Entity downStair = FeatureFactory.createFeature("down stair");
+		downStair.add(entranceStairPos);
+		entranceStairPos.getTile().put(downStair);
+		
+		Entity upStair = FeatureFactory.createFeature("up stair");
+		upStair.add(exitStairPos);
+		exitStairPos.getTile().put(upStair);
 		
 		putWalls();
+		
+		Miner.floorTiles.clear();
 	}
 	
-	private void dig(PositionComponent startingPos, int floorTilesAmount) {
+	private void dig(Tile startingTile, int floorTilesAmount) {
 		Set<Miner> miners = new HashSet<>();
-		miners.add(new Miner(startingPos, floorTiles));
+		miners.add(new Miner(startingTile, caveArea));
+		miners.add(new Miner(startingTile, caveArea));
+		miners.add(new Miner(startingTile, caveArea));
 		
-		while(floorTiles.size() < floorTilesAmount) {
+		while(Miner.getDiggedTiles() < floorTilesAmount) {
 			Set<Miner> newMiners = new HashSet<>();
+			Set<Miner> deactivatedMiners = new HashSet<>();
 			
 			for(Miner miner : miners) {
+				if(!miner.activated) {
+					deactivatedMiners.add(miner);
+					continue;
+				}
 				miner.dig();
-				if(RNG.nextInt(500) == 1) {
-					PositionComponent newMinerPos = null;
-					for(Tile tile : floorTiles) {
-						if(Map.isOrthogonallyAdjacent(tile, t -> t.get(Type.TERRAIN) == null)) {
-							newMinerPos = tile.getPos();
-							if(newMinerPos == null) { 
-								continue;
-							}
-							break;
-						}
-					}
-					if(newMinerPos != null) {
-						newMiners.add(new Miner(newMinerPos, floorTiles));
+				if(RNG.nextInt(100) == 1) {
+					Miner newMiner = miner.reproduce(caveArea);
+					if(newMiner != null) {
+						newMiners.add(newMiner);
 					}
 				}
 			}
 			miners.addAll(newMiners);
+			miners.removeAll(deactivatedMiners);
+			if(miners.isEmpty()) {
+				miners.add(new Miner(RNG.getRandom(Miner.floorTiles, t -> Map.isOrthogonallyAdjacent(t, ti -> ti.get(Type.TERRAIN) == null)), caveArea));
+			}
 		}
 	}
 	
 	private void putWalls() {
 		Entity dirtWall = TerrainFactory.get("dirt wall");
 		Entity dirtFloor = TerrainFactory.get("dirt floor");
-		for(Tile tile : floorTiles) {
+		for(Tile tile : Miner.floorTiles) {
 			for(Tile emptyTile : Map.getAdjacentTiles(tile, t -> t.get(Type.TERRAIN) == null)) {
 				if(Map.countOrthogonalAdjacency(emptyTile, t -> !t.isTransitable()) != 0) {
 					emptyTile.put(dirtWall);
