@@ -27,8 +27,7 @@ public class Cave2 extends MultiLevelLocation{
 	
 	/**Hecho con cellular automaton, no sirve como cueva pero puede servir para otras cosas, como para agregar spots de pasto o arboles*/
 	public Cave2(PositionComponent startingPos) {
-		Entity stair = FeatureFactory.createFeature("stair");
-		Mappers.graphMap.get(stair).ASCII = ">";
+		Entity stair = FeatureFactory.createFeature("down stair");
 		stair.add(startingPos);
 		startingPos.getTile().put(stair);
 		dig(startingPos);

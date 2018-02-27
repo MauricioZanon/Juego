@@ -45,9 +45,11 @@ public class Chunk{
 	protected void fillLevel(Consumer<Tile> createNewTerrain){
 		int size = World.CHUNK_SIZE;
 		chunkMap = new Tile[size][size];
+		int x0 = gx*chunkMap.length;
+		int y0 = gy*chunkMap.length;
 		for (int x = 0; x < size; x++){
 			for (int y = 0; y < size; y++){
-				chunkMap[x][y] = new Tile(new PositionComponent(gx*chunkMap.length + x, gy*chunkMap.length + y, gz));
+				chunkMap[x][y] = new Tile(new PositionComponent(x0 + x, y0 + y, gz));
 				createNewTerrain.accept(chunkMap[x][y]);
 			}
 		} 

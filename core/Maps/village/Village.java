@@ -128,7 +128,7 @@ public class Village extends Location{
 			for(int j = 0; j < bpArray[0].length; j++) {
 				Tile tile = Map.getTile(startingPos.coord[0] + i, startingPos.coord[1] + j, startingPos.coord[2]);
 				if(tile == null || !validHouseTile(tile)) return;
-				
+
 				char symbol = bpArray[i][j];
 				switch(symbol) {
 				case '.':

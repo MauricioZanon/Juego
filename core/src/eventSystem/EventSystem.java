@@ -34,14 +34,17 @@ public class EventSystem extends EntitySystem {
 		Entity entity = null;
 		do {
 			entity = timedEntities.remove();
+			
 			if(!timedMap.get(entity).isActive) { // Si la entidad no debería actuar se la quita del engine
 				Juego.ENGINE.removeEntity(entity);
 				continue;
 			}
+			
 			long entityTurn = timedMap.get(entity).nextTurn;
+			
 			if(playerMap.has(entity)) { // Si es el turno del player
 				waitingForPlayerInput = true;
-				if((GameInput.pressTime == 0 || GameInput.pressTime >= 10)) {
+				if((GameInput.pressTime == 0 || GameInput.pressTime >= 6)) {
 					if(GameInput.playerDir != null) {
 						Actions.bump(Mappers.posMap.get(Juego.player), GameInput.playerDir);
 						GameInput.pressTime++;

@@ -21,6 +21,7 @@ import components.PositionComponent;
 import components.TransitableComponent;
 import components.TranslucentComponent;
 import components.Type;
+import world.Time;
 
 public class Tile {
 	
@@ -32,9 +33,9 @@ public class Tile {
 	private LinkedList<Entity> items = new LinkedList<>();
 	private Entity terrain = null;
 	
-	private float lightLevel = 0.15f;
+	private float lightLevel = 0.1f;
 	
-	private Visibility visibility = Visibility.NOT_VIEWED;
+	private Visibility visibility = Visibility.VISIBLE;
 	
 	public Tile(PositionComponent p){
 		pos = p;
@@ -170,12 +171,11 @@ public class Tile {
 	
 	public float getLightLevel() {
 		return 1f;
-//		if(pos.coord[2] == 0) return Math.max(Time.getLightLevel(), lightLevel);
-//		else return lightLevel;
+//		return pos.coord[2] == 0 ? Math.max(Time.getLightLevel(), lightLevel) : lightLevel;
 	}
 
 	public void setLightLevel(float lightLevel) {
-		this.lightLevel = MathUtils.clamp(this.lightLevel + lightLevel, 0.15f, 1f);
+		this.lightLevel = MathUtils.clamp(this.lightLevel + lightLevel, 0.1f, 1f);
 	}
 
 	public Visibility getVisibility() {

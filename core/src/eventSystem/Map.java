@@ -12,6 +12,7 @@ import com.mygdx.juego.StateLoader;
 
 import components.Mappers;
 import components.PositionComponent;
+import factories.EntityFactory;
 import main.Chunk;
 import main.Tile;
 import world.Direction;
@@ -24,6 +25,7 @@ public abstract class Map {
 	private static Chunk[][] mapInChunks = new Chunk[5][5];
 	private static Tile[][] mapInTiles = new Tile[World.CHUNK_SIZE*5][World.CHUNK_SIZE*5];
 	private static int zLevel = 0;
+	private static int chunkSize = World.CHUNK_SIZE;
 	
 	public static void refresh(){
 		PositionComponent playerPos = Mappers.posMap.get(Juego.player);
@@ -50,7 +52,6 @@ public abstract class Map {
 		
 		zLevel = gz0;
 		
-		int chunkSize = World.CHUNK_SIZE;
 		for(int gx = 0; gx < mapInChunks.length; gx++) {
 			for(int gy = 0; gy < mapInChunks[0].length; gy++) {
 				Chunk chunk;
@@ -100,18 +101,26 @@ public abstract class Map {
 		int lx;
 		int ly;
 		if(x >= 0) {
-			gx = x/World.CHUNK_SIZE;
-			lx = x%World.CHUNK_SIZE;
+			gx = x/chunkSize;
+			lx = x%chunkSize;
 		}else {
-			gx = x/World.CHUNK_SIZE - 1;
-			lx = World.CHUNK_SIZE -1 - Math.abs(x%World.CHUNK_SIZE);
+			gx = x/chunkSize - 1;
+			lx = chunkSize - Math.abs(x%chunkSize);
+			if(lx % chunkSize == 0) {
+				gx++;
+				lx =0;
+			}
 		}
 		if(y >= 0) {
-			gy = y/World.CHUNK_SIZE;
-			ly = y%World.CHUNK_SIZE;
+			gy = y/chunkSize;
+			ly = y%chunkSize;
 		}else {
-			gy = y/World.CHUNK_SIZE - 1;
-			ly = World.CHUNK_SIZE-1 - Math.abs(y%World.CHUNK_SIZE);
+			gy = y/chunkSize - 1;
+			ly = chunkSize - Math.abs(y%chunkSize);
+			if(ly % chunkSize == 0) {
+				gy++;
+				ly =0;
+			}
 		}
 		Chunk chunk = getChunk(gx, gy, z);
 		return chunk.getChunkMap()[lx][ly];
@@ -353,7 +362,7 @@ public abstract class Map {
 	 */
 	public static Tile getClosestTile(Tile origin, Predicate<Tile> cond){
 		Set<Tile> possibleTiles = getAdjacentTiles(origin, t -> t.isTransitable());
-		for(int i = 0; i < World.CHUNK_SIZE; i++){
+		for(int i = 0; i < chunkSize; i++){
 			Set<Tile> newSet = new HashSet<>();
 			for(Tile tile : possibleTiles){
 				if(cond.test(tile)){

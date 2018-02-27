@@ -4,6 +4,9 @@ import RNG.Noise;
 import cave.Cave;
 import cave.Cave.CaveSize;
 import components.PositionComponent;
+import dungeon.DungeonBuilder;
+import dungeon.DungeonBuilder.DungeonSize;
+import dungeon.DungeonBuilder.DungeonType;
 import village.Village;
 
 public class World {
@@ -46,9 +49,9 @@ public class World {
 	}
 	
 	private void createLocations() {
-		new Village(new PositionComponent(200, 200, 0));
-//		DungeonBuilder.createDungeon(new PositionComponent(200, 200, 0), DungeonType.REGULAR, DungeonSize.TINY);
-		new Cave(new PositionComponent(200, 200, 0), CaveSize.BIG);
+		new Village(new PositionComponent(0, 0, 0));
+//		DungeonBuilder.createDungeon(new PositionComponent(0, 0, 0), DungeonType.REGULAR, DungeonSize.TINY);
+		new Cave(new PositionComponent(0, 0, 0), CaveSize.BIG);
 	}
 
 	public static String getName() {

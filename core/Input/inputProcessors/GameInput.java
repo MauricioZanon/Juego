@@ -1,8 +1,8 @@
 package inputProcessors;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 
 import com.badlogic.ashley.core.Entity;
@@ -27,7 +27,6 @@ import factories.ItemFactory;
 import factories.TerrainFactory;
 import main.Tile;
 import menus.EntitySelectMenu;
-import pathFind.PathFinder;
 import screens.GameScreenASCII;
 import world.Direction;
 
@@ -192,17 +191,18 @@ public class GameInput implements InputProcessor{
 		
 		PositionComponent playerPos = Juego.player.getComponent(PositionComponent.class);
 		Tile clickedTile = GameScreenASCII.getInstance().getClickedTile();
-		ArrayList<Tile> lista;
+		Set<Tile> lista;
 		
 		switch(button){
 			case 0: //click izquierdo
-				Mappers.movMap.get(Juego.player).path = PathFinder.findPath(playerPos, clickedTile.getPos(), Juego.player);
-				State<Entity> exploreState = Mappers.AIMap.get(Juego.player).states.get("wandering");
-				Mappers.AIMap.get(Juego.player).fsm.changeState(exploreState);
-				Juego.ENGINE.getSystem(EventSystem.class).waitingForPlayerInput = false;
+//				Mappers.movMap.get(Juego.player).path = PathFinder.findPath(playerPos, clickedTile.getPos(), Juego.player);
+//				State<Entity> exploreState = Mappers.AIMap.get(Juego.player).states.get("wandering");
+//				Mappers.AIMap.get(Juego.player).fsm.changeState(exploreState);
+//				Juego.ENGINE.getSystem(EventSystem.class).waitingForPlayerInput = false;
+				System.out.println(clickedTile.getPos());
 				return true;
 			case 1: //click derecho
-				lista = Map.getStraigthLine(playerPos, clickedTile.getPos());
+				lista = Map.getOrthogonalTiles(clickedTile, t -> true);
 				for(Tile tile : lista){
 					Entity wall = TerrainFactory.get("concrete floor");
 					tile.put(wall);
