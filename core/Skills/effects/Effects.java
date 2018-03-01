@@ -6,8 +6,8 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.MathUtils;
 
 import FOV.VisionCalculator;
+import RNG.RNG;
 import actions.Actions;
-import components.DescriptionComponent;
 import components.HealthComponent;
 import components.Mappers;
 import components.PositionComponent;
@@ -20,25 +20,25 @@ import main.Tile;
 public abstract class Effects {
 	
 	public static void heal(Entity actor, int amount){
-		HealthComponent HC = Mappers.healthMap.get(actor);
-		HC.curHP = MathUtils.clamp(HC.curHP + amount, 0, HC.maxHP);
+		HealthComponent hc = Mappers.healthMap.get(actor);
+		hc.curHP = MathUtils.clamp(hc.curHP + amount, 0, hc.maxHP);
 		
 		String[] extraText = {Mappers.descMap.get(actor).name};
 		String messageType = playerMap.has(actor) ? "PlayerHeals" : "NpcHeals";
 		MessageFactory.loadMessage(messageType, extraText);
 	}
 	
-	//TODO Debería buscar un tile en las cercanías del actor, no del active map
-//	public static void randomTeleport(Entity actor){
-//		PositionComponent newPos = RNG.getRandom(ActiveMap.getMap(), t -> t.isTransitable() && t.get(Type.ACTOR) == null).getPos();
-//		teleport(actor, newPos);
-//	}
+	public static void randomTeleport(Entity actor){
+		Tile tile = posMap.get(actor).getTile();
+		PositionComponent newPos = RNG.getRandom(Map.getCircundatingAreaAsSet(10, tile, true), t -> t.isTransitable()).getPos();
+		teleport(actor, newPos);
+	}
 	
 	public static void teleport(Entity actor, PositionComponent newPos){
-		move(actor, newPos);
 		if(playerMap.has(actor)){
 			MessageFactory.createMessage("Suddenly you find yourself in another place");
 		}
+		move(actor, newPos);
 	}
 	
 	/**
@@ -54,7 +54,7 @@ public abstract class Effects {
 			entity.add(newPos);
 			Map.refresh();
 			if(newTile.get(Type.ITEM) != null) {
-				String[] extraText = {newTile.get(Type.ITEM).getComponent(DescriptionComponent.class).name}; 
+				String[] extraText = {Mappers.descMap.get(newTile.get(Type.ITEM)).name};
 				MessageFactory.loadMessage("StandingOnItem", extraText);
 			}
 		}

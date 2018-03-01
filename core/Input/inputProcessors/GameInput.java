@@ -52,6 +52,7 @@ public class GameInput implements InputProcessor{
 				return true;
 			case Keys.SPACE:
 				Tile tile = Mappers.posMap.get(Juego.player).getTile();
+				System.out.println(Map.getChunksInMemory().size());
 				tile.put(ItemFactory.createPotion());
 				return true;
 			case Keys.CONTROL_LEFT:
@@ -199,7 +200,7 @@ public class GameInput implements InputProcessor{
 //				State<Entity> exploreState = Mappers.AIMap.get(Juego.player).states.get("wandering");
 //				Mappers.AIMap.get(Juego.player).fsm.changeState(exploreState);
 //				Juego.ENGINE.getSystem(EventSystem.class).waitingForPlayerInput = false;
-				System.out.println(clickedTile.getPos());
+				System.out.println(clickedTile);
 				return true;
 			case 1: //click derecho
 				lista = Map.getOrthogonalTiles(clickedTile, t -> true);

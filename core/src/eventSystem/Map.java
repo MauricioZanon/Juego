@@ -2,30 +2,36 @@ package eventSystem;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.function.Predicate;
 
 import com.badlogic.ashley.core.Entity;
 import com.mygdx.juego.Juego;
 import com.mygdx.juego.StateLoader;
+import com.mygdx.juego.StateSaver;
 
 import components.Mappers;
 import components.PositionComponent;
-import factories.EntityFactory;
 import main.Chunk;
 import main.Tile;
 import world.Direction;
 import world.World;
 
+/**
+ * Guarda los últimos chunks que se usaron y tiene varias formas de encontrar tiles
+ * @author Mauro
+ */
 public abstract class Map {
 	
-	private static LinkedHashMap<String, Chunk> chunksInMemory = new LinkedHashMap<>();
+	private static TreeMap<String, Chunk> chunksInMemory = new TreeMap<>();
+	private static LinkedHashSet<String> lastUsedChunks = new LinkedHashSet<>();
 	
-	private static Chunk[][] mapInChunks = new Chunk[5][5];
-	private static Tile[][] mapInTiles = new Tile[World.CHUNK_SIZE*5][World.CHUNK_SIZE*5];
-	private static int zLevel = 0;
 	private static int chunkSize = World.CHUNK_SIZE;
+	private static Chunk[][] mapInChunks = new Chunk[5][5];
+	private static Tile[][] mapInTiles = new Tile[chunkSize*5][chunkSize*5];
+	private static int zLevel = 0;
 	
 	public static void refresh(){
 		PositionComponent playerPos = Mappers.posMap.get(Juego.player);
@@ -54,19 +60,17 @@ public abstract class Map {
 		
 		for(int gx = 0; gx < mapInChunks.length; gx++) {
 			for(int gy = 0; gy < mapInChunks[0].length; gy++) {
-				Chunk chunk;
-				String posString = (gx0 - 2 + gx) + ":" + (gy0 - 2 + gy) + ":" + gz0;
-				if(chunksInMemory.keySet().contains(posString)) {
-					chunk = chunksInMemory.get(posString);
-				}else {
-					chunk = StateLoader.load(posString);
-					chunksInMemory.put(posString, chunk);
-				}
+				int chunkX = gx0 - 2 + gx;
+				int chunkY = gy0 - 2 + gy;
+				Chunk chunk = getChunk(chunkX, chunkY, gz0);
 				mapInChunks[gx][gy] = chunk;
+				
 				Tile[][] chunkMap = chunk.getChunkMap();
+				int tileMapX0 = gx*chunkSize;
+				int tileMapY0 = gy*chunkSize;
 				for(int lx = 0; lx < chunkSize; lx++) {
 					for(int ly = 0; ly < chunkSize; ly++) {
-						mapInTiles[lx + gx*chunkSize][ly + gy*chunkSize] = chunkMap[lx][ly];
+						mapInTiles[lx + tileMapX0][ly + tileMapY0] = chunkMap[lx][ly];
 					}
 				}
 			}
@@ -79,7 +83,14 @@ public abstract class Map {
 		if(chunk == null) {
 			chunk = StateLoader.load(posString);
 			chunksInMemory.put(posString, chunk);
+			lastUsedChunks.add(posString);
+			if(chunksInMemory.size() > 50) {
+				String chunkPosToRemove = lastUsedChunks.iterator().next();
+				lastUsedChunks.remove(chunkPosToRemove);
+				StateSaver.addChunkToSaveList(chunksInMemory.remove(chunkPosToRemove));
+			}
 		}
+		lastUsedChunks.add(posString);
 		return chunk;
 	}
 	
@@ -232,7 +243,8 @@ public abstract class Map {
 		for(int i = -radius; i <= radius; i++){
 			for (int j = -radius; j <= radius; j++){
 				try {
-					PositionComponent evalPos = new PositionComponent(x+i, y+j, z);
+					PositionComponent evalPos = Juego.ENGINE.createComponent(PositionComponent.class);
+					evalPos.coord = new int[]{x+i, y+j, z};
 					if(!isRound || getDistance(tile.getPos(), evalPos) <= radius){
 						Tile t = getTile(x+i, y+j, z);
 						list.add(t);
@@ -251,7 +263,8 @@ public abstract class Map {
 		for (int i = -radius; i <= radius; i++){
 			for (int j = -radius; j <= radius; j++){
 				try {
-					PositionComponent evalPos = new PositionComponent(x+i, y+j, z);
+					PositionComponent evalPos = Juego.ENGINE.createComponent(PositionComponent.class);
+					evalPos.coord = new int[]{x+i, y+j, z};
 					if(!isRound || getDistance(tile.getPos(), evalPos) <= radius){
 						area[i+radius][j+radius] = getTile(x+i, y+j, z);
 					}
@@ -311,6 +324,11 @@ public abstract class Map {
 	}
 	
 	public static ArrayList<Tile> getStraigthLine(PositionComponent start, PositionComponent end, Tile[][] area, Predicate<Tile> cond){
+		ArrayList<Tile> line = new ArrayList<Tile>();
+		if(start.equals(end)) {
+			line.add(start.getTile());
+			return line;
+		}
 		int dx = end.coord[0] - start.coord[0];
 		int dy = start.coord[1] - end.coord[1];
 
@@ -322,7 +340,6 @@ public abstract class Map {
 		
 		int err = dx - dy;
 		
-		ArrayList<Tile> line = new ArrayList<Tile>();
 		PositionComponent posInLine = start.clone();
 		
 		int[] startCoord = start.coord;
@@ -399,7 +416,7 @@ public abstract class Map {
 		return mapInTiles;
 	}
 
-	public static LinkedHashMap<String, Chunk> getChunksInMemory() {
+	public static TreeMap<String, Chunk> getChunksInMemory() {
 		return chunksInMemory;
 	}
 }

@@ -7,13 +7,13 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 import com.badlogic.ashley.core.Entity;
 
 import components.Mappers;
 import eventSystem.Map;
 import main.Chunk;
-import main.Tile;
 
 /**
  * TODO: guardar el heightMap del World y los lugares de las locations
@@ -21,6 +21,8 @@ import main.Tile;
  */
 public class StateSaver {
 	
+	private static HashMap<String, String> chunksToSave = new HashMap<>();
+		
 	private static Connection connect() {
         Connection conn = null;
         try {
@@ -31,6 +33,11 @@ public class StateSaver {
         } 
         return conn;
     }
+	private static void close(Connection con) {
+		try {
+			con.close();
+		} catch (SQLException e) {}
+	}
 	
 	public static void createInitialSave() {
 		try {
@@ -60,42 +67,41 @@ public class StateSaver {
 		}
 	}
 	
+	public static void save(String chunkCoord, String entities) {
+		Connection con = connect();
+		boolean failed = false;
+		do {
+			failed = insert(chunkCoord, entities, con);
+		}while(failed);
+		close(con);
+	}
+	
 	public static void save(Chunk chunk) {
 		Connection con = connect();
 		save(chunk, con);
-		try {
-			con.close();
-		} catch (SQLException e) {}
+		close(con);
 	}
 	
 	public static void save(Chunk chunk, Connection con) {
 		boolean failed = false;
 		do {
-				Tile[][] map = chunk.getChunkMap();
-				String chunkCoord = Integer.toString(chunk.getGx()) + ":" + Integer.toString(chunk.getGy()) + ":" + Integer.toString(chunk.getGz());
-				String entities = "";
-				for(int x = 0; x < map.length; x++) {
-					for(int y = 0; y < map[0].length; y++) {
-						try{
-						entities += map[x][y].serialize();
-						}catch(NullPointerException e) {
-							continue;
-						}
-					}
-				}
-				failed = insert(chunkCoord, entities, con);
+			String chunkCoord = Integer.toString(chunk.getGx()) + ":" + Integer.toString(chunk.getGy()) + ":" + Integer.toString(chunk.getGz());
+			String entities = chunk.serialize();
+			failed = insert(chunkCoord, entities, con);
 		}while(failed);
 	}
 	
 	public static void saveState() {
+		long tiempo = System.currentTimeMillis();
 		Connection con = connect();
+		System.out.println("chunks en memoria " + Map.getChunksInMemory().values().size());
 		for(Chunk chunk : Map.getChunksInMemory().values()) {
 			save(chunk, con);
 		}
 		
 		Entity player = Juego.player;
 		
-		String playerPos = Mappers.posMap.get(player).serialize();
+		String playerPos = Mappers.posMap.get(player).toString();
 		String playerHP = Mappers.healthMap.get(player).serialize();
 		String playerStats = Mappers.attMap.get(player).serialize();
 		String playerEquipment = Mappers.equipMap.get(player).serialize();
@@ -111,15 +117,17 @@ public class StateSaver {
         	pstmt.setString(5, playerEffects);
         	pstmt.setString(6, playerItems);
         	pstmt.executeUpdate();
-        	con.close();
 		} catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-		
-		
+		close(con);
+		System.out.println("save time " + (System.currentTimeMillis() - tiempo));
 	}
 	
-	public static boolean insert(String chunkCoord, String entities, Connection con) {
+	private static boolean insert(String chunkCoord, String entities, Connection con) {
+		System.out.println(chunkCoord);
+		System.out.println(entities);
+		System.out.println();
         try {
         	PreparedStatement pstmt = con.prepareStatement("REPLACE INTO Chunks(ChunkCoord, Entities) VALUES(?, ?)");
         	pstmt.setString(1, chunkCoord);
@@ -131,4 +139,20 @@ public class StateSaver {
         }
         return false;
     }
+	
+	public static void addChunkToSaveList(Chunk chunk) {
+		String chunkCoord = Integer.toString(chunk.getGx()) + ":" + Integer.toString(chunk.getGy()) + ":" + Integer.toString(chunk.getGz());
+		String entities = chunk.serialize();
+		
+		chunksToSave.put(chunkCoord, entities);
+		
+		if(chunksToSave.size() > 200) {
+			System.out.println("saving...");
+			chunksToSave.forEach((pos, entitiesString) -> save(pos, entitiesString));
+			chunksToSave.clear();
+		}
+		
+	}
+	
+	
 }

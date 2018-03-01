@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import com.badlogic.ashley.core.Entity;
+import com.mygdx.juego.Juego;
 
 import components.PositionComponent;
 import factories.EntityFactory;
@@ -20,25 +21,30 @@ public class Chunk{
 	protected int gy = 0;
 	protected int gz = 0;
 	
-	protected Set<Entity> npcList = new HashSet<>();
-	protected Set<Entity> featureList = new HashSet<>();
-	
 	public Chunk() {}
 	
 	public Chunk(String chunkCoord, String chunkString) {
+		int chunkSize = World.CHUNK_SIZE;
     	int[] coords = Arrays.stream(chunkCoord.split(":")).mapToInt(Integer::parseInt).toArray();
     	gx = coords[0];
     	gy = coords[1];
     	gz = coords[2];
+    	
+    	fillLevel(t -> {});
+    	
     	String[] tileStrings = chunkString.split("/");
     	for(int i = 0; i < tileStrings.length; i++) {
-    		String[] entitiesStrings = tileStrings[i].split("-");
-    		int[] pos = Arrays.stream(entitiesStrings[0].split(":")).mapToInt(Integer::parseInt).toArray();
-    		Tile t = new Tile(new PositionComponent(pos));
+    		String[] entitiesStrings = tileStrings[i].split(",");
+    		
+    		PositionComponent tilePos = Juego.ENGINE.createComponent(PositionComponent.class);
+    		int tileX = i/chunkSize;
+    		int tileY = i%chunkSize;
+    		tilePos.coord = new int[] {gx*chunkSize + tileX, gy*chunkSize + tileY, gz};
+    		Tile t = new Tile(tilePos);
     		for(int j = 1; j < entitiesStrings.length; j++) {
     			t.put(EntityFactory.create(Integer.parseInt(entitiesStrings[j])));
     		}
-    		chunkMap[pos[0]%chunkMap.length][pos[1]%chunkMap[0].length] = t;
+    		chunkMap[tileX][tileY] = t;
     	}
     }
 	
@@ -49,34 +55,15 @@ public class Chunk{
 		int y0 = gy*chunkMap.length;
 		for (int x = 0; x < size; x++){
 			for (int y = 0; y < size; y++){
-				chunkMap[x][y] = new Tile(new PositionComponent(x0 + x, y0 + y, gz));
+				PositionComponent tilePos = Juego.ENGINE.createComponent(PositionComponent.class);
+				tilePos.coord = new int[] {x0+x, y0+y, gz};
+				chunkMap[x][y] = new Tile(tilePos);
 				createNewTerrain.accept(chunkMap[x][y]);
 			}
 		} 
 	}  
 	
 	protected void buildLevel() {};
-	
-	public void addNPC(Tile tile, Entity npc){
-		tile.put(npc);
-		npcList.add(npc);
-	}
-	
-	public void removeNPC(Entity npc){
-		npcList.remove(npc);
-		npc.getComponent(PositionComponent.class).getTile().remove(npc);
-	}
-	
-	public void addFeature(Tile tile, Entity feature){
-		tile.put(feature);
-		featureList.add(feature);
-	}
-	
-	public boolean isBorder(Tile tile){
-		int X = tile.getPos().getLx();
-		int Y = tile.getPos().getLy();
-		return X == 0 || X == chunkMap.length - 1 || Y == 0 || Y == chunkMap[0].length - 1;
-	}
 	
 	public Set<Entity> getEntities(Predicate<Entity> cond){
 		Set<Entity> result = new HashSet<>();
@@ -88,20 +75,26 @@ public class Chunk{
 		return result;
 	}
 	
-	public Set<Entity> getNpcList() {
-		return npcList;
-	}
-
-	public Set<Entity> getFeaturesLocations() {
-		return featureList;
-	}
-
 	public Tile[][] getChunkMap() {
 		return chunkMap;
 	}
 	
 	public String getPosAsString() {
 		return gx + ":" + gy + ":" + gz;
+	}
+	
+	public String serialize() {
+		StringBuilder sb = new StringBuilder();
+		for(int x = 0; x < chunkMap.length; x++) {
+			for(int y = 0; y < chunkMap[0].length; y++) {
+				Tile tile = chunkMap[x][y];
+				if(tile != null) {
+					chunkMap[x][y].serialize(sb);
+				}
+			}
+		}
+		
+		return sb.toString();
 	}
 
 	public int getGx() {

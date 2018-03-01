@@ -29,10 +29,8 @@ public class ForestLevel extends Chunk{
 	protected void buildLevel() {
 		for(int i = 0; i < RNG.nextGaussian(World.CHUNK_SIZE / 2, World.CHUNK_SIZE / 10); i++){
 			Tile tile = RNG.getRandom(chunkMap, t -> t.isTransitable() && t.get(Type.FEATURE) == null);
-			
 			Entity feature = FeatureFactory.createFeature("tree");
-			
-			addFeature(tile, feature);
+			tile.put(feature);
 		}
 	}
 	

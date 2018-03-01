@@ -239,11 +239,6 @@ public class GameScreenASCII implements Screen{
 		batch.begin();
 		font.draw(batch, Time.getHour(), HEALTH_BAR_X_POS, HEALTH_BAR_Y_POS - 50);
 		font.draw(batch, Mappers.posMap.get(Juego.player).toString(), HEALTH_BAR_X_POS, HEALTH_BAR_Y_POS - 100);
-//		int a =0;
-//		for(Tile t : Map.getOrthogonalTiles(Mappers.posMap.get(Juego.player).getTile(), t -> true)) {
-//			font.draw(batch, t.getPos().toString(), HEALTH_BAR_X_POS, HEALTH_BAR_Y_POS - (120 + a * 20));
-//			a++;
-//		}
 		batch.end();
 	}
 	
@@ -264,20 +259,18 @@ public class GameScreenASCII implements Screen{
 	private void drawMarkedTileInfo(){
 		Tile tile = getClickedTile();
 		
-		if(tile != null && tile.getVisibility() != Visibility.NOT_VIEWED && !tile.isEmpty()){
-			String text = "";
-			if(tile.get(Type.ACTOR) != null){
-				text = Mappers.descMap.get(tile.get(Type.ACTOR)).name;
-			}else if(tile.get(Type.FEATURE) != null){
-				text = Mappers.descMap.get(tile.get(Type.FEATURE)).name;
-			}else if(tile.get(Type.ITEM) != null){
-				text = Mappers.descMap.get(tile.get(Type.ITEM)).name;
-			}
-			
-			batch.begin();
-			fonts.get("console").draw(batch, text, markerX - TILE_SIZE, markerY + TILE_SIZE*2);
-			batch.end();
+		String text = "";
+		if(tile.get(Type.ACTOR) != null){
+			text = Mappers.descMap.get(tile.get(Type.ACTOR)).name;
+		}else if(tile.get(Type.FEATURE) != null){
+			text = Mappers.descMap.get(tile.get(Type.FEATURE)).name;
+		}else if(tile.get(Type.ITEM) != null){
+			text = Mappers.descMap.get(tile.get(Type.ITEM)).name;
 		}
+		
+		batch.begin();
+		fonts.get("console").draw(batch, text, markerX - TILE_SIZE, markerY + TILE_SIZE*2);
+		batch.end();
 	}
 	
 	public boolean showMarker = false;

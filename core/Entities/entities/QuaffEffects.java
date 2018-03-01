@@ -20,9 +20,9 @@ public abstract class QuaffEffects {
 			Effects.heal(a, 10);
 		});
 		
-//		quaffEffectsList.put("teleportation potion", a -> {
-//			Effects.randomTeleport(a);
-//		});
+		quaffEffectsList.put("teleportation potion", a -> {
+			Effects.randomTeleport(a);
+		});
 		
 		quaffEffectsList.put("cure potion", a -> {
 			Effects.cure(a);

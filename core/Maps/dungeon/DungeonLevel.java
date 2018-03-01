@@ -28,9 +28,7 @@ public abstract class DungeonLevel {
 	
 	protected void putDoors() {
 		for(Tile tile : doors) {
-			if(tile.isEmpty()) {
-				tile.put(FeatureFactory.createFeature("closed door"));
-			}
+			tile.put(FeatureFactory.createFeature("closed door"));
 		}
 	}
 	

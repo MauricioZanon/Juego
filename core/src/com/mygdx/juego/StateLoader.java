@@ -28,6 +28,12 @@ public class StateLoader {
         return conn;
     }
 	
+	private static void close(Connection con) {
+		try {
+			con.close();
+		} catch (SQLException e) {}
+	}
+	
 	public static Chunk load(String chunkPos) {
 		Connection con = connect();
 		Chunk chunk = null;
@@ -35,17 +41,20 @@ public class StateLoader {
 			PreparedStatement pstmt = con.prepareStatement("SELECT Entities FROM Chunks WHERE ChunkCoord='" + chunkPos + "'");
 			ResultSet rs = pstmt.executeQuery();
 			chunk = new Chunk(chunkPos, rs.getString("Entities"));
+			close(con);
 			return chunk;
-		} catch (SQLException e) {}
+		} catch (SQLException e) {close(con);}
 		int[] coord = Arrays.stream(chunkPos.split(":")).mapToInt(Integer::parseInt).toArray();
 		if(coord[2] == 0) {
+			close(con);
 			return new ForestLevel(coord[0], coord[1]);
 		}else {
+			close(con);
 			return new EmptyChunk(coord[0], coord[1], coord[2]);
 		}
 	}
 	
-	public static Entity loadPlayer() {
+	public static void loadPlayer() {
 		Entity player = PlayerBuilder.createBasePlayer();
 		
 		Connection con = connect();
@@ -70,10 +79,11 @@ public class StateLoader {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			close(con);
 		}
 		Juego.player = player;
 		
-		return player;
+		close(con);
 	}
 	
 }

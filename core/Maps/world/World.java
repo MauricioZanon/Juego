@@ -1,5 +1,7 @@
 package world;
 
+import com.mygdx.juego.Juego;
+
 import RNG.Noise;
 import cave.Cave;
 import cave.Cave.CaveSize;
@@ -49,9 +51,11 @@ public class World {
 	}
 	
 	private void createLocations() {
-		new Village(new PositionComponent(0, 0, 0));
-//		DungeonBuilder.createDungeon(new PositionComponent(0, 0, 0), DungeonType.REGULAR, DungeonSize.TINY);
-		new Cave(new PositionComponent(0, 0, 0), CaveSize.BIG);
+		PositionComponent pos00 = Juego.ENGINE.createComponent(PositionComponent.class);
+		pos00.coord = new int[] {0,0,0};
+//		new Village(pos00);
+//		DungeonBuilder.createDungeon(pos00, DungeonType.REGULAR, DungeonSize.TINY);
+		new Cave(pos00, CaveSize.TINY);
 	}
 
 	public static String getName() {

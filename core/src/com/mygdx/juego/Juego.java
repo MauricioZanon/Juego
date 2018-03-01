@@ -34,11 +34,9 @@ public class Juego extends Game {
     	ENGINE.addSystem(new EventSystem());
     	
     	if(player == null) {
-    		System.out.println("null player");
     		player = PlayerBuilder.createBasePlayer();
     		PositionComponent playerPos = ENGINE.createComponent(PositionComponent.class);
-    		playerPos.coord[0] = 0;
-    		playerPos.coord[1] = 0;
+    		playerPos.coord = new int[] {0, 0, 0};
     		playerPos.getTile().put(player);
     	}
     	Map.refresh();

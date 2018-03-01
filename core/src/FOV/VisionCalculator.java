@@ -39,7 +39,6 @@ public abstract class VisionCalculator {
 				if(tile != null && !newVisibleTiles.contains(tile)){
 					calculateLOS(originTile, tile, newVisibleTiles, enemyTiles, faction, area);
 				}
-				
 			}
 		}
 		
@@ -67,7 +66,7 @@ public abstract class VisionCalculator {
 		for(int x = 0; x < area.length; x++) {
 			for(int y = 0; y < area[0].length; y++) {
 				Tile tile = area[x][y];
-				if(tile != null && !tile.isEmpty()){
+				if(tile != null){ // TODO volver a agregar la condicion de que el tile tenga algo de interes
 					calculateLOS(originTile, tile, visibleTiles, enemyTiles, faction, area);
 				}
 			}

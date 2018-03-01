@@ -21,7 +21,6 @@ import components.PositionComponent;
 import components.TransitableComponent;
 import components.TranslucentComponent;
 import components.Type;
-import world.Time;
 
 public class Tile {
 	
@@ -219,24 +218,21 @@ public class Tile {
 		return message; 
 	}
 	
-	public String serialize() {
-		String string = pos.toString();
-		try {string += "-" + terrain.flags;
+	public void serialize(StringBuilder sb) {
+		try {sb.append("," + terrain.flags);
 		}catch(NullPointerException e) {}
-		try {string += "-" + actor.flags;
+		try {sb.append("," + actor.flags);
 		}catch(NullPointerException e) {}
 		for(Entity item : items) {
-			string += "-" + item.flags;
+			sb.append("," + item.flags);
 		}
-		try {string += "-" + feature.flags;
+		try {sb.append("," + feature.flags);
 		}catch(NullPointerException e) {}
-		string += "/";
-		
-		return string;
+		sb.append("/");
 	}
 	
 	public boolean isEmpty() {
-		return actor == null && items.isEmpty() && feature == null;
+		return gas == null && actor == null && feature == null && items.isEmpty() && terrain == null;
 	}
 	
 	public enum Visibility{
