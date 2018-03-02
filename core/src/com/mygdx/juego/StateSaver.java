@@ -12,6 +12,7 @@ import java.util.HashMap;
 import com.badlogic.ashley.core.Entity;
 
 import components.Mappers;
+import components.Type;
 import eventSystem.Map;
 import main.Chunk;
 
@@ -93,13 +94,11 @@ public class StateSaver {
 	
 	public static void saveState() {
 		long tiempo = System.currentTimeMillis();
+		Entity player = Juego.player;
+		Mappers.posMap.get(player).getTile().remove(Type.ACTOR);
+		
 		Connection con = connect();
 		System.out.println("chunks en memoria " + Map.getChunksInMemory().values().size());
-		for(Chunk chunk : Map.getChunksInMemory().values()) {
-			save(chunk, con);
-		}
-		
-		Entity player = Juego.player;
 		
 		String playerPos = Mappers.posMap.get(player).toString();
 		String playerHP = Mappers.healthMap.get(player).serialize();
@@ -109,6 +108,9 @@ public class StateSaver {
 		String playerItems = Mappers.inventoryMap.get(player).serialize();
 		
 		try {
+			PreparedStatement reset = con.prepareStatement("DELETE FROM Player");
+			reset.executeUpdate();
+			
         	PreparedStatement pstmt = con.prepareStatement("REPLACE INTO Player(Position, HP, Stats, Equipment, Effects, Items) VALUES(?, ?, ?, ?, ?, ?)");
         	pstmt.setString(1, playerPos);
         	pstmt.setString(2, playerHP);
@@ -120,14 +122,16 @@ public class StateSaver {
 		} catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+
+		for(Chunk chunk : Map.getChunksInMemory().values()) {
+			save(chunk, con);
+		}
+		
 		close(con);
 		System.out.println("save time " + (System.currentTimeMillis() - tiempo));
 	}
 	
 	private static boolean insert(String chunkCoord, String entities, Connection con) {
-		System.out.println(chunkCoord);
-		System.out.println(entities);
-		System.out.println();
         try {
         	PreparedStatement pstmt = con.prepareStatement("REPLACE INTO Chunks(ChunkCoord, Entities) VALUES(?, ?)");
         	pstmt.setString(1, chunkCoord);

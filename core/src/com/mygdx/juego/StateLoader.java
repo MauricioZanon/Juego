@@ -83,6 +83,8 @@ public class StateLoader {
 		}
 		Juego.player = player;
 		
+		Mappers.posMap.get(player).getTile().put(player);
+		
 		close(con);
 	}
 	
