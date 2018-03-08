@@ -64,7 +64,7 @@ public class GameInput implements InputProcessor{
 				Actions.pickUp(Map.getTile(playerCoord[0], playerCoord[1], playerCoord[2]));
 				return true;
 			case Keys.L:
-				StateSaver.saveState();
+				StateSaver.saveGameState();
 				return true;
 			case Keys.E:
 				MessageFactory.createMessage("Use what?");

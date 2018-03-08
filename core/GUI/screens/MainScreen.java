@@ -12,7 +12,7 @@ import com.mygdx.juego.StateLoader;
 import com.mygdx.juego.StateSaver;
 
 import tools.FontLoader;
-import world.World;
+import world.WorldBuilder;
 
 public class MainScreen implements Screen{
 	
@@ -80,7 +80,7 @@ public class MainScreen implements Screen{
 				switch(keycode){
 				case Keys.N:
 					StateSaver.createInitialSave();
-					new World().initialize();
+					new WorldBuilder().initialize();
 					Juego.startGame();
 					break;
 				case Keys.L:

@@ -17,7 +17,7 @@ import components.PositionComponent;
 import main.Chunk;
 import main.Tile;
 import world.Direction;
-import world.World;
+import world.WorldBuilder;
 
 /**
  * Guarda los últimos chunks que se usaron y tiene varias formas de encontrar tiles
@@ -28,7 +28,7 @@ public abstract class Map {
 	private static TreeMap<String, Chunk> chunksInMemory = new TreeMap<>();
 	private static LinkedHashSet<String> lastUsedChunks = new LinkedHashSet<>();
 	
-	private static int chunkSize = World.CHUNK_SIZE;
+	private static int chunkSize = WorldBuilder.CHUNK_SIZE;
 	private static Chunk[][] mapInChunks = new Chunk[5][5];
 	private static Tile[][] mapInTiles = new Tile[chunkSize*5][chunkSize*5];
 	private static int zLevel = 0;
@@ -47,6 +47,10 @@ public abstract class Map {
 			}
 			npcs.add(Juego.player);
 			Juego.ENGINE.getSystem(EventSystem.class).setTimedEntities(npcs);
+			
+			synchronized(StateSaver.saveThreadLock) {
+				StateSaver.saveThreadLock.notify();
+			}
 		}
 	}
 	
@@ -84,7 +88,7 @@ public abstract class Map {
 			chunk = StateLoader.load(posString);
 			chunksInMemory.put(posString, chunk);
 			lastUsedChunks.add(posString);
-			if(chunksInMemory.size() > 50) {
+			if(chunksInMemory.size() > 70 && !WorldBuilder.isBuilding) {
 				String chunkPosToRemove = lastUsedChunks.iterator().next();
 				lastUsedChunks.remove(chunkPosToRemove);
 				StateSaver.addChunkToSaveList(chunksInMemory.remove(chunkPosToRemove));

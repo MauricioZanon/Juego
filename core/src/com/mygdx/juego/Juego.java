@@ -38,6 +38,7 @@ public class Juego extends Game {
     		PositionComponent playerPos = ENGINE.createComponent(PositionComponent.class);
     		playerPos.coord = new int[] {0, 0, 0};
     		playerPos.getTile().put(player);
+    		StateSaver.saveGameState();
     	}
     	Map.refresh();
     	VisionCalculator.calculateVision(player);

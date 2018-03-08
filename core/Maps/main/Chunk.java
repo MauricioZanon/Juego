@@ -11,11 +11,11 @@ import com.mygdx.juego.Juego;
 
 import components.PositionComponent;
 import factories.EntityFactory;
-import world.World;
+import world.WorldBuilder;
 
 public class Chunk{
 	
-	protected Tile[][] chunkMap = new Tile[World.CHUNK_SIZE][World.CHUNK_SIZE];
+	protected Tile[][] chunkMap = new Tile[WorldBuilder.CHUNK_SIZE][WorldBuilder.CHUNK_SIZE];
 	
 	protected int gx = 0;
 	protected int gy = 0;
@@ -24,7 +24,7 @@ public class Chunk{
 	public Chunk() {}
 	
 	public Chunk(String chunkCoord, String chunkString) {
-		int chunkSize = World.CHUNK_SIZE;
+		int chunkSize = WorldBuilder.CHUNK_SIZE;
     	int[] coords = Arrays.stream(chunkCoord.split(":")).mapToInt(Integer::parseInt).toArray();
     	gx = coords[0];
     	gy = coords[1];
@@ -49,7 +49,7 @@ public class Chunk{
     }
 	
 	protected void fillLevel(Consumer<Tile> createNewTerrain){
-		int size = World.CHUNK_SIZE;
+		int size = WorldBuilder.CHUNK_SIZE;
 		chunkMap = new Tile[size][size];
 		int x0 = gx*chunkMap.length;
 		int y0 = gy*chunkMap.length;

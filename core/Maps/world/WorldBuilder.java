@@ -1,6 +1,7 @@
 package world;
 
 import com.mygdx.juego.Juego;
+import com.mygdx.juego.StateSaver;
 
 import RNG.Noise;
 import cave.Cave;
@@ -11,11 +12,13 @@ import dungeon.DungeonBuilder.DungeonSize;
 import dungeon.DungeonBuilder.DungeonType;
 import village.Village;
 
-public class World {
+public class WorldBuilder {
 	
 	public static final int CHUNK_SIZE = 25;
 	private static String name = "world";
 	private static int[][] initialMap = new int[1000][1000];
+	
+	public static boolean isBuilding;
 	
 	public static void main(String[] args) {
 		createOverworld();
@@ -24,10 +27,13 @@ public class World {
 	public void initialize(){
 		long time = System.currentTimeMillis();
 		
+		isBuilding = true;
 		createOverworld();
 		createLocations();
+		isBuilding = false;
 		
 		System.out.println("Tiempo de creación del World Map: " + (System.currentTimeMillis() - time));
+		
 	}
 	
 	private static void createOverworld() {
@@ -54,12 +60,13 @@ public class World {
 		PositionComponent pos00 = Juego.ENGINE.createComponent(PositionComponent.class);
 		pos00.coord = new int[] {0,0,0};
 //		new Village(pos00);
-//		DungeonBuilder.createDungeon(pos00, DungeonType.REGULAR, DungeonSize.TINY);
+//		DungeonBuilder.createDungeon(pos00, DungeonType.REGULAR, DungeonSize.MEDIUM);
 		new Cave(pos00, CaveSize.TINY);
 	}
 
 	public static String getName() {
 		return name;
 	}
+
 	
 }

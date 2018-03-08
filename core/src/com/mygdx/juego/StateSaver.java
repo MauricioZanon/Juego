@@ -8,6 +8,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
 
@@ -18,22 +21,49 @@ import main.Chunk;
 
 /**
  * TODO: guardar el heightMap del World y los lugares de las locations
- *
  */
 public class StateSaver {
 	
-	private static HashMap<String, String> chunksToSave = new HashMap<>();
+	private volatile static HashMap<String, String> chunksToSave = new HashMap<>();
+	public static Object saveThreadLock = new Object();
+	
+	public static Thread savingThread = new Thread(() -> {
+		synchronized (saveThreadLock) {
+			while(true) {
+				Connection con = connect();
+				Set<Entry<String, String>> entries = new HashSet<>();
+				entries.addAll(chunksToSave.entrySet());
+				chunksToSave.clear();
+				
+				for(Entry<String, String> e : entries) {
+					save(e.getKey(), e.getValue(), con);
+				}
+				close(con);
+				try {
+					saveThreadLock.wait();
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				}
+			}
+		}
+	});
+	
+	static {
+		savingThread.setName("saving thread");
+		savingThread.start();
+	}
 		
 	private static Connection connect() {
         Connection conn = null;
         try {
             conn = DriverManager.getConnection("jdbc:sqlite:../core/assets/Saves/world.db");
-            conn.createStatement().execute("PRAGMA locking_mode = EXCLUSIVE");
+//            conn.createStatement().execute("PRAGMA locking_mode = EXCLUSIVE");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         } 
         return conn;
     }
+	
 	private static void close(Connection con) {
 		try {
 			con.close();
@@ -68,19 +98,11 @@ public class StateSaver {
 		}
 	}
 	
-	public static void save(String chunkCoord, String entities) {
-		Connection con = connect();
+	public static void save(String chunkCoord, String entities, Connection con) {
 		boolean failed = false;
 		do {
 			failed = insert(chunkCoord, entities, con);
 		}while(failed);
-		close(con);
-	}
-	
-	public static void save(Chunk chunk) {
-		Connection con = connect();
-		save(chunk, con);
-		close(con);
 	}
 	
 	public static void save(Chunk chunk, Connection con) {
@@ -92,10 +114,15 @@ public class StateSaver {
 		}while(failed);
 	}
 	
-	public static void saveState() {
+	public static void saveGameState() {
 		long tiempo = System.currentTimeMillis();
+		savePlayerState();
+		saveWorldState();
+		System.out.println("save time " + (System.currentTimeMillis() - tiempo));
+	}
+	
+	public static void savePlayerState() {
 		Entity player = Juego.player;
-		Mappers.posMap.get(player).getTile().remove(Type.ACTOR);
 		
 		Connection con = connect();
 		System.out.println("chunks en memoria " + Map.getChunksInMemory().values().size());
@@ -120,15 +147,20 @@ public class StateSaver {
         	pstmt.setString(6, playerItems);
         	pstmt.executeUpdate();
 		} catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-
+			close(con);
+			System.out.println(e.getMessage());
+   	    }
+		close(con);
+	}
+	
+	public static void saveWorldState() {
+		Mappers.posMap.get(Juego.player).getTile().remove(Type.ACTOR);
+		Connection con = connect();
 		for(Chunk chunk : Map.getChunksInMemory().values()) {
 			save(chunk, con);
 		}
-		
 		close(con);
-		System.out.println("save time " + (System.currentTimeMillis() - tiempo));
+		Mappers.posMap.get(Juego.player).getTile().put(Juego.player);
 	}
 	
 	private static boolean insert(String chunkCoord, String entities, Connection con) {
@@ -149,14 +181,6 @@ public class StateSaver {
 		String entities = chunk.serialize();
 		
 		chunksToSave.put(chunkCoord, entities);
-		
-		if(chunksToSave.size() > 200) {
-			System.out.println("saving...");
-			chunksToSave.forEach((pos, entitiesString) -> save(pos, entitiesString));
-			chunksToSave.clear();
-		}
-		
 	}
-	
 	
 }

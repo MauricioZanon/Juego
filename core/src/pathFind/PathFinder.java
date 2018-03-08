@@ -8,11 +8,11 @@ import com.badlogic.ashley.core.Entity;
 import components.PositionComponent;
 import eventSystem.Map;
 import main.Tile;
-import world.World;
+import world.WorldBuilder;
 
 public abstract class PathFinder {
 
-	private static final int MAX_DISTANCE = World.CHUNK_SIZE;
+	private static final int MAX_DISTANCE = WorldBuilder.CHUNK_SIZE;
 	private static Comparator<Node> comparador = new Comparator<Node>(){
 		@Override
 		public int compare(Node n1, Node n2) {
