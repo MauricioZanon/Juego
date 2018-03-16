@@ -28,9 +28,9 @@ public abstract class Map {
 	private static TreeMap<String, Chunk> chunksInMemory = new TreeMap<>();
 	private static LinkedHashSet<String> lastUsedChunks = new LinkedHashSet<>();
 	
-	private static int chunkSize = WorldBuilder.CHUNK_SIZE;
-	private static Chunk[][] mapInChunks = new Chunk[5][5];
-	private static Tile[][] mapInTiles = new Tile[chunkSize*5][chunkSize*5];
+	private static int chunkSize = Chunk.SIZE;
+	private static Chunk[][] mapInChunks = new Chunk[3][3];
+	private static Tile[][] mapInTiles = new Tile[chunkSize*3][chunkSize*3];
 	private static int zLevel = 0;
 	
 	public static void refresh(){
@@ -64,8 +64,8 @@ public abstract class Map {
 		
 		for(int gx = 0; gx < mapInChunks.length; gx++) {
 			for(int gy = 0; gy < mapInChunks[0].length; gy++) {
-				int chunkX = gx0 - 2 + gx;
-				int chunkY = gy0 - 2 + gy;
+				int chunkX = gx0 - 1 + gx;
+				int chunkY = gy0 - 1 + gy;
 				Chunk chunk = getChunk(chunkX, chunkY, gz0);
 				mapInChunks[gx][gy] = chunk;
 				

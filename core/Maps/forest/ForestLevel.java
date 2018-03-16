@@ -10,7 +10,6 @@ import factories.FeatureFactory;
 import factories.TerrainFactory;
 import main.Chunk;
 import main.Tile;
-import world.WorldBuilder;
 
 public class ForestLevel extends Chunk{
 	
@@ -27,7 +26,7 @@ public class ForestLevel extends Chunk{
 	
 	@Override
 	protected void buildLevel() {
-		for(int i = 0; i < RNG.nextGaussian(WorldBuilder.CHUNK_SIZE / 2, WorldBuilder.CHUNK_SIZE / 10); i++){
+		for(int i = 0; i < RNG.nextGaussian(Chunk.SIZE / 2, Chunk.SIZE / 10); i++){
 			Tile tile = RNG.getRandom(chunkMap, t -> t.isTransitable() && t.get(Type.FEATURE) == null);
 			Entity feature = FeatureFactory.createFeature("tree");
 			tile.put(feature);

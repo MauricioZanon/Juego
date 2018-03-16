@@ -18,7 +18,6 @@ import village.Village;
 
 public class WorldBuilder {
 	
-	public static final int CHUNK_SIZE = 100;
 	private static String name = "world";
 	private static int[][] initialMap = new int[1000][1000];
 	

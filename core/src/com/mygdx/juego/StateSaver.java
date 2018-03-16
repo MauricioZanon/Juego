@@ -17,7 +17,6 @@ import com.badlogic.ashley.core.Entity;
 import components.Mappers;
 import eventSystem.Map;
 import main.Chunk;
-import world.WorldBuilder;
 
 /**
  * TODO: guardar el heightMap del World y los lugares de las locations
@@ -198,7 +197,7 @@ public class StateSaver {
 	
 	public static void addChunkToSaveList(Chunk chunk) {
 		String entities = chunk.serialize();
-		if(entities.length() > WorldBuilder.CHUNK_SIZE*WorldBuilder.CHUNK_SIZE) { // Si el chunk está vacío no se guarda
+		if(entities.length() > Chunk.SIZE*Chunk.SIZE) { // Si el chunk está vacío no se guarda
 			String chunkCoord = Integer.toString(chunk.getGx()) + ":" + Integer.toString(chunk.getGy()) + ":" + Integer.toString(chunk.getGz());
 			chunksToSave.put(chunkCoord, entities);
 		}

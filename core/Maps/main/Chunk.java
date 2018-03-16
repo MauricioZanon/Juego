@@ -11,11 +11,11 @@ import com.mygdx.juego.Juego;
 
 import components.PositionComponent;
 import factories.EntityFactory;
-import world.WorldBuilder;
 
 public class Chunk{
 	
-	protected Tile[][] chunkMap = new Tile[WorldBuilder.CHUNK_SIZE][WorldBuilder.CHUNK_SIZE];
+	public static final int SIZE = 100;
+	protected Tile[][] chunkMap = new Tile[SIZE][SIZE];
 	
 	protected int gx = 0;
 	protected int gy = 0;
@@ -24,7 +24,6 @@ public class Chunk{
 	public Chunk() {}
 	
 	public Chunk(String chunkCoord, String chunkString) {
-		int chunkSize = WorldBuilder.CHUNK_SIZE;
     	int[] coords = Arrays.stream(chunkCoord.split(":")).mapToInt(Integer::parseInt).toArray();
     	gx = coords[0];
     	gy = coords[1];
@@ -37,9 +36,9 @@ public class Chunk{
     		String[] entitiesStrings = tileStrings[i].split(",");
     		
     		PositionComponent tilePos = Juego.ENGINE.createComponent(PositionComponent.class);
-    		int tileX = i/chunkSize;
-    		int tileY = i%chunkSize;
-    		tilePos.coord = new int[] {gx*chunkSize + tileX, gy*chunkSize + tileY, gz};
+    		int tileX = i/SIZE;
+    		int tileY = i%SIZE;
+    		tilePos.coord = new int[] {gx*SIZE + tileX, gy*SIZE + tileY, gz};
     		Tile t = new Tile(tilePos);
     		for(int j = 1; j < entitiesStrings.length; j++) {
     			t.put(EntityFactory.create(Integer.parseInt(entitiesStrings[j])));
@@ -49,12 +48,11 @@ public class Chunk{
     }
 	
 	protected void fillLevel(Consumer<Tile> createNewTerrain){
-		int size = WorldBuilder.CHUNK_SIZE;
-		chunkMap = new Tile[size][size];
+		chunkMap = new Tile[SIZE][SIZE];
 		int x0 = gx*chunkMap.length;
 		int y0 = gy*chunkMap.length;
-		for (int x = 0; x < size; x++){
-			for (int y = 0; y < size; y++){
+		for (int x = 0; x < SIZE; x++){
+			for (int y = 0; y < SIZE; y++){
 				PositionComponent tilePos = Juego.ENGINE.createComponent(PositionComponent.class);
 				tilePos.coord = new int[] {x0+x, y0+y, gz};
 				chunkMap[x][y] = new Tile(tilePos);

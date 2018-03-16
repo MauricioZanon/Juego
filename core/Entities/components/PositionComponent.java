@@ -4,24 +4,24 @@ import com.badlogic.ashley.core.Component;
 import com.mygdx.juego.Juego;
 
 import eventSystem.Map;
+import main.Chunk;
 import main.Tile;
-import world.WorldBuilder;
 
 public class PositionComponent implements Cloneable, Component{
 	
 	public int[] coord;
 
 	public int getGx() {
-		return coord[0] / WorldBuilder.CHUNK_SIZE;
+		return coord[0] / Chunk.SIZE;
 	}
 	public int getLx() {
-		return coord[0] % WorldBuilder.CHUNK_SIZE;
+		return coord[0] % Chunk.SIZE;
 	}
 	public int getGy() {
-		return coord[1] / WorldBuilder.CHUNK_SIZE;
+		return coord[1] / Chunk.SIZE;
 	}
 	public int getLy() {
-		return coord[1] % WorldBuilder.CHUNK_SIZE;
+		return coord[1] % Chunk.SIZE;
 	}
 	public int getGz() {
 		return coord[2];
