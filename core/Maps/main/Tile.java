@@ -221,18 +221,14 @@ public class Tile {
 	}
 	
 	public void serialize(StringBuilder sb) {
-		PooledEngine engine = Juego.ENGINE;
 		try {sb.append("," + terrain.flags);
 		}catch(NullPointerException e) {}
 		try {sb.append("," + actor.flags);
-		engine.removeEntity(actor);
 		}catch(NullPointerException e) {}
 		for(Entity item : items) {
 			sb.append("," + item.flags);
-			engine.removeEntity(item);
 		}
 		try {sb.append("," + feature.flags);
-		engine.removeEntity(feature);
 		}catch(NullPointerException e) {}
 		sb.append("/");
 	}
@@ -245,5 +241,17 @@ public class Tile {
 		NOT_VIEWED,
 		VISIBLE,
 		VIEWED;
+	}
+
+	public void dump() {
+		PooledEngine engine = Juego.ENGINE;
+		try {engine.removeEntity(actor);
+		}catch(NullPointerException e) {}
+		for(Entity item : items) {
+			engine.removeEntity(item);
+		}
+		try {engine.removeEntity(feature);
+		}catch(NullPointerException e) {}
+		
 	}
 }

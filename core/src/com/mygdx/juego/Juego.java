@@ -6,6 +6,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 
 import FOV.VisionCalculator;
+import components.Mappers;
 import components.PositionComponent;
 import eventSystem.EventSystem;
 import eventSystem.Map;
@@ -46,6 +47,7 @@ public class Juego extends Game {
     
     public static void loadGame() {
     	StateLoader.loadPlayer();
+    	Mappers.posMap.get(player).getTile().put(player);
     	startGame();
     }
     

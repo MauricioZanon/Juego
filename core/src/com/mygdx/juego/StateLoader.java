@@ -12,11 +12,8 @@ import com.badlogic.ashley.core.Entity;
 import components.AttributeComponent;
 import components.Mappers;
 import components.PositionComponent;
-import field.FieldLevel;
-import forest.ForestLevel;
 import main.Chunk;
 import main.EmptyChunk;
-import mountain.MountainLevel;
 import world.WorldBuilder;
 
 public class StateLoader {

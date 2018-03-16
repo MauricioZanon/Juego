@@ -15,6 +15,7 @@ import java.util.Set;
 import com.badlogic.ashley.core.Entity;
 
 import components.Mappers;
+import components.Type;
 import eventSystem.Map;
 import main.Chunk;
 
@@ -163,6 +164,7 @@ public class StateSaver {
 	}
 	
 	public static void saveWorldState() {
+		Mappers.posMap.get(Juego.player).getTile().remove(Type.ACTOR);
 		Connection con = connect();
 		PreparedStatement statement = getChunkSaveStatement(con);
 		for(Chunk chunk : Map.getChunksInMemory().values()) {
@@ -172,6 +174,7 @@ public class StateSaver {
 			statement.executeBatch();
 		} catch (SQLException e) {}
 		close(con);
+		Mappers.posMap.get(Juego.player).getTile().put(Juego.player);
 	}
 	
 //	private static boolean insert(String chunkCoord, String entities, Connection con) {
@@ -197,6 +200,7 @@ public class StateSaver {
 	
 	public static void addChunkToSaveList(Chunk chunk) {
 		String entities = chunk.serialize();
+		chunk.dump();
 		if(entities.length() > Chunk.SIZE*Chunk.SIZE) { // Si el chunk está vacío no se guarda
 			String chunkCoord = Integer.toString(chunk.getGx()) + ":" + Integer.toString(chunk.getGy()) + ":" + Integer.toString(chunk.getGz());
 			chunksToSave.put(chunkCoord, entities);

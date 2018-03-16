@@ -91,8 +91,15 @@ public class Chunk{
 				}
 			}
 		}
-		
 		return sb.toString();
+	}
+	
+	public void dump() {
+		for(int x = 0; x < chunkMap.length; x++) {
+			for(int y = 0; y < chunkMap[0].length; y++) {
+				chunkMap[x][y].dump();
+			}
+		}
 	}
 
 	public int getGx() {
