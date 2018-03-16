@@ -12,9 +12,12 @@ import com.badlogic.ashley.core.Entity;
 import components.AttributeComponent;
 import components.Mappers;
 import components.PositionComponent;
+import field.FieldLevel;
 import forest.ForestLevel;
 import main.Chunk;
 import main.EmptyChunk;
+import mountain.MountainLevel;
+import world.WorldBuilder;
 
 public class StateLoader {
 	
@@ -47,7 +50,8 @@ public class StateLoader {
 		int[] coord = Arrays.stream(chunkPos.split(":")).mapToInt(Integer::parseInt).toArray();
 		if(coord[2] == 0) {
 			close(con);
-			return new ForestLevel(coord[0], coord[1]);
+			return WorldBuilder.createOverworldChunk(coord[0], coord[1]);
+			
 		}else {
 			close(con);
 			return new EmptyChunk(coord[0], coord[1], coord[2]);
@@ -79,13 +83,10 @@ public class StateLoader {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			close(con);
 		}
-		Juego.player = player;
-		
-		Mappers.posMap.get(player).getTile().put(player);
-		
 		close(con);
+		
+		Juego.player = player;
 	}
 	
 }

@@ -17,6 +17,7 @@ import inputProcessors.GameInput;
 import screens.GameScreenASCII;
 import screens.MainScreen;
 import tools.RenderSystem;
+import world.WorldBuilder;
 
 public class Juego extends Game {
 	
@@ -30,21 +31,34 @@ public class Juego extends Game {
     	ENGINE.addSystem(render);
     }
     
+    public static void newGame() {
+    	StateSaver.createInitialSave();
+    	
+		new WorldBuilder().initialize();
+		
+    	player = PlayerBuilder.createBasePlayer();
+		PositionComponent playerPos = ENGINE.createComponent(PositionComponent.class);
+		playerPos.coord = new int[] {0, 0, 0};
+		playerPos.getTile().put(player);
+		
+		Juego.startGame();
+    }
+    
+    public static void loadGame() {
+    	StateLoader.loadPlayer();
+    	startGame();
+    }
+    
     public static void startGame() {
     	ENGINE.addSystem(new EventSystem());
     	
-    	if(player == null) {
-    		player = PlayerBuilder.createBasePlayer();
-    		PositionComponent playerPos = ENGINE.createComponent(PositionComponent.class);
-    		playerPos.coord = new int[] {0, 0, 0};
-    		playerPos.getTile().put(player);
-    		StateSaver.saveGameState();
-    	}
     	Map.refresh();
     	VisionCalculator.calculateVision(player);
     	
     	ENGINE.getSystem(RenderSystem.class).setScreen(GameScreenASCII.getInstance());
     	Gdx.input.setInputProcessor(new GameInput());
+    	
+    	StateSaver.savingThread.start();
 	}
     
     public static void initializeFactories() {

@@ -8,11 +8,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.juego.Juego;
-import com.mygdx.juego.StateLoader;
-import com.mygdx.juego.StateSaver;
 
 import tools.FontLoader;
-import world.WorldBuilder;
 
 public class MainScreen implements Screen{
 	
@@ -79,13 +76,10 @@ public class MainScreen implements Screen{
 			public boolean keyDown(int keycode) {
 				switch(keycode){
 				case Keys.N:
-					StateSaver.createInitialSave();
-					new WorldBuilder().initialize();
-					Juego.startGame();
+					Juego.newGame();
 					break;
 				case Keys.L:
-					StateLoader.loadPlayer(); // TODO: cambiar a loadState
-					Juego.startGame();
+					Juego.loadGame();
 					break;
 				case Keys.O:
 					break;

@@ -37,7 +37,7 @@ public abstract class Map {
 		PositionComponent playerPos = Mappers.posMap.get(Juego.player);
 		Chunk center = mapInChunks[2][2];
 		if(center == null || playerPos.getGx() != center.getGx() || playerPos.getGy() != center.getGy() || playerPos.getGz() != center.getGz()) {
-			refreshMap();
+	    	refreshMap();
 			
 			HashSet<Entity> npcs = new HashSet<>();
 			for (int lx = 0; lx < mapInChunks.length; lx++){
@@ -87,13 +87,13 @@ public abstract class Map {
 		if(chunk == null) {
 			chunk = StateLoader.load(posString);
 			chunksInMemory.put(posString, chunk);
-			lastUsedChunks.add(posString);
 			if(chunksInMemory.size() > 70 && !WorldBuilder.isBuilding) {
 				String chunkPosToRemove = lastUsedChunks.iterator().next();
 				lastUsedChunks.remove(chunkPosToRemove);
 				StateSaver.addChunkToSaveList(chunksInMemory.remove(chunkPosToRemove));
 			}
 		}
+		lastUsedChunks.remove(posString);
 		lastUsedChunks.add(posString);
 		return chunk;
 	}

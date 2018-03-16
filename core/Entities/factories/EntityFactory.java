@@ -47,6 +47,7 @@ public abstract class EntityFactory {
 		T[] p = (T[]) xstream.fromXML(XMLString);
 		
 		Entity e = Juego.ENGINE.createEntity();
+		Juego.ENGINE.addEntity(e);
 		Pattern pattern = Pattern.compile("(?<=id=\")(\\s*.*)(?=\")");
 		Matcher matcher = pattern.matcher(XMLString);
 		matcher.find();
@@ -67,7 +68,7 @@ public abstract class EntityFactory {
 		else if(id >= 1000) {
 			return TerrainFactory.get(id);
 		}
-		else if(id > 0){
+		else if(id >= 0){
 			return NPCFactory.createNPC(id);
 		}
 		else {

@@ -15,7 +15,8 @@ public abstract class RNG {
 	/**========================================================================
 	 * ============================COLLECTIONS=================================
 	 * ========================================================================*/
-	
+
+
 	public static <T> T getRandom(T[] array){
 		return array[nextInt(array.length)];
 	}
@@ -61,6 +62,7 @@ public abstract class RNG {
 			newColor = getAproximateClarity(newColor);
 		if(rng.nextBoolean())
 			newColor = getAproximateHue(newColor);
+		
 		return newColor;
 	}
 	
@@ -121,7 +123,7 @@ public abstract class RNG {
 	
 	/**
 	 * @param mean: valor base
-	 * @param variation: variación máxima desde el valor base
+	 * @param variation: variaciÃ³n mÃ¡xima desde el valor base
 	 * @return un entero entre (mean - variation) y (mean + variation) que tiende a quedarse cerca del valor de mean
 	 */
 	public static int nextGaussian(int mean, int variation){

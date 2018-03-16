@@ -52,7 +52,7 @@ public class GameInput implements InputProcessor{
 				return true;
 			case Keys.SPACE:
 				Tile tile = Mappers.posMap.get(Juego.player).getTile();
-				System.out.println(Map.getChunksInMemory().size());
+				System.out.println(Juego.ENGINE.getEntities().size());
 				tile.put(ItemFactory.createPotion());
 				return true;
 			case Keys.CONTROL_LEFT:

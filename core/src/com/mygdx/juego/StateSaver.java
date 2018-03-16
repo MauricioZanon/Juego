@@ -15,7 +15,6 @@ import java.util.Set;
 import com.badlogic.ashley.core.Entity;
 
 import components.Mappers;
-import components.Type;
 import eventSystem.Map;
 import main.Chunk;
 
@@ -30,14 +29,18 @@ public class StateSaver {
 	public static Thread savingThread = new Thread(() -> {
 		synchronized (saveThreadLock) {
 			while(true) {
-				Connection con = connect();
 				Set<Entry<String, String>> entries = new HashSet<>();
 				entries.addAll(chunksToSave.entrySet());
 				chunksToSave.clear();
 				
+				Connection con = connect();
+				PreparedStatement statement = getChunkSaveStatement(con);
 				for(Entry<String, String> e : entries) {
-					save(e.getKey(), e.getValue(), con);
+					save(e.getKey(), e.getValue(), con, statement);
 				}
+				try {
+					statement.executeBatch();
+				} catch (SQLException e2) {}
 				close(con);
 				try {
 					saveThreadLock.wait();
@@ -48,11 +51,6 @@ public class StateSaver {
 		}
 	});
 	
-	static {
-		savingThread.setName("saving thread");
-		savingThread.start();
-	}
-		
 	private static Connection connect() {
         Connection conn = null;
         try {
@@ -92,25 +90,37 @@ public class StateSaver {
 																		"Seed INTEGER NOT NULL, " +
 																		"Items TEXT);");
 			createWorldInfoTable.execute();
-			con.close();
+			close(con);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static void save(String chunkCoord, String entities, Connection con) {
+	public static void save(String chunkPos, String entities, Connection con, PreparedStatement statement) {
 		boolean failed = false;
 		do {
-			failed = insert(chunkCoord, entities, con);
+			try {
+				statement.setString(1, chunkPos);
+				statement.setString(2, entities);
+				statement.addBatch();
+			} catch (SQLException e) {
+				failed = true;
+			}
 		}while(failed);
 	}
 	
-	public static void save(Chunk chunk, Connection con) {
+	public static void save(Chunk chunk, Connection con, PreparedStatement statement) {
 		boolean failed = false;
 		do {
 			String chunkCoord = Integer.toString(chunk.getGx()) + ":" + Integer.toString(chunk.getGy()) + ":" + Integer.toString(chunk.getGz());
 			String entities = chunk.serialize();
-			failed = insert(chunkCoord, entities, con);
+			try {
+				statement.setString(1, chunkCoord);
+				statement.setString(2, entities);
+				statement.addBatch();
+			} catch (SQLException e) {
+				failed = true;
+			}
 		}while(failed);
 	}
 	
@@ -147,39 +157,48 @@ public class StateSaver {
         	pstmt.setString(6, playerItems);
         	pstmt.executeUpdate();
 		} catch (SQLException e) {
-			close(con);
 			System.out.println(e.getMessage());
    	    }
 		close(con);
 	}
 	
 	public static void saveWorldState() {
-		Mappers.posMap.get(Juego.player).getTile().remove(Type.ACTOR);
 		Connection con = connect();
+		PreparedStatement statement = getChunkSaveStatement(con);
 		for(Chunk chunk : Map.getChunksInMemory().values()) {
-			save(chunk, con);
+			save(chunk, con, statement);
 		}
+		try {
+			statement.executeBatch();
+		} catch (SQLException e) {}
 		close(con);
-		Mappers.posMap.get(Juego.player).getTile().put(Juego.player);
 	}
 	
-	private static boolean insert(String chunkCoord, String entities, Connection con) {
-        try {
-        	PreparedStatement pstmt = con.prepareStatement("REPLACE INTO Chunks(ChunkCoord, Entities) VALUES(?, ?)");
-        	pstmt.setString(1, chunkCoord);
-        	pstmt.setString(2, entities);
-        	pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            return true;
-        }
-        return false;
-    }
+//	private static boolean insert(String chunkCoord, String entities, Connection con) {
+//        try {
+//        	PreparedStatement pstmt = con.prepareStatement("REPLACE INTO Chunks(ChunkCoord, Entities) VALUES(?, ?)");
+//        	pstmt.setString(1, chunkCoord);
+//        	pstmt.setString(2, entities);
+//        	pstmt.executeUpdate();
+//        } catch (SQLException e) {
+//            System.out.println(e.getMessage());
+//            return true;
+//        }
+//        return false;
+//    }
+	
+	private static PreparedStatement getChunkSaveStatement(Connection con) {
+		try {
+			return con.prepareStatement("REPLACE INTO Chunks(ChunkCoord, Entities) VALUES(?, ?)");
+		} catch (SQLException e) {
+			return null;
+		}
+	}
 	
 	public static void addChunkToSaveList(Chunk chunk) {
 		String chunkCoord = Integer.toString(chunk.getGx()) + ":" + Integer.toString(chunk.getGy()) + ":" + Integer.toString(chunk.getGz());
 		String entities = chunk.serialize();
-		
+			
 		chunksToSave.put(chunkCoord, entities);
 	}
 	

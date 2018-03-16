@@ -12,7 +12,9 @@ import java.util.function.Predicate;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.MathUtils;
+import com.mygdx.juego.Juego;
 
 import components.GraphicsComponent;
 import components.Mappers;
@@ -219,14 +221,18 @@ public class Tile {
 	}
 	
 	public void serialize(StringBuilder sb) {
+		PooledEngine engine = Juego.ENGINE;
 		try {sb.append("," + terrain.flags);
 		}catch(NullPointerException e) {}
 		try {sb.append("," + actor.flags);
+		engine.removeEntity(actor);
 		}catch(NullPointerException e) {}
 		for(Entity item : items) {
 			sb.append("," + item.flags);
+			engine.removeEntity(item);
 		}
 		try {sb.append("," + feature.flags);
+		engine.removeEntity(feature);
 		}catch(NullPointerException e) {}
 		sb.append("/");
 	}

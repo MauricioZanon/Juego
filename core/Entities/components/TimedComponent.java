@@ -6,7 +6,7 @@ import com.badlogic.ashley.core.Component;
 
 public class TimedComponent implements Component{
 	
-	public long nextTurn = 0;
+	public int nextTurn = 0;
 	
 	public boolean isActive = true;
 

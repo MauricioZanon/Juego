@@ -19,7 +19,7 @@ import world.Time;
 
 public class EventSystem extends EntitySystem {
 	
-	private long turn = 0;
+	private int gameTurn = 0;
 	private PriorityQueue<Entity> timedEntities = new PriorityQueue<>(createComparator()); // Las entidades del ActiveMap que actuen por turnos
 	
 	public boolean waitingForPlayerInput = false;
@@ -40,29 +40,33 @@ public class EventSystem extends EntitySystem {
 				continue;
 			}
 			
-			long entityTurn = timedMap.get(entity).nextTurn;
+			int entityTurn = timedMap.get(entity).nextTurn;
 			
 			if(playerMap.has(entity)) { // Si es el turno del player
-				waitingForPlayerInput = true;
-				if((GameInput.pressTime == 0 || GameInput.pressTime >= 6)) {
-					if(GameInput.playerDir != null) {
-						Actions.bump(Mappers.posMap.get(Juego.player), GameInput.playerDir);
-						GameInput.pressTime++;
-					}
-				}else {
-					GameInput.pressTime++;
-				}
-				Time.advanceTime((int) (entityTurn - turn));
+				managePlayer();
+				Time.advanceTime((int) (entityTurn - gameTurn));
 			}
 			// Si el turno de la entidad es menor al turno actual es porque se la acaba de agregar al engine
-			if(entityTurn < turn) { 
-				timedMap.get(entity).nextTurn = turn + 6;
+			if(entityTurn < gameTurn) { 
+				timedMap.get(entity).nextTurn = gameTurn + 6;
 			}else {
-				turn = entityTurn;
+				gameTurn = entityTurn;
 				AIMap.get(entity).fsm.update();
 			}
 			timedEntities.add(entity);
 		}while(!playerMap.has(entity));
+	}
+	
+	private void managePlayer() {
+		waitingForPlayerInput = true;
+		if((GameInput.pressTime == 0 || GameInput.pressTime >= 6)) {
+			if(GameInput.playerDir != null) {
+				Actions.bump(Mappers.posMap.get(Juego.player), GameInput.playerDir);
+				GameInput.pressTime++;
+			}
+		}else {
+			GameInput.pressTime++;
+		}
 	}
 	
 	private Comparator<Entity> createComparator(){

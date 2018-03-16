@@ -26,8 +26,8 @@ public abstract class PlayerBuilder {
 	
 	public static Entity createBasePlayer() {
 		PooledEngine engine = Juego.ENGINE;
-		Entity player = Juego.ENGINE.createEntity();
-		player.flags = 0;
+		Entity player = engine.createEntity();
+		player.flags = -1;
 		
 		DescriptionComponent nc = engine.createComponent(DescriptionComponent.class);
 		nc.name = "player";

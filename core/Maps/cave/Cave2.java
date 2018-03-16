@@ -8,7 +8,6 @@ import java.util.Set;
 import com.badlogic.ashley.core.Entity;
 
 import RNG.RNG;
-import components.Mappers;
 import components.PositionComponent;
 import components.Type;
 import eventSystem.Map;
@@ -82,7 +81,6 @@ public class Cave2 extends MultiLevelLocation{
 			wallTiles.add(tile);
 			floorTiles.remove(tile);
 		}
-		
 	}
 
 	private void putWalls() {
