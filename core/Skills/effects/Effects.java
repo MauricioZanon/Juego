@@ -1,13 +1,13 @@
 package effects;
 import static components.Mappers.playerMap;
 import static components.Mappers.posMap;
+import static components.Mappers.timedMap;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.MathUtils;
 
 import FOV.VisionCalculator;
 import RNG.RNG;
-import actions.Actions;
 import components.HealthComponent;
 import components.Mappers;
 import components.PositionComponent;
@@ -78,8 +78,21 @@ public abstract class Effects {
 	public static void damage(Entity actor, Float amount){
 		Mappers.healthMap.get(actor).curHP -= amount;
 		if(Mappers.healthMap.get(actor).curHP <= 0) {
-			Actions.die(actor);
+			die(actor);
 		}
+	}
+	
+	/**
+	 * Hace que el actor ya no figure como activo
+	 * @param actor el actor a eliminar
+	 */
+	private static void die(Entity actor) {
+		if(playerMap.has(actor)) {
+			System.exit(0);
+		}
+		PositionComponent pos = posMap.get(actor);
+		pos.getTile().remove(actor);
+		timedMap.get(actor).isActive = false;
 	}
 	
 }

@@ -221,30 +221,12 @@ public abstract class Actions {
 		endTurn(actor, ActionType.USE_ITEM);
 	}
 	
-	/**
-	 * Termina el turno de la entidad y disminuye sus ap según la acción realizada y la velocidad de la entidad
-	 * @param entity
-	 * @param action la última acción realizada
-	 */
 	public static void endTurn(Entity entity, ActionType action) {
 		timedMap.get(entity).nextTurn += (int) attMap.get(entity).get(action.asociatedStat);
 		Mappers.statusEffectsMap.get(entity).affect(Trigger.END_TURN);
 		if(playerMap.has(entity)) {
 			Juego.ENGINE.getSystem(EventSystem.class).waitingForPlayerInput = false;
 		}
-	}
-
-	/**
-	 * Hace que el actor ya no figure como activo
-	 * @param actor el actor a eliminar
-	 */
-	public static void die(Entity actor) {
-		if(playerMap.has(actor)) {
-			System.exit(0);
-		}
-		PositionComponent pos = posMap.get(actor);
-		pos.getTile().remove(actor);
-		timedMap.get(actor).isActive = false;
 	}
 	
 }

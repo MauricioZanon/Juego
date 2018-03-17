@@ -35,8 +35,7 @@ public class EventSystem extends EntitySystem {
 		do {
 			entity = timedEntities.remove();
 			
-			if(!timedMap.get(entity).isActive) { // Si la entidad no debería actuar se la quita del engine
-				Juego.ENGINE.removeEntity(entity);
+			if(!timedMap.get(entity).isActive) {
 				continue;
 			}
 			
@@ -46,6 +45,7 @@ public class EventSystem extends EntitySystem {
 				managePlayer();
 				Time.advanceTime((int) (entityTurn - gameTurn));
 			}
+			
 			// Si el turno de la entidad es menor al turno actual es porque se la acaba de agregar al engine
 			if(entityTurn < gameTurn) { 
 				timedMap.get(entity).nextTurn = gameTurn + 6;

@@ -28,6 +28,10 @@ public abstract class PathFinder {
 		}
 	};
 	
+	/**
+	 * Busca un camino desde la primer posición hasta la segunda, si no es posible devuelve null
+	 * TODO: Hacer que los tiles sean transitables o no dependiendo de el tipo de movimiento del actor
+	 */
 	public static Path findPath(PositionComponent start, PositionComponent end, Entity actor){
 		if(!end.getTile().isTransitable()){
 			return null;
